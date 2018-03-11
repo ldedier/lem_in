@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/01 22:07:57 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/11 18:12:46 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 # define FT_VISU_LEM_IN_H
 
 # include "lem_in.h"
-# include "mlx.h"
+# include <SDL2/SDL.h>
+# include <SDL2_image/SDL_image.h>
+# include <SDL2_mixer/SDL_mixer.h>
 # include "../libft/srcs/libft.h"
 
-# define WIN_WIDTH		1500
-# define WIN_HEIGHT		800
+# define WIN_WIDTH		1200
+# define WIN_HEIGHT		950
 
 typedef struct			s_image
 {

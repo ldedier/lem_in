@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/03/12 17:36:42 by ldedier          ###   ########.fr        #
+#    Updated: 2018/03/12 18:19:20 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ EOC = \033[0m
 
 SRCS_NO_PREFIX = main.c ft_parse.c ft_debug.c ft_process_lem_in.c
 
-VSRCS_NO_PREFIX = main_visu.c
+VSRCS_NO_PREFIX = main_visu.c ft_init.c
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
 VSOURCES = $(addprefix $(SRCDIR)/, $(VSRCS_NO_PREFIX))

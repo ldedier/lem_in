@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/03/11 17:02:42 by ldedier          ###   ########.fr        #
+#    Updated: 2018/03/12 00:46:04 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ LIBFTDIR = libft
 OK_COLOR = \x1b[32;01m
 EOC = \033[0m
 
-SRCS_NO_PREFIX = main.c
+SRCS_NO_PREFIX = main.c ft_parse.c
 
 VSRCS_NO_PREFIX = main_visu.c
 
@@ -46,9 +46,7 @@ OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))
 VOBJECTS = $(addprefix $(OBJDIR)/, $(VSRCS_NO_PREFIX:%.c=%.o))
 
 SDL2 = ./frameworks/SDL2.framework/Versions/A/SDL2
-
 SDL2_image = ./frameworks/SDL2_image.framework/Versions/A/SDL2_image
-
 SDL2_mixer = ./frameworks/SDL2_mixer.framework/Versions/A/SDL2_mixer
 
 all: $(BINDIR)/$(NAME) $(BINDIR)/$(VISU_NAME)

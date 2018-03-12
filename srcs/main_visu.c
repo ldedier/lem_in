@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/11 18:27:36 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/11 18:41:14 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ SDL_Texture* LoadTexture(const char *str)
 int	init_texture()
 {
 	texture = LoadTexture(PATH"/resources/ant.png");
-	bg = LoadTexture(PATH"/resources/bg2.jpg");
+	bg = LoadTexture(PATH"/resources/swag.png");
 	if (!texture || !bg)
 		return (0);
 	return (1);

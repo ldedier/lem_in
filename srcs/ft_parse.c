@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 03:32:01 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/12 17:36:37 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		ft_links_transition_check(char *str, t_lem *lem)
 	if (ft_describe_link(str))
 	{
 		lem->parser.phase = e_phase_links;
-		return (1);
+		return (ft_phase_links(str, lem));
 	}
 	return (0);
 }
@@ -84,9 +84,9 @@ int		ft_isdigit_string(char *str)
 	{
 		if(!(ft_isdigit(str[i])))
 			return (0);
-		i++;	
+		i++;
 	}
-	return (1);
+	return (i);
 }
 
 int		ft_phase_nb_ants(char *str, t_lem *lem)
@@ -136,7 +136,13 @@ int		ft_is_valid_room(char **split, t_lem *lem)
 	return (1);
 }
 
-int		ft_add_room(char *str, t_lem *lem)
+void	ft_init_ant_room(t_room *room)
+{
+	room->ant_number = 0;
+	room->ant_count = 0;
+}
+
+int		ft_add_room(char *str, t_lem *lem, int role)
 {
 	char **split;
 	t_room *room;
@@ -147,7 +153,16 @@ int		ft_add_room(char *str, t_lem *lem)
 		room->name = ft_strdup(split[0]);
 		room->x = ft_atoi(split[1]);
 		room->y = ft_atoi(split[2]);
+		ft_init_ant_room(room);
 		ft_lstadd(&(lem->map.rooms),ft_lstnew_ptr(room, sizeof(t_room)));
+		if (role == START)
+		{
+			room->ant_number = 1;
+			room->ant_count = lem->map.total_ants;
+			lem->map.start = room;
+		}
+		else if (role == END)
+			lem->map.end = room;
 		lem->parser.phase = e_phase_rooms;
 		return(0);
 	}
@@ -193,7 +208,7 @@ int		ft_add_link(char *str, t_lem *lem)
 	{
 		ft_lstadd(&(r1->neighbours),ft_lstnew_ptr(r2, sizeof(t_room)));
 		ft_lstadd(&(r2->neighbours),ft_lstnew_ptr(r1, sizeof(t_room)));
-		return(0);
+		return (1);
 	}
 	else
 		return (-1);
@@ -209,7 +224,7 @@ int		ft_phase_rooms(char *str, t_lem *lem)
 		return (ret);
 	if ((ret = ft_links_transition_check(str, lem)))
 		return (ret);
-	return (ft_add_room(str, lem));
+	return (ft_add_room(str, lem, NONE));
 }
 
 int		ft_phase_start(char *str, t_lem *lem)
@@ -220,7 +235,7 @@ int		ft_phase_start(char *str, t_lem *lem)
 		return (ret);
 	if ((ret = ft_special_rooms_check(str, lem)))
 		return (ret);
-	return (ft_add_room(str, lem));
+	return (ft_add_room(str, lem, START));
 }
 int		ft_phase_end(char *str, t_lem *lem)
 {
@@ -230,7 +245,7 @@ int		ft_phase_end(char *str, t_lem *lem)
 		return (ret);
 	if ((ret = ft_special_rooms_check(str, lem)))
 		return (ret);
-	return (ft_add_room(str, lem));
+	return (ft_add_room(str, lem, END));
 }
 
 int		ft_phase_links(char *str, t_lem *lem)

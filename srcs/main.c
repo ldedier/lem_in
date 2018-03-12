@@ -6,18 +6,11 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 03:32:28 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/12 17:36:36 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-int		ft_add_data(char *str, t_lem *lem)
-{
-	(void) str;
-	(void) lem;
-	return (0);
-}
 
 void	ft_init_parser(t_parser *parser)
 {
@@ -46,8 +39,8 @@ char	*ft_parse(t_lem *lem)
 	res = ft_strnew(0);
 	while ((ret = get_next_line(0, &str)) > 0)
 	{
-		ft_printf("phase: %d\n", lem->parser.phase);
-		ft_printf("hoy: %s\n", str);
+	//	ft_printf("phase: %d\n", lem->parser.phase);
+	//	ft_printf("hoy: %s\n", str);
 		if (parse_arr[lem->parser.phase](str, lem) == -1)
 			return (NULL);
 		if (!(res = ft_strjoin(res, str)))
@@ -66,6 +59,11 @@ int		main(void)
 	if ((to_print = ft_parse(&lem)) == NULL)
 		ft_printf("ERROR\n");
 	else
-		ft_printf("%s", to_print);
+	{
+		ft_printf("%s\n", to_print);
+		if (ft_process_lem_in(&(lem.map)) == -1)
+			ft_printf("ERROR\n");
+	}
+	//ft_affich_map(&(lem.map));
 	return (0);
 }

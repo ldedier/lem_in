@@ -6,13 +6,15 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 03:32:34 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/12 17:36:45 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LEM_IN_H
 # define FT_LEM_IN_H
-
+# define NONE 0
+# define START 1
+# define END 2
 # include "../libft/srcs/libft.h"
 
 typedef struct		s_room
@@ -20,9 +22,10 @@ typedef struct		s_room
 	char			*name;
 	int				x;
 	int				y;
-	int				is_special;
-	int				nb_ants;
+	int				ant_number;
+	int				ant_count;
 	t_list			*neighbours;
+	int				parsed;
 }					t_room;
 
 typedef struct		s_map
@@ -63,5 +66,7 @@ int					ft_phase_rooms(char *str, t_lem *lem);
 int					ft_phase_start(char *str, t_lem *lem);
 int					ft_phase_end(char *str, t_lem *lem);
 int					ft_phase_links(char *str, t_lem *lem);
-
+void				ft_affich_map(t_map *map);
+void				ft_affich_queue(t_list *queue);
+int					ft_process_lem_in(t_map *map);
 #endif

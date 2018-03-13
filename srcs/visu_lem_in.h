@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 23:22:01 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/14 00:35:04 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 # include <SDL2_mixer/SDL_mixer.h>
 # include "../libft/srcs/libft.h"
 
-# define WIN_WIDTH		1200
-# define WIN_HEIGHT		950
+# define WIN_WIDTH		1600
+# define WIN_HEIGHT		1200
+# define GRASS_BORDER	110
+# define ROOM_SIZE		50
 # define ANT			0
 # define BG				1
 

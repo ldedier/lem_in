@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/13 01:04:30 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/14 00:35:42 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,29 @@
 
 void	ft_render_rooms(t_env *e)
 {
-	double alpha;
+	double w_alpha;
+	double h_alpha;
 	t_list *ptr;
 	t_room *room;
 	SDL_Rect pos;
 	SDL_Rect ant_pos;
-	int	x_margin;
-	int	y_margin;
 	SDL_Point center;
 
+	int x_margin;
+	int y_margin;
 	ptr = e->lem.map.rooms;
-	alpha = ft_min((2.0 * WIN_WIDTH) / ((double)(3.0 * ((double)e->stats.right - e->stats.left))),
-			(2.0 * WIN_HEIGHT) / ((double)(3.0 * ((double)e->stats.bottom - e->stats.top))));
-	x_margin =  (WIN_WIDTH / 8) - e->stats.left * alpha;
-	y_margin = (WIN_HEIGHT / 4) - e->stats.top * alpha;
-	pos.w = ft_max(alpha / 1.5, ft_min(WIN_WIDTH / 50, WIN_HEIGHT / 40));
-	pos.h = ft_max(alpha / 1.5, ft_min(WIN_WIDTH / 50, WIN_HEIGHT / 40));
+	w_alpha = (double)((double)(9.0 * WIN_WIDTH) / ((double)(10.0 * ((double)e->stats.right - e->stats.left)))) - ROOM_SIZE / (e->stats.right - e->stats.left);
+	h_alpha = (double)((9.0 * (WIN_HEIGHT - GRASS_BORDER)) / ((double)(10.0 * ((double)e->stats.bottom - e->stats.top)))) - ROOM_SIZE / (e->stats.bottom - e->stats.top);
+	
+	x_margin = (WIN_WIDTH / 20) - (e->stats.left * w_alpha);
+	y_margin = ((WIN_HEIGHT - GRASS_BORDER) / 20) - (e->stats.top * h_alpha) + GRASS_BORDER;
+	
+	pos.w = ROOM_SIZE;
+	pos.h = ROOM_SIZE;
+	
+	//	printf("%f\n", alpha);
+//	pos.w = ft_max(alpha / 2, ft_min(WIN_WIDTH / 50, (WIN_HEIGHT - GRASS_BORDER) / 40));
+//	pos.h = ft_max(alpha / 2, ft_min(WIN_WIDTH / 50, (WIN_HEIGHT - GRASS_BORDER) / 40));
 	ant_pos.w = pos.w / 2;
 	ant_pos.h = pos.h / 2;
 	while (ptr != NULL)
@@ -41,8 +48,10 @@ void	ft_render_rooms(t_env *e)
 			SDL_SetRenderDrawColor( e->sdl.renderer, 255, 0, 0, 255);
 		else
 			SDL_SetRenderDrawColor( e->sdl.renderer, 255, 255, 255, 255);
-		pos.x = x_margin + room->x * alpha;
-		pos.y = y_margin + room->y * alpha;
+		pos.x = x_margin + room->x * w_alpha;
+		pos.y = y_margin + room->y * h_alpha;
+//		ft_printf("y: %d\n", pos.x);
+//		ft_printf("x: %d\n", pos.y);
 		ant_pos.x = pos.x + pos.w / 4;
 		ant_pos.y = pos.y + pos.h / 4;
 		SDL_RenderFillRect(e->sdl.renderer, &pos);

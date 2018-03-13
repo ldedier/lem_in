@@ -1,2 +1,7 @@
 make
-./lem-in < maps/map01
+if [ -z $1 ]
+then
+	./lem-in < maps/map01 
+else
+	./lem-in < maps/$1 | ./lem-in_visu
+fi

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 17:36:45 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/12 23:06:57 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,17 @@ int					ft_phase_links(char *str, t_lem *lem);
 void				ft_affich_map(t_map *map);
 void				ft_affich_queue(t_list *queue);
 int					ft_process_lem_in(t_map *map);
+char				*ft_parse(t_lem *lem);
+int					ft_common_checks(char *str);
+int					ft_is_valid_room(char **split, t_lem *lem);
+int					ft_isdigit_string(char *str);
+int					ft_share_same_infos(t_list *rooms, char **split);
+int					ft_special_rooms_check(char *str, t_lem *lem);
+int					ft_links_transition_check(char *str, t_lem *lem);
+int					ft_add_room(char *str, t_lem *lem, int indic);
+int					ft_add_link(char *str, t_lem *lem);
+void				ft_init_parser(t_parser *parser);
+void				ft_init_parse_arr(t_parse_func arr[5]);
+void				ft_error(char *error);
+void				ft_file_error(char *filename);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 19:13:04 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/12 23:22:01 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define WIN_WIDTH		1200
 # define WIN_HEIGHT		950
 # define ANT			0
-# define BACKGROUND		1
+# define BG				1
 
 typedef struct			s_image
 {
@@ -44,8 +44,21 @@ typedef struct			s_sdl
 	SDL_Texture			*textures[5];
 }						t_sdl;
 
+typedef struct			s_stats
+{
+	int					top;
+	int					top_fix;
+	int					bottom;
+	int					bottom_fix;
+	int					right;
+	int					right_fix;
+	int					left;
+	int					left_fix;
+}						t_stats;
+
 typedef struct			s_env
 {
+	t_stats				stats;
 	t_lem				lem;
 	t_sdl				sdl;
 }						t_env;

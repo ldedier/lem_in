@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 23:06:57 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/16 15:43:56 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ typedef struct		s_room
 	char			*name;
 	int				x;
 	int				y;
+	int				corr_x;
+	int				corr_y;
 	int				ant_number;
 	int				ant_count;
 	t_list			*neighbours;

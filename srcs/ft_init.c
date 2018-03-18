@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/15 22:14:48 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/18 03:03:34 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ SDL_Texture	*ft_load_texture(t_env *e, char *str)
 int			ft_init_textures(t_env *e)
 {
 	e->sdl.textures[ANT] = ft_load_texture(e, PATH"/resources/ant.png");
+	e->sdl.textures[ROOM] = ft_load_texture(e, PATH"/resources/octagon.png");
 	e->sdl.textures[BG] = ft_load_texture(e, PATH"/resources/swag.png");
 	return (1);
 }

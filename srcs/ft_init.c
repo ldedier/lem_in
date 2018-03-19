@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 15:49:42 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/20 00:32:13 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,32 @@ SDL_Texture	*ft_load_texture(t_env *e, char *str)
 		ft_file_error(str);
 	return (texture);
 }
+TTF_Font	*ft_load_font(char *str, int quality)
+{
+	TTF_Font *font;
+
+	font = TTF_OpenFont(str, quality);
+	if (font == NULL)
+		ft_file_error(str);
+	return (font);
+}
 
 int			ft_init_textures(t_env *e)
 {
 	e->sdl.textures[ANT] = ft_load_texture(e, PATH"/resources/ant_0.png");
 	e->sdl.textures[ROOM] = ft_load_texture(e, PATH"/resources/octagon.png");
 	e->sdl.textures[BG] = ft_load_texture(e, PATH"/resources/swag.png");
-	e->sdl.ant_textures[0] = ft_load_texture(e, PATH"/resources/ant_0.png");
-	e->sdl.ant_textures[1] = ft_load_texture(e, PATH"/resources/ant_1.png");
-	e->sdl.ant_textures[2] = ft_load_texture(e, PATH"/resources/ant_2.png");
-	e->sdl.ant_textures[3] = ft_load_texture(e, PATH"/resources/ant_3.png");
+	e->sdl.textures[END_SPRITE] = ft_load_texture(e, PATH"/resources/swag_gem.png");
+	e->sdl.textures[START_SPRITE] = ft_load_texture(e, PATH"/resources/green_gem.png");
+	
+	e->sdl.ant_textures[0] = ft_load_texture(e, PATH"/resources/ant_0_ref.png");
+	e->sdl.ant_textures[1] = ft_load_texture(e, PATH"/resources/ant_1_ref.png");
+	e->sdl.ant_textures[2] = ft_load_texture(e, PATH"/resources/ant_2_ref.png");
+	e->sdl.ant_textures[3] = ft_load_texture(e, PATH"/resources/ant_3_ref.png");
+
+e->sdl.fonts[0] = ft_load_font(PATH"/resources/workaholic.ttf", 200);
+//	e->sdl.fonts[0] = ft_load_font(PATH"/resources/hack.ttf", 200);
+//	e->sdl.fonts[0] = ft_load_font(PATH"/resources/mono.ttf", 200);
 	return (1);
 }
 
@@ -49,6 +65,8 @@ int			ft_init_sdl(t_env *e)
 	e->sdl.screen.y = 200;
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		return (0);
+	if (TTF_Init() < 0)
+		return(0);
 	ft_get_dimensions(e);
 	e->sdl.screen.w = e->dim.width;
 	e->sdl.screen.h = e->dim.height;

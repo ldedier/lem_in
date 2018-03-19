@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 17:21:19 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/20 00:58:54 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct		s_map
 	t_room			*end;
 	t_list			*rooms;
 	int				total_ants;
+	int				toward_end;
 }					t_map;
 
 
@@ -61,6 +62,7 @@ typedef struct		s_lem
 {
 	t_map			map;
 	t_parser		parser;
+	int				turn;
 }					t_lem;
 
 typedef int         (*t_parse_func)(char *, t_lem *);

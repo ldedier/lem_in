@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 16:48:36 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/20 00:45:39 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 	//	ft_affich_map(&(e.lem.map));
 	ft_gather_stats(&e);
 	ft_update_corr_pos(&e);
+	e.lem.turn = 1;
 //	ft_debug_stats(&(e.stats));
 	while (get_next_line(0, &str) > 0)
 	{
@@ -40,6 +41,7 @@ int main(int argc, char **argv)
 //		ft_affich_map(&(e.lem.map));
 		e.anim.transitions = NULL;
 		e.anim.static_ants_rooms = NULL;
+		e.lem.turn++;
 		//TO FREE
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 03:22:05 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 16:48:37 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct			s_sdl
 	SDL_Renderer		*renderer;
 	SDL_Surface			*surface;
 	SDL_Texture			*textures[5];
+	SDL_Texture			*ant_textures[4];
 }						t_sdl;
 
 typedef struct			s_stats
@@ -69,10 +70,13 @@ typedef struct			s_stats
 typedef struct			s_anim
 {
 	t_list				*transitions;
+	double				progress;
 	t_list				*static_ants_rooms;
 	Uint32				start;
+	Uint32				previous;
 	Uint32				current;
-	char				**split;
+	int					pause;
+	int					current_animation;
 }						t_anim;
 
 typedef struct			s_keys
@@ -81,6 +85,7 @@ typedef struct			s_keys
 	int					up;
 	int					right;
 	int					left;
+	int					can_pause;
 }						t_keys;
 
 typedef struct			s_grab

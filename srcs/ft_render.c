@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:30:10 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 04:44:28 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 16:44:23 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,16 @@ void	ft_render_rooms(t_env *e)
 }
 
 /*
- ** return the position of moving ant at the very instant
- */
+** return the position of moving ant at the very instant
+*/
 SDL_Rect	ft_get_pos(t_env *e, t_transition *tr)
 {
-	int diff;
 	SDL_Rect res;
 
-	diff =  SDL_GetTicks() - e->anim.start;
 	res.w = e->room_size / 2;
 	res.h = e->room_size / 2;
-	res.x = tr->from->corr_x + (e->room_size / 4) + ((double)diff / (double)e->time_per_turn) * ((tr->to->corr_x + (e->room_size / 4) - (tr->from->corr_x + (e->room_size / 4))));
-	res.y = tr->from->corr_y + (e->room_size / 4) + ((double)diff / (double)e->time_per_turn) * ((tr->to->corr_y + (e->room_size / 4) - (tr->from->corr_y + (e->room_size / 4))));
+	res.x = tr->from->corr_x + ((double)e->room_size / 4) + (e->anim.progress) * ((tr->to->corr_x + (e->room_size / 4) - (tr->from->corr_x + (e->room_size / 4))));
+	res.y = tr->from->corr_y + ((double)e->room_size / 4) + (e->anim.progress) * ((tr->to->corr_y + (e->room_size / 4) - (tr->from->corr_y + (e->room_size / 4))));
 	return (res);
 }
 
@@ -86,19 +84,30 @@ int	ft_get_angle(t_env *e, t_transition *tr)
 						tr->to->corr_x + e->room_size / 2 - (tr->from->corr_x + e->room_size / 2)) * 180 / M_PI) + 90));
 }
 
+/*
+SDL_Texture *ft_get_ant_texture(t_env *e)
+{
+	SDL_Texture *texture;
 
+	return texture;
+}
+*/
 void	ft_render_ants(t_env *e)
 {
 	t_list *ptr;
 	t_transition *tr;
 	SDL_Rect pos;
 	SDL_Point center;
-	int flip;
+	
+	if (!e->anim.pause)
+		e->anim.current_animation = ((SDL_GetTicks() - e->anim.start) % 400) / 100;
+//	texture = e->sdl.ant_textures[3];
+	//int flip;
 	ptr = e->anim.transitions;
-	if ((SDL_GetTicks() - e->anim.start) % 200 < 100)
-		flip = SDL_FLIP_HORIZONTAL;
-	else
-		flip = SDL_FLIP_NONE;
+//	if ((SDL_GetTicks() - e->anim.start) % 200 < 100)
+//		flip = SDL_FLIP_HORIZONTAL;
+//	else
+//		flip = SDL_FLIP_NONE;
 	while (ptr != NULL)
 	{
 		tr = (t_transition *)(ptr->content);
@@ -110,9 +119,19 @@ void	ft_render_ants(t_env *e)
 		//		if (rand() % 2 == 0)
 		//	flip = SDL_FLIP_NONE;
 		//		else
-		SDL_RenderCopyEx(e->sdl.renderer, e->sdl.textures[ANT], NULL, &pos, tr->angle, &center, flip);
+		SDL_RenderCopyEx(e->sdl.renderer, e->sdl.ant_textures[e->anim.current_animation], NULL, &pos, tr->angle, &center, SDL_FLIP_NONE);
 		ptr = ptr->next;
 	}
+}
+
+void	ft_process_animation(t_env *e)
+{
+	int diff;
+
+	e->anim.current = SDL_GetTicks();
+	diff = e->anim.current - e->anim.previous;
+	e->anim.progress = ft_fmin(1, e->anim.progress + (double)diff / e->time_per_turn);
+	e->anim.previous = e->anim.current;
 }
 
 void	ft_render_static_ants(t_env *e)
@@ -156,8 +175,10 @@ void ft_render_visu(t_env *e, char *str)
 	ft_add_transitions(e, str);
 	ft_add_static(e);
 	e->anim.start = SDL_GetTicks();
+	e->anim.previous = e->anim.start;
+	e->anim.progress = 0;
 	loop = 1;
-	while (SDL_GetTicks() < e->anim.start + e->time_per_turn)
+	while (e->anim.progress < 1)
 	{
 		while (SDL_PollEvent(&event))
 		{
@@ -175,6 +196,8 @@ void ft_render_visu(t_env *e, char *str)
 			else if(event.type == SDL_MOUSEMOTION)
 				ft_mouse_motion(e, event);
 		}
+		if (!e->anim.pause)
+			ft_process_animation(e);
 		ft_process(e);
 		ft_render(e);
 		SDL_Delay(16);

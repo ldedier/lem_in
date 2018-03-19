@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 03:21:35 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 16:48:36 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int main(int argc, char **argv)
 	e.lem.map.rooms = NULL;
 	e.anim.transitions = NULL;
 	e.anim.static_ants_rooms = NULL;
+	e.anim.pause = 0;
+	e.keys.can_pause = 1;
 	e.time_per_turn = TIME_PER_TURN;
 	if (!ft_init_all(&e))
 		ft_error("Initialisation error\n");

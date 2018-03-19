@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/18 17:48:51 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 17:21:19 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define NONE 0
 # define START 1
 # define END 2
-# include "../libft/srcs/libft.h"
+# include "libft.h"
 
 typedef struct		s_room
 {

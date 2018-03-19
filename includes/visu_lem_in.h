@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 16:48:37 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 16:51:14 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <SDL2/SDL.h>
 # include <SDL2_image/SDL_image.h>
 # include <SDL2_mixer/SDL_mixer.h>
-# include "../libft/srcs/libft.h"
+# include "libft.h"
 
 # define GRASS_BORDER	0
 # define ROOM_SIZE		150

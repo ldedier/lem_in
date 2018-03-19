@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/18 19:21:57 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 01:27:52 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@
 # include <SDL2_mixer/SDL_mixer.h>
 # include "../libft/srcs/libft.h"
 
-# define WIN_WIDTH		1600
-# define WIN_HEIGHT		1200
 # define GRASS_BORDER	0
-# define ROOM_SIZE		100
+# define ROOM_SIZE		150
 # define ANT			0
 # define BG				1
 # define ROOM			2
@@ -71,6 +69,7 @@ typedef struct			s_stats
 typedef struct			s_anim
 {
 	t_list				*transitions;
+	t_list				*static_ants_rooms;
 	Uint32				start;
 	Uint32				current;
 	char				**split;
@@ -88,12 +87,18 @@ typedef struct			s_grab
 {
 	int					x_diff;
 	int					y_diff;
-	int					has_grabbed;
 	t_room				*grabbed_room;
 }						t_grab;
 
+typedef struct			s_dim
+{
+	int					width;
+	int					height;
+}						t_dim;
+
 typedef struct			s_env
 {
+	t_dim				dim;
 	t_anim				anim;
 	t_keys				keys;
 	t_stats				stats;
@@ -102,7 +107,6 @@ typedef struct			s_env
 	t_grab				grab;
 	int					room_size;
 	int					time_per_turn;
-
 }						t_env;
 
 int						ft_init_all(t_env *e);

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/18 19:21:56 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 01:27:49 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int		ft_iz_okay(t_env *e)
 	t_room *room2;
 
 	ptr = e->lem.map.rooms;
-	w_alpha = (double)((double)(9.0 * WIN_WIDTH) / ((double)(10.0 * ((double)e->stats.right - e->stats.left)))) - (double)e->room_size / (double)(e->stats.right - e->stats.left);
-	h_alpha = (double)((9.0 * (WIN_HEIGHT - GRASS_BORDER)) / ((double)(10.0 * ((double)e->stats.bottom - e->stats.top)))) - (double)e->room_size / (double)(e->stats.bottom - e->stats.top);
+	w_alpha = (double)((double)(9.0 * e->dim.width) / ((double)(10.0 * ((double)e->stats.right - e->stats.left)))) - (double)e->room_size / (double)(e->stats.right - e->stats.left);
+	h_alpha = (double)((9.0 * (e->dim.height - GRASS_BORDER)) / ((double)(10.0 * ((double)e->stats.bottom - e->stats.top)))) - (double)e->room_size / (double)(e->stats.bottom - e->stats.top);
 
 	while (ptr != NULL)
 	{
@@ -33,10 +33,7 @@ int		ft_iz_okay(t_env *e)
 		{
 			room2 = (t_room *)(ptr2->content);
 			if (room != room2 && sqrt(pow(room->x * w_alpha - room2->x * w_alpha, 2) + pow(room->y * h_alpha - room2->y * h_alpha, 2)) <= e->room_size)
-			{
-				ft_printf("room1:%s\nroom2:%s\n", room->name, room2->name);
 				return (0);
-			}
 			ptr2 = ptr2->next;
 		}
 		ptr = ptr->next;
@@ -65,19 +62,11 @@ void	ft_update_corr_pos(t_env *e)
 
 	ptr = e->lem.map.rooms;
 	ft_update_room_size(e);
-	w_alpha = (double)((double)(9.0 * WIN_WIDTH) / ((double)(10.0 * ((double)e->stats.right - e->stats.left)))) - (double)e->room_size / (double)(e->stats.right - e->stats.left);
-	h_alpha = (double)((9.0 * (WIN_HEIGHT - GRASS_BORDER)) / ((double)(10.0 * ((double)e->stats.bottom - e->stats.top)))) - (double)e->room_size / (double)(e->stats.bottom - e->stats.top);
+	w_alpha = (double)((double)(9.0 * e->dim.width) / ((double)(10.0 * ((double)e->stats.right - e->stats.left)))) - (double)e->room_size / (double)(e->stats.right - e->stats.left);
+	h_alpha = (double)((9.0 * (e->dim.height - GRASS_BORDER)) / ((double)(10.0 * ((double)e->stats.bottom - e->stats.top)))) - (double)e->room_size / (double)(e->stats.bottom - e->stats.top);
 
-	//	if (w_alpha > h_alpha)
-//	{
-//		x_margin = (WIN_WIDTH / 20) - (e->stats.left * w_alpha) - e->room_size / 2;
-//		y_margin = ((WIN_HEIGHT - GRASS_BORDER) / 20) - (e->stats.top * h_alpha) + GRASS_BORDER - e->room_size / 2;
-//	}
-//	else
-//	{
-		x_margin = (WIN_WIDTH / 20) - (e->stats.left * w_alpha);
-		y_margin = ((WIN_HEIGHT - GRASS_BORDER) / 20) - (e->stats.top * h_alpha) + GRASS_BORDER;
-//	}
+	x_margin = (e->dim.width / 20) - (e->stats.left * w_alpha);
+	y_margin = ((e->dim.height - GRASS_BORDER) / 20) - (e->stats.top * h_alpha) + GRASS_BORDER;
 	while (ptr != NULL)
 	{
 		room = (t_room *)(ptr->content);
@@ -92,29 +81,6 @@ void	ft_update_corr_pos(t_env *e)
 int	ft_dist(int x1, int y1, int x2, int y2)
 {
 	return (sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
-}
-
-void	ft_draw_circle(SDL_Renderer *renderer, int x, int y, int radius)
-{
-	int i;
-	int j;
-	int center_x;
-	int center_y;
-
-	center_x = x + radius / 2;
-	center_y = y + radius / 2;
-	i = y;
-	while (i < y + radius * 2)
-	{
-		j = x;
-		while (j < x + radius * 2)
-		{
-			if (ft_dist(j, i, center_x, center_y) <= radius/2)
-				SDL_RenderDrawPoint(renderer, j, i);
-			j++;
-		}
-		i++;
-	}
 }
 
 void	ft_render_links(t_env *e)
@@ -155,18 +121,16 @@ void	ft_render_rooms(t_env *e)
 
 	while (ptr != NULL)
 	{
-		room = (t_room *)(ptr->content);
+		room = (t_room *)(ptr->content);	
+		pos.x = room->corr_x;
+		pos.y = room->corr_y;
 		if (room == e->lem.map.start)
 			SDL_SetRenderDrawColor( e->sdl.renderer, 0, 0, 255, 255);
 		else if (room == e->lem.map.end)
 			SDL_SetRenderDrawColor( e->sdl.renderer, 255, 0, 0, 255);
 		else
 			SDL_SetRenderDrawColor( e->sdl.renderer, 255, 255, 255, 255);
-		pos.x = room->corr_x;
-		pos.y = room->corr_y;
-	//	ft_draw_circle(e->sdl.renderer, pos.x, pos.y, pos.w);
-	SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[ROOM], NULL, &pos);
-	//	SDL_RenderFillRect(e->sdl.renderer, &pos);
+		SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[ROOM], NULL, &pos);
 		ptr = ptr->next;
 	}
 }
@@ -221,6 +185,65 @@ void	ft_render_ants(t_env *e)
 		ptr = ptr->next;
 	}
 }
+
+
+
+void	ft_add_static(t_env *e)
+{
+	e->anim.static_ants_rooms = NULL;
+	t_list *ptr;
+	t_list *ptr2;
+	t_room *room;
+	t_transition *tr;
+	int is_static_ant;
+
+	ptr = e->lem.map.rooms;
+	while (ptr != NULL)
+	{
+		room = (t_room *)(ptr->content);
+		if (room->ant_count && room != e->lem.map.start && room != e->lem.map.end)
+		{
+			is_static_ant = 1;
+			ptr2 = e->anim.transitions;
+			while (ptr2 != NULL)
+			{
+				tr = (t_transition *)(ptr2->content);
+				if (tr->to == room)
+				{
+					is_static_ant = 0;
+					break;
+				}
+				ptr2 = ptr2->next;
+			}
+		if (is_static_ant)
+			ft_lstadd(&(e->anim.static_ants_rooms), ft_lstnew_ptr(room, sizeof(t_room)));
+		}
+		ptr = ptr->next;
+	}
+}
+
+void	ft_render_static_ants(t_env *e)
+{
+	t_list *ptr;
+	t_room *room;
+	SDL_Rect pos;
+	SDL_Point center;
+
+	ptr = e->anim.static_ants_rooms;
+	while (ptr != NULL)
+	{
+		room = (t_room *)(ptr->content);
+		pos.x = room->corr_x + e->room_size / 4;
+		pos.y = room->corr_y + e->room_size / 4;
+		pos.w = e->room_size / 2;
+		pos.h = e->room_size / 2;
+		center.x = pos.w / 2;
+		center.y = pos.h / 2;
+		SDL_RenderCopyEx(e->sdl.renderer, e->sdl.textures[ANT], NULL, &pos, 0, &center, SDL_FLIP_NONE);
+		ptr = ptr->next;
+	}
+}
+
 void ft_render(t_env *e)
 {
 	SDL_SetRenderDrawColor( e->sdl.renderer, 100, 100, 100, 255);
@@ -229,6 +252,7 @@ void ft_render(t_env *e)
 	ft_render_links(e);
 	ft_render_rooms(e);
 	ft_render_ants(e);
+	ft_render_static_ants(e);
 	SDL_RenderPresent(e->sdl.renderer);
 }
 
@@ -257,7 +281,6 @@ t_transition *ft_new_transition(t_env *e, t_room *from, t_room *to, int ant_num)
 	res->from = from;
 	res->to = to;
 	res->ant_num = ant_num;
-	res->angle = ft_get_angle(e, res);
 	return (res);
 }
 
@@ -324,6 +347,7 @@ void	ft_reset_pos(t_env *e)
 	t_list *ptr;
 	t_room *room;
 
+	e->grab.grabbed_room = NULL;
 	ptr = e->lem.map.rooms;
 	while (ptr != NULL)
 	{
@@ -377,7 +401,6 @@ void	ft_process(t_env *e)
 void	ft_grab_room(t_env *e, int x, int y)
 {
 
-	ft_printf("x:%d\ny:%d\n",x, y);
 	t_list *ptr;
 	t_room *room;
 	ptr = e->lem.map.rooms;
@@ -390,7 +413,6 @@ void	ft_grab_room(t_env *e, int x, int y)
 			e->grab.grabbed_room = room;
 			e->grab.x_diff = room->corr_x - x;
 			e->grab.y_diff = room->corr_y - y;
-			ft_printf("LE NOM: %s\n", room->name);
 			return;
 		}
 		ptr = ptr->next;
@@ -399,7 +421,6 @@ void	ft_grab_room(t_env *e, int x, int y)
 
 void	ft_mouse_down(t_env *e, SDL_Event event)
 {
-	ft_printf("LOOOOOOOOL");
 	ft_grab_room(e, event.button.x, event.button.y);
 }
 
@@ -413,8 +434,8 @@ void	ft_mouse_motion(t_env *e, SDL_Event event)
 {
 	if (e->grab.grabbed_room)
 	{
-		e->grab.grabbed_room->corr_x = event.motion.x + e->grab.x_diff;
-		e->grab.grabbed_room->corr_y = event.motion.y + e->grab.y_diff;
+		e->grab.grabbed_room->corr_x = ft_clamp(0, event.motion.x + e->grab.x_diff, e->dim.width - e->room_size);
+		e->grab.grabbed_room->corr_y = ft_clamp(GRASS_BORDER, event.motion.y + e->grab.y_diff, e->dim.height - e->room_size);
 	}
 }
 
@@ -423,6 +444,7 @@ void render_visu(t_env *e, char *str)
 	int loop;
 	SDL_Event event;
 	ft_add_transitions(e, str);
+	ft_add_static(e);
 //	ft_affich_transitions(e);
 	e->anim.start = SDL_GetTicks();
 	loop = 1;
@@ -577,6 +599,7 @@ int main(int argc, char **argv)
 	(void)argv;
 	e.lem.map.rooms = NULL;
 	e.anim.transitions = NULL;
+	e.anim.static_ants_rooms = NULL;
 	e.time_per_turn = TIME_PER_TURN;
 	if (!ft_init_all(&e))
 		ft_error("Initialisation error\n");
@@ -592,6 +615,8 @@ int main(int argc, char **argv)
 //		ft_update_map(&(e.lem.map), str);
 //		ft_affich_map(&(e.lem.map));
 		e.anim.transitions = NULL;
+		e.anim.static_ants_rooms = NULL;
+		//TO FREE
 	}
 	return (0);
 }

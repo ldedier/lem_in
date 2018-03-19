@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/18 03:03:34 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/18 20:21:18 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,26 @@ int			ft_init_textures(t_env *e)
 	return (1);
 }
 
+void	ft_get_dimensions(t_env *e)
+{
+	SDL_DisplayMode dm;
+
+	SDL_GetCurrentDisplayMode(0, &dm);
+	e->dim.width = dm.w;
+	e->dim.height = dm.h;
+}
+
 int			ft_init_sdl(t_env *e)
 {
 	e->sdl.screen.x = 300;
 	e->sdl.screen.y = 200;
-	e->sdl.screen.w = WIN_WIDTH;
-	e->sdl.screen.h = WIN_HEIGHT;
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		return (0);
+	ft_get_dimensions(e);
+	e->sdl.screen.w = e->dim.width;
+	e->sdl.screen.h = e->dim.height;
 	if (!(e->sdl.window = SDL_CreateWindow("lem-in visu",
-		e->sdl.screen.x, e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, 0)))
+		e->sdl.screen.x, e->sdl.screen.y, e->sdl.screen.w, e->sdl.screen.h, SDL_WINDOW_FULLSCREEN_DESKTOP)))
 		return (0);
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 		return (0);
@@ -53,7 +63,7 @@ int			ft_init_sdl(t_env *e)
 	if (SDL_SetRenderDrawColor(e->sdl.renderer, 0, 0, 0, 255) < 0)
 		return (0);
 	e->sdl.surface = SDL_CreateRGBSurface(0,
-			WIN_WIDTH, WIN_HEIGHT, 32, 0, 0, 0, 0);
+			e->dim.width, e->dim.height, 32, 0, 0, 0, 0);
 	if (e->sdl.surface == NULL)
 		return (0);
 	return (1);

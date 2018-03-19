@@ -6,39 +6,40 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 03:21:35 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 03:18:19 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visu_lem_in.h"
 
-int main(int argc, char **argv)
+void	ft_affich_transitions(t_env *e)
 {
-	t_env e;
-	char *str;
+	t_list *ptr;
+	t_transition *tr;
 
-	(void)argc;
-	(void)argv;
-	e.lem.map.rooms = NULL;
-	e.anim.transitions = NULL;
-	e.anim.static_ants_rooms = NULL;
-	e.time_per_turn = TIME_PER_TURN;
-	if (!ft_init_all(&e))
-		ft_error("Initialisation error\n");
-	if (ft_parse_visu(&(e.lem)) == -1)
-		ft_error("Parsing error\n");
-	//	ft_affich_map(&(e.lem.map));
-	ft_gather_stats(&e);
-	ft_update_corr_pos(&e);
-//	ft_debug_stats(&(e.stats));
-	while (get_next_line(0, &str) > 0)
+	ptr = e->anim.transitions;
+	while (ptr != NULL)
 	{
-		ft_render_visu(&e, str);
-//		ft_update_map(&(e.lem.map), str);
-//		ft_affich_map(&(e.lem.map));
-		e.anim.transitions = NULL;
-		e.anim.static_ants_rooms = NULL;
-		//TO FREE
+		tr = (t_transition *)(ptr->content);
+		ft_printf("from: %s\n", tr->from->name);
+		ft_printf("to: %s\n", tr->to->name);
+		ft_printf("by ant #%d\n\n", tr->ant_num);
+		ptr = ptr->next;
+	}
+}
+
+int		ft_parse_visu(t_lem *lem)
+{
+	char	*str;
+	int		ret;
+
+	t_parse_func parse_arr[5];
+	ft_init_parser(&(lem->parser));
+	ft_init_parse_arr(parse_arr);
+	while ((ret = get_next_line(0, &str)) > 0 && ft_strcmp(str, ""))
+	{
+		if (parse_arr[lem->parser.phase](str, lem) == -1)
+			return (-1);
 	}
 	return (0);
 }

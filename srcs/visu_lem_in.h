@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 01:27:52 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/19 03:22:05 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,19 @@ typedef struct			s_env
 }						t_env;
 
 int						ft_init_all(t_env *e);
-
+void					ft_render(t_env *e);
+void					ft_key_down(t_env *e, SDL_Event event);
+void					ft_key_up(t_env *e, SDL_Event event);
+void					ft_mouse_down(t_env *e, SDL_Event event);
+void					ft_mouse_up(t_env *e, SDL_Event event);
+void					ft_mouse_motion(t_env *e, SDL_Event event);
+void					ft_update_corr_pos(t_env *e);
+void					ft_update_room(t_map *map, int ant_num, char *room_name);
+void					ft_add_transitions(t_env *e, char *str);
+void					ft_affich_transitions(t_env *e);
+void					ft_add_static(t_env *e);
+void					ft_gather_stats(t_env *e);
+void					ft_process(t_env *e);
+int						ft_parse_visu(t_lem *lem);
+void					ft_render_visu(t_env *e, char *str);
 #endif

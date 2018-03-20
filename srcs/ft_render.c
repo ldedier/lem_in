@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:30:10 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/20 00:58:56 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/20 23:48:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ void	ft_render_rooms(t_env *e)
 		pos.x = room->corr_x;
 		pos.y = room->corr_y;
 		if (room == e->lem.map.start)
-			SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[START_SPRITE], NULL, &pos);
+			SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[START_SPRITE + (room == e->selected_room) * 3], NULL, &pos);
 		else if (room == e->lem.map.end)
-			SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[END_SPRITE], NULL, &pos);
+			SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[END_SPRITE + (room == e->selected_room) * 3], NULL, &pos);
 		else
-			SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[ROOM], NULL, &pos);
+			SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[ROOM + (room == e->selected_room) * 3], NULL, &pos);
 		ptr = ptr->next;
 	}
 }
@@ -97,7 +97,7 @@ void	ft_render_ants(t_env *e)
 	t_transition *tr;
 	SDL_Rect pos;
 	SDL_Point center;
-	
+
 	if (!e->anim.pause)
 		e->anim.current_animation = ((SDL_GetTicks() - e->anim.start) % 400) / 100;
 //	texture = e->sdl.ant_textures[3];
@@ -154,6 +154,28 @@ void	ft_render_static_ants(t_env *e)
 		ptr = ptr->next;
 	}
 }
+
+void	ft_render_selected_room(t_env *e)
+{
+	char		*str;
+	SDL_Rect	pos;
+	SDL_Color color = {255, 255, 255, 255};
+	SDL_Surface *textSurface;
+	SDL_Texture *texture;
+	str = ft_strjoin("room: ", e->selected_room->name);
+	
+	textSurface = TTF_RenderText_Solid(e->sdl.fonts[0], str, color);
+	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
+	SDL_FreeSurface(textSurface);
+	pos.x = 1280 - (ft_strlen(str) * 10);
+	pos.y = 140;
+	pos.w = ft_strlen(str) * 20;
+	pos.h = 45;
+	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
+	SDL_DestroyTexture(texture);
+	ft_strdel(&str);
+}
+
 void	ft_render_turn(t_env *e)
 {
 	char		*str;
@@ -164,9 +186,9 @@ void	ft_render_turn(t_env *e)
 	SDL_Texture *texture;
 	str2 = ft_itoa(e->lem.turn);
 	str = ft_strjoin("turn #", str2);
-	
+
 	pos.x = 1280 - ft_strlen(str) * 15;
-	pos.y = 70;
+	pos.y = 65;
 	pos.w = ft_strlen(str) * 30;
 	pos.h = 70;
 
@@ -226,7 +248,10 @@ void	ft_render_nb_ants_start(t_env *e)
 	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
 	SDL_DestroyTexture(texture);
 	str2 = ft_itoa(e->lem.map.start->ant_count);
-	str = ft_strjoin(str2, " ants");
+	if (e->lem.map.start->ant_count == 1)
+		str = ft_strjoin(str2, " ant");
+	else
+		str = ft_strjoin(str2, " ants");
 	textSurface = TTF_RenderText_Solid(e->sdl.fonts[0], str, color);
 	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
 	SDL_FreeSurface(textSurface);
@@ -255,7 +280,12 @@ void	ft_render_nb_ants_end(t_env *e)
 	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
 	SDL_DestroyTexture(texture);
 	str2 = ft_itoa(e->lem.map.end->ant_count - e->lem.map.toward_end);
-	str = ft_strjoin(str2, " ants");
+
+
+	if (e->lem.map.end->ant_count - e->lem.map.toward_end == 1)
+		str = ft_strjoin(str2, " ant");
+	else
+		str = ft_strjoin(str2, " ants");
 	textSurface = TTF_RenderText_Solid(e->sdl.fonts[0], str, color);
 	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
 	SDL_FreeSurface(textSurface);
@@ -283,7 +313,10 @@ void	ft_render_nb_ants_others(t_env *e)
 	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
 	SDL_DestroyTexture(texture);
 	str2 = ft_itoa(e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->lem.map.toward_end)));
-	str = ft_strjoin(str2, " ants");
+	if (e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->lem.map.toward_end)) == 1)
+		str = ft_strjoin(str2, " ant");
+	else
+		str = ft_strjoin(str2, " ants");
 	textSurface = TTF_RenderText_Solid(e->sdl.fonts[0], str, color);
 	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
 	pos.x = 250;
@@ -299,6 +332,8 @@ void	ft_render_nb_ants(t_env *e)
 	ft_render_nb_ants_end(e);
 	ft_render_nb_ants_others(e);
 	ft_render_speed(e);
+	if (e->selected_room != NULL)
+		ft_render_selected_room(e);
 }
 
 void	ft_render_dashboard(t_env *e)
@@ -360,6 +395,37 @@ void ft_render_visu(t_env *e, char *str)
 		if (!e->anim.pause)
 			ft_process_animation(e);
 		ft_process(e);
+		ft_render(e);
+		SDL_Delay(20);
+	}
+}
+
+void ft_render_visu_end(t_env *e)
+{
+	int loop;
+	SDL_Event event;
+
+	e->lem.map.toward_end = 0;
+	loop = 1;
+	while (loop)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_QUIT ||
+					(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
+				loop = 0;
+			else if (event.type == SDL_KEYUP)
+				ft_key_up(e, event);
+			else if(event.type == SDL_MOUSEBUTTONDOWN)
+				ft_mouse_down(e, event);
+			else if(event.type == SDL_MOUSEBUTTONUP)
+				ft_mouse_up(e, event);
+			else if(event.type == SDL_MOUSEMOTION)
+				ft_mouse_motion(e, event);
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
+				ft_reset_pos(e);
+		}
+		ft_process_end(e);
 		ft_render(e);
 		SDL_Delay(20);
 	}

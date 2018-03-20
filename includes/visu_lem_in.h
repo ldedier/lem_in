@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/20 00:23:04 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/20 23:48:10 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@
 # define ANT			0
 # define BG				1
 # define ROOM			2
-# define END_SPRITE		3
-# define START_SPRITE	4
+# define START_SPRITE	3
+# define END_SPRITE		4
+# define ROOM_SEL		5
+# define START_SEL		6
+# define END_SEL		7
+
 # define TIME_PER_TURN	3000
 
 typedef struct			s_image
@@ -54,7 +58,7 @@ typedef struct			s_sdl
 	SDL_Window			*window;
 	SDL_Renderer		*renderer;
 	SDL_Surface			*surface;
-	SDL_Texture			*textures[5];
+	SDL_Texture			*textures[10];
 	SDL_Texture			*ant_textures[4];
 	TTF_Font			*fonts[3];
 }						t_sdl;
@@ -117,6 +121,7 @@ typedef struct			s_env
 	int					room_size;
 	int					time_per_turn;
 	int					toward_end;
+	t_room				*selected_room;
 }						t_env;
 
 int						ft_init_all(t_env *e);
@@ -133,6 +138,9 @@ void					ft_affich_transitions(t_env *e);
 void					ft_add_static(t_env *e);
 void					ft_gather_stats(t_env *e);
 void					ft_process(t_env *e);
+void					ft_process_end(t_env *e);
 int						ft_parse_visu(t_lem *lem);
 void					ft_render_visu(t_env *e, char *str);
+void					ft_render_visu_end(t_env *e);
+void					ft_reset_pos(t_env *e);
 #endif

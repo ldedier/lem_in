@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 03:10:04 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/20 23:46:53 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,9 @@ void	ft_process(t_env *e)
 	{
 		e->time_per_turn += 100;
 	}
+}
+
+void	ft_process_end(t_env *e)
+{
+	(void)e;
 }

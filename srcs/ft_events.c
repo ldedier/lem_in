@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:51:24 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 16:39:28 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/21 00:47:12 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	ft_grab_room(t_env *e, int x, int y)
 		if (x >= room->corr_x && x <= room->corr_x + e->room_size &&
 				y >= room->corr_y && y <= room->corr_y + e->room_size)
 		{
+			e->selected_room = room;
 			e->grab.grabbed_room = room;
 			e->grab.x_diff = room->corr_x - x;
 			e->grab.y_diff = room->corr_y - y;
@@ -96,6 +97,8 @@ void	ft_grab_room(t_env *e, int x, int y)
 		}
 		ptr = ptr->next;
 	}
+	if (y > GRASS_BORDER)
+		e->selected_room = NULL;
 }	
 
 void	ft_mouse_down(t_env *e, SDL_Event event)

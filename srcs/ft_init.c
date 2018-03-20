@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/20 00:32:13 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/21 00:37:25 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,24 @@ TTF_Font	*ft_load_font(char *str, int quality)
 int			ft_init_textures(t_env *e)
 {
 	e->sdl.textures[ANT] = ft_load_texture(e, PATH"/resources/ant_0.png");
-	e->sdl.textures[ROOM] = ft_load_texture(e, PATH"/resources/octagon.png");
+
 	e->sdl.textures[BG] = ft_load_texture(e, PATH"/resources/swag.png");
-	e->sdl.textures[END_SPRITE] = ft_load_texture(e, PATH"/resources/swag_gem.png");
-	e->sdl.textures[START_SPRITE] = ft_load_texture(e, PATH"/resources/green_gem.png");
+	
+	e->sdl.textures[ROOM] = ft_load_texture(e, PATH"/resources/octagon.png");
+	e->sdl.textures[START_SPRITE] = ft_load_texture(e, PATH"/resources/octagon_red.png");
+	e->sdl.textures[END_SPRITE] = ft_load_texture(e, PATH"/resources/octagon_blue.png");
+
+	e->sdl.textures[ROOM_SEL] = ft_load_texture(e, PATH"/resources/octagon_selected.png");
+	e->sdl.textures[START_SEL] = ft_load_texture(e, PATH"/resources/octagon_red_selected.png");
+	e->sdl.textures[END_SEL] = ft_load_texture(e, PATH"/resources/octagon_blue_selected.png");
 	
 	e->sdl.ant_textures[0] = ft_load_texture(e, PATH"/resources/ant_0_ref.png");
 	e->sdl.ant_textures[1] = ft_load_texture(e, PATH"/resources/ant_1_ref.png");
 	e->sdl.ant_textures[2] = ft_load_texture(e, PATH"/resources/ant_2_ref.png");
 	e->sdl.ant_textures[3] = ft_load_texture(e, PATH"/resources/ant_3_ref.png");
 
-e->sdl.fonts[0] = ft_load_font(PATH"/resources/workaholic.ttf", 200);
+	e->sdl.fonts[0] = ft_load_font(PATH"/resources/workaholic.ttf", 100);
+//	e->sdl.fonts[0] = ft_load_font(PATH"/resources/grandma.ttf", 100);
 //	e->sdl.fonts[0] = ft_load_font(PATH"/resources/hack.ttf", 200);
 //	e->sdl.fonts[0] = ft_load_font(PATH"/resources/mono.ttf", 200);
 	return (1);

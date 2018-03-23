@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:54:59 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 02:55:01 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/22 21:23:06 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		ft_iz_okay(t_env *e)
 void	ft_update_room_size(t_env *e)
 {
 	e->room_size = ROOM_SIZE;
-	while (!ft_iz_okay(e))
+	while (!ft_iz_okay(e) && e->room_size > 10)
 		e->room_size -= 10;
 }
 

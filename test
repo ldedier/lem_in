@@ -1,7 +1,9 @@
 make
 if [ -z $1 ]
 then
-	./lem-in < maps/map01 
+	./lem-in < maps/map_genius
+	./lem-in < maps/map_genius | grep L | wc -l
+	#./lem-in < maps/map_genius | ./lem-in_visu
 else
 	./lem-in < maps/$1 | ./lem-in_visu
 fi

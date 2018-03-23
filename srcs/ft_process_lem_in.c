@@ -6,12 +6,75 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 17:50:28 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/23 17:59:00 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
+
+void	ft_print_transition(t_room *current, int *first)
+{
+	if (*first == 0)
+		ft_printf(" L%d-%s",current->ant_number, current->name);
+	else
+	{
+		*first = 0;
+		ft_printf("L%d-%s",current->ant_number, current->name);
+	}
+
+}
+
+
+t_list	*ft_list_at(t_list *begin_list, unsigned int n)
+{
+	unsigned int	i;
+	t_list			*list_ptr;
+
+	i = 0;
+	list_ptr = begin_list;
+	while (list_ptr != NULL && i < n)
+	{
+		list_ptr = list_ptr->next;
+		i++;
+	}
+	return (list_ptr);
+}
+
+int		ft_list_size(t_list *begin_list)
+{
+	int		i;
+	t_list	*list_ptr;
+
+	i = 0;
+	list_ptr = begin_list;
+	while (list_ptr != NULL)
+	{
+		i++;
+		list_ptr = list_ptr->next;
+	}
+	return (i);
+}
+
+void	ft_list_reverse(t_list *begin_list)
+{
+	int		i;
+	int		len;
+	void	*tmp;
+
+	i = 0;
+	len = ft_list_size(begin_list);
+	if (len < 2)
+		return ;
+	while (i < len / 2)
+	{
+		tmp = ft_list_at(begin_list, i)->content;
+		ft_list_at(begin_list, i)->content =
+			ft_list_at(begin_list, len - i - 1)->content;
+		ft_list_at(begin_list, len - i - 1)->content = tmp;
+		i++;
+	}
+}
 
 void	ft_process_room(t_room *current, t_map *map, t_list **queue, int *first)
 {
@@ -22,11 +85,15 @@ void	ft_process_room(t_room *current, t_map *map, t_list **queue, int *first)
 	current->parsed = 1;
 	while (ptr != NULL)
 	{
+		if (rand() % 2 == 0)
+		{
+			ft_list_reverse(ptr);
+		}
 		neighbour = (t_room *)(ptr->content);
 		if (neighbour->parsed == 0 || neighbour == map->start)
 		{
 			if ((current->ant_count == 0 || current == map->end) &&
-				(neighbour->ant_count))
+					(neighbour->ant_count))
 			{
 				current->ant_count++;
 				neighbour->ant_count--;
@@ -34,13 +101,7 @@ void	ft_process_room(t_room *current, t_map *map, t_list **queue, int *first)
 					current->ant_number = neighbour->ant_number++;
 				else
 					current->ant_number = neighbour->ant_number;
-				if (*first == 0)
-					ft_printf(" L%d-%s",current->ant_number, current->name);
-				else
-				{
-					*first = 0;
-					ft_printf("L%d-%s",current->ant_number, current->name);
-				}
+				ft_print_transition(current, first);
 			}
 			ft_lstpushback(queue, ft_lstnew_ptr(neighbour, sizeof(t_room)));
 		}

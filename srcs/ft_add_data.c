@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 22:42:23 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/23 17:53:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ int		ft_add_room(char *str, t_lem *lem, int role)
 		return (0);
 	}
 	else
+	{
+		ft_printf("ROOM ERROR\n");
 		return (-1);
+	}
 }
 
 t_room	*ft_get_room(t_list *rooms, char *str)
@@ -82,10 +85,13 @@ int		ft_add_link(char *str, t_lem *lem)
 	split = ft_strsplit(str, '-');
 	r1 = ft_get_room((lem->map.rooms), split[0]);
 	r2 = ft_get_room((lem->map.rooms), split[1]);
-	if (r1 && r2 && ft_not_linked_yet(r1, r2))
+	if (r1 && r2)
 	{
-		ft_lstadd(&(r1->neighbours), ft_lstnew_ptr(r2, sizeof(t_room)));
-		ft_lstadd(&(r2->neighbours), ft_lstnew_ptr(r1, sizeof(t_room)));
+		if (ft_not_linked_yet(r1, r2))
+		{
+			ft_lstadd(&(r1->neighbours), ft_lstnew_ptr(r2, sizeof(t_room)));
+			ft_lstadd(&(r2->neighbours), ft_lstnew_ptr(r1, sizeof(t_room)));
+		}
 		return (1);
 	}
 	else

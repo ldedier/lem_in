@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 21:44:43 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/12 21:44:44 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/23 15:34:15 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int		ft_isdigit_string(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!(ft_isdigit(str[i])))
+
+		if (!(ft_isdigit(str[i])) && !(i == 0 && str[i] == '-'))
 			return (0);
 		i++;
 	}

@@ -44,8 +44,8 @@ int		ft_iz_okay(t_env *e)
 void	ft_update_room_size(t_env *e)
 {
 	e->room_size = ROOM_SIZE;
-	while (!ft_iz_okay(e) && e->room_size > 10)
-		e->room_size -= 10;
+	while (!ft_iz_okay(e) && e->room_size > 30)
+		e->room_size -= 5;
 }
 
 void	ft_update_corr_pos(t_env *e)

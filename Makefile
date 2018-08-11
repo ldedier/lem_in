@@ -19,7 +19,6 @@ PWD = \"$(shell pwd)\"
 
 DEBUG ?= 0
 
-
 ifeq ($(DEBUG), 1)
 	CFLAGS += -DDEBUG -fsanitize=address
 endif
@@ -65,6 +64,8 @@ SDL2_mixer = ./frameworks/SDL2_mixer.framework/Versions/A/SDL2_mixer
 SDL2_ttf = ./frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf
 
 all: $(BINDIR)/$(NAME) $(BINDIR)/$(VISU_NAME)
+
+macbook: all
 
 debug:
 	@make all DEBUG=0

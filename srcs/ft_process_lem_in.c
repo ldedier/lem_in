@@ -85,10 +85,10 @@ void	ft_process_room(t_room *current, t_map *map, t_list **queue, int *first)
 	current->parsed = 1;
 	while (ptr != NULL)
 	{
-		if (rand() % 2 == 0)
-		{
-			ft_list_reverse(ptr);
-		}
+//		if (rand() % 2 == 0)
+//		{
+//			ft_list_reverse(ptr);
+//		}
 		neighbour = (t_room *)(ptr->content);
 		if (neighbour->parsed == 0 || neighbour == map->start)
 		{

@@ -22,7 +22,6 @@ void	ft_print_transition(t_room *current, int *first)
 		*first = 0;
 		ft_printf("L%d-%s",current->ant_number, current->name);
 	}
-
 }
 
 

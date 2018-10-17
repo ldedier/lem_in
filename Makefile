@@ -23,9 +23,13 @@ ifeq ($(DEBUG), 1)
 	CFLAGS += -DDEBUG -fsanitize=address
 endif
 
-SRCDIR   = srcs
-OBJDIR   = objs
-BINDIR   = .
+SRCDIR  	= srcs
+SRCDIR_VISU	= srcs_visu
+
+OBJDIR  	= objs
+OBJDIR_VISU = objs_visu
+
+BINDIR  	= .
 INCLUDESDIR = includes
 
 LIBFTDIR = libft
@@ -46,15 +50,13 @@ VSRCS_NO_PREFIX = main_visu.c ft_init.c ft_parse_lem.c ft_parse_tools.c\
 INCLUDES_NO_PREFIX = lem_in.h visu_lem_in.h
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
-VSOURCES = $(addprefix $(SRCDIR)/, $(VSRCS_NO_PREFIX))
-
+VSOURCES = $(addprefix $(SRCDIR_VISU)/, $(VSRCS_NO_PREFIX))
 
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))
 VOBJECTS = $(addprefix $(OBJDIR)/, $(VSRCS_NO_PREFIX:%.c=%.o))
 
 INCLUDES = $(addprefix $(INCLUDESDIR)/, $(INCLUDES_NO_PREFIX))
 INC = -I $(INCLUDESDIR) -I $(LIBFTDIR)/$(LIBFT_INCLUDEDIR)
-
 
 CFLAGS = -DPATH=$(PWD) -Wall -Wextra -Werror $(INC)
 
@@ -84,6 +86,9 @@ $(BINDIR)/$(VISU_NAME): $(VOBJECTS)
 	@install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image $(SDL2_image) $(VISU_NAME)
 	@install_name_tool -change @rpath/SDL2_mixer.framework/Versions/A/SDL2_mixer $(SDL2_mixer) $(VISU_NAME)
 	@install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf $(SDL2_ttf) $(VISU_NAME)
+
+$(OBJDIR)/%.o : $(SRCDIR_VISU)/%.c  $(INCLUDES)
+	$(CC) -c $< -o $@ -F ./frameworks $(CFLAGS) 
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(INCLUDES)
 	$(CC) -c $< -o $@ -F ./frameworks $(CFLAGS) 

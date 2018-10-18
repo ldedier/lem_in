@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_process_lem_in.c                                :+:      :+:    :+:   */
+/*   ft_strichr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/18 21:16:57 by ldedier           #+#    #+#             */
-/*   Updated: 2018/10/18 21:16:57 by ldedier          ###   ########.fr       */
+/*   Created: 2018/07/08 18:32:54 by ldedier           #+#    #+#             */
+/*   Updated: 2018/07/08 19:09:31 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "libft.h"
 
-int		ft_process_lem_in(t_map *map)
+int		ft_strichr(const char *s, int c)
 {
-	(void)map;
+	int i;
 
-	return 0;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
 }

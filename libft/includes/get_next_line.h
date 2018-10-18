@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_process_lem_in.c                                :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/18 21:16:57 by ldedier           #+#    #+#             */
-/*   Updated: 2018/10/18 21:16:57 by ldedier          ###   ########.fr       */
+/*   Created: 2018/07/08 15:42:52 by ldedier           #+#    #+#             */
+/*   Updated: 2018/07/09 22:23:59 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#ifndef FT_GET_NEXT_LINE_H
+# define FT_GET_NEXT_LINE_H
 
-int		ft_process_lem_in(t_map *map)
+# include <limits.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include "libft.h"
+# define BUFF_SIZE 4096
+
+typedef struct	s_gnl
 {
-	(void)map;
+	int			fd;
+	char		*rest;
+	char		*whole_buffer;
+}				t_gnl;
 
-	return 0;
-}
+int				get_next_line(int const fd, char **line);
+
+#endif

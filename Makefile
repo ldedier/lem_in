@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/03/24 01:17:29 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/02 18:34:33 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ SRCS_NO_PREFIX = main.c ft_parse_tools.c ft_debug.c ft_process_lem_in.c ft_parse
 VSRCS_NO_PREFIX = main_visu.c ft_init.c ft_parse_lem.c ft_parse_tools.c\
 				 ft_checks.c ft_parse_phases.c ft_add_data.c ft_debug.c ft_tools.c\
 				 ft_render.c ft_events.c ft_center.c ft_add_infos.c ft_stats.c\
-				 ft_update_map.c ft_process_visu.c ft_visu_tools.c
+				 ft_process_visu.c ft_visu_tools.c
 
 INCLUDES_NO_PREFIX = lem_in.h visu_lem_in.h
 
@@ -71,7 +71,7 @@ debug:
 
 $(BINDIR)/$(NAME): $(OBJECTS)
 	@make -C $(LIBFTDIR)
-	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft
+	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft -fsanitize=address
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 
 $(BINDIR)/$(VISU_NAME): $(VOBJECTS)

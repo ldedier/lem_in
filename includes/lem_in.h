@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/02 13:58:03 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/02 20:17:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define START 1
 # define END 2
 # include "libft.h"
+# include <math.h>
 
 typedef struct		s_room
 {
@@ -54,7 +55,7 @@ typedef enum		e_phase
 typedef struct		s_multi_path
 {
 	t_list			*paths;
-	int				path_numbers;
+	int				path_count;
 }					t_multi_path;
 
 typedef struct		s_paths

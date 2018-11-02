@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_process_lem_in.c                                :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/02 12:17:11 by ldedier          ###   ########.fr       */
+/*   Created: 2018/07/08 15:42:52 by ldedier           #+#    #+#             */
+/*   Updated: 2018/07/09 22:23:59 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
-#include <time.h>
+#ifndef FT_GET_NEXT_LINE_H
+# define FT_GET_NEXT_LINE_H
 
-/*
-** find the optimal ants movement for each turn and write it on standard output
-*/
+# include <limits.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include "libft.h"
+# define BUFF_SIZE 4096
 
-int		ft_process_lem_in(t_map *map)
+typedef struct	s_gnl
 {
-	(void)map;
+	int			fd;
+	char		*rest;
+	char		*whole_buffer;
+}				t_gnl;
 
-	return 0;
-}
+int				get_next_line(int const fd, char **line);
+
+#endif

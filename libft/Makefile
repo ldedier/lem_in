@@ -13,7 +13,7 @@
 NAME = libft.a
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-DEPS = libft.h ft_printf.h
+DEPS = libft.h ft_printf.h get_next_line.h
 
 ifeq ($(DEBUG), 1)
 	CFLAGS += -DDEBUG -fsanitize=address
@@ -53,7 +53,8 @@ SRCS_NO_PREFIX = ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c\
 	   ft_display_len_wchar.c ft_display_len_p.c\
 	   ft_get_casted_values_func.c ft_get_casted_values_func_2.c\
 	   ft_get_casted_values_func_3.c ft_may_error.c ft_splitlen.c\
-	   ft_fmax.c ft_fmin.c ft_clamp.c
+	   ft_fmax.c ft_fmin.c ft_clamp.c ft_strndup.c ft_strnjoin_free.c\
+	   ft_strjoin_free.c ft_strichr.c
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))

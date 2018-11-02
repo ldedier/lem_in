@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include "ft_printf.h"
+# include "get_next_line.h"
 
 typedef struct		s_list
 {
@@ -100,7 +101,6 @@ t_tree				*ft_newtree(void *content);
 void				ft_infix(t_tree *tree, void (*f)(t_tree *));
 void				ft_prefix(t_tree *tree, void (*f)(t_tree *));
 void				ft_postfix(t_tree *tree, void (*f)(t_tree *));
-int					get_next_line(const int fd, char **line);
 void				ft_free_split(char **split);
 int					ft_abs(int a);
 int					ft_min(int a, int b);
@@ -110,4 +110,8 @@ double				ft_fmax(double a, double b);
 int					ft_splitlen(char **split);
 int					ft_clamp(int min, int val, int max);
 t_list				*ft_lstnew_ptr(void const *content, size_t content_size);
+int					ft_strichr(const char *s, int c);
+char				*ft_strjoin_free(char *s1, char *s2);
+char				*ft_strnjoin_free(char *s1, char *s2, size_t n);
+char				*ft_strndup(const char *s, int n);
 #endif

@@ -1,0 +1,51 @@
+10
+##start
+start 0 0
+0 2 2
+1 0 2
+2 0 4
+3 2 4
+4 -2 5
+5 0 6
+6 2 6
+7 -2 7
+##end
+end 0 8
+start-1
+start-0
+1-2
+0-3
+2-4
+2-5
+4-7
+7-end
+end-5
+5-6
+6-3
+
+name: start
+name: 1
+name: 2
+name: 4
+name: 7
+name: end
+name: start
+name: 1
+name: 2
+name: 5
+name: end
+name: start
+name: 0
+name: 3
+name: 6
+name: 5
+name: 2
+name: 4
+name: 7
+name: end
+name: start
+name: 0
+name: 3
+name: 6
+name: 5
+name: end

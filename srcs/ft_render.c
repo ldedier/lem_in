@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:30:10 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/31 01:50:17 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/02 13:01:22 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,12 @@ SDL_Rect	ft_get_pos(t_env *e, t_transition *tr)
 
 int	ft_get_angle(t_env *e, t_transition *tr)
 {
-	return (((atan2(tr->to->corr_y + e->room_size / 2 - (tr->from->corr_y + e->room_size / 2),
-						tr->to->corr_x + e->room_size / 2 - (tr->from->corr_x + e->room_size / 2)) * 180 / M_PI) + 90));
+	return (((atan2(tr->to->corr_y + e->room_size / 2 - 
+				(tr->from->corr_y + e->room_size / 2),
+				tr->to->corr_x + e->room_size / 2 -
+					(tr->from->corr_x + e->room_size / 2)) * 180 / M_PI) + 90));
 }
 
-/*
-SDL_Texture *ft_get_ant_texture(t_env *e)
-{
-	SDL_Texture *texture;
-
-	return texture;
-}
-*/
 void	ft_render_ants(t_env *e)
 {
 	t_list *ptr;
@@ -100,24 +94,14 @@ void	ft_render_ants(t_env *e)
 
 	if (!e->anim.pause)
 		e->anim.current_animation = ((SDL_GetTicks() - e->anim.start) % 400) / 100;
-//	texture = e->sdl.ant_textures[3];
-	//int flip;
 	ptr = e->anim.transitions;
-//	if ((SDL_GetTicks() - e->anim.start) % 200 < 100)
-//		flip = SDL_FLIP_HORIZONTAL;
-//	else
-//		flip = SDL_FLIP_NONE;
 	while (ptr != NULL)
 	{
 		tr = (t_transition *)(ptr->content);
 		tr->angle = ft_get_angle(e, tr);
 		pos = ft_get_pos(e, tr);
-		//SDL_RenderFillRect(e->sdl.renderer, &pos);
 		center.x = pos.w / 2;
 		center.y = pos.h / 2;
-		//		if (rand() % 2 == 0)
-		//	flip = SDL_FLIP_NONE;
-		//		else
 		SDL_RenderCopyEx(e->sdl.renderer, e->sdl.ant_textures[e->anim.current_animation], NULL, &pos, tr->angle, &center, SDL_FLIP_NONE);
 		ptr = ptr->next;
 	}
@@ -279,10 +263,10 @@ void	ft_render_nb_ants_end(t_env *e)
 	pos.h = 45;
 	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
 	SDL_DestroyTexture(texture);
-	str2 = ft_itoa(e->lem.map.end->ant_count - e->lem.map.toward_end);
+	str2 = ft_itoa(e->lem.map.end->ant_count - e->toward_end);
 
 
-	if (e->lem.map.end->ant_count - e->lem.map.toward_end == 1)
+	if (e->lem.map.end->ant_count - e->toward_end == 1)
 		str = ft_strjoin(str2, " ant");
 	else
 		str = ft_strjoin(str2, " ants");
@@ -312,8 +296,8 @@ void	ft_render_nb_ants_others(t_env *e)
 	pos.h = 45;
 	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
 	SDL_DestroyTexture(texture);
-	str2 = ft_itoa(e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->lem.map.toward_end)));
-	if (e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->lem.map.toward_end)) == 1)
+	str2 = ft_itoa(e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->toward_end)));
+	if (e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->toward_end)) == 1)
 		str = ft_strjoin(str2, " ant");
 	else
 		str = ft_strjoin(str2, " ants");
@@ -367,7 +351,8 @@ void ft_render_visu(t_env *e, char *str)
 {
 	int loop;
 	SDL_Event event;
-	e->lem.map.toward_end = 0;
+
+	e->toward_end = 0;
 	ft_add_transitions(e, str);
 	ft_add_static(e);
 	e->anim.start = SDL_GetTicks();
@@ -405,7 +390,7 @@ void ft_render_visu_end(t_env *e)
 	int loop;
 	SDL_Event event;
 
-	e->lem.map.toward_end = 0;
+	e->toward_end = 0;
 	loop = 1;
 	while (loop)
 	{

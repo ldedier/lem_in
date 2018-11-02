@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/18 21:15:55 by ldedier           #+#    #+#             */
-/*   Updated: 2018/10/18 21:15:55 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/02 14:25:00 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	ft_reset_pathfinding(t_map *map)
 */
 int		ft_process_lem_in(t_map *map)
 {
-	t_list *queue;
+	t_listwye *queue;
 	t_room *current;
 	int first;
 

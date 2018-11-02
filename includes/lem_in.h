@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/07/08 15:31:44 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/02 13:58:03 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,18 @@ typedef enum		e_phase
 	e_phase_links
 }					t_phase;
 
+typedef struct		s_multi_path
+{
+	t_list			*paths;
+	int				path_numbers;
+}					t_multi_path;
+
+typedef struct		s_paths
+{
+	t_list			*paths_list;
+	t_list			*multipaths_list;
+}					t_paths;
+
 typedef struct		s_parser
 {
 	t_phase			phase;
@@ -61,6 +73,7 @@ typedef struct		s_parser
 
 typedef struct		s_lem
 {
+	t_paths			paths;
 	t_map			map;
 	t_parser		parser;
 	int				turn;
@@ -76,7 +89,7 @@ int					ft_phase_end(char *str, t_lem *lem);
 int					ft_phase_links(char *str, t_lem *lem);
 void				ft_affich_map(t_map *map);
 void				ft_affich_queue(t_list *queue);
-int					ft_process_lem_in(t_map *map);
+int					ft_process_lem_in(t_lem *lem);
 char				*ft_parse(t_lem *lem);
 int					ft_common_checks(char *str);
 int					ft_is_valid_room(char **split, t_lem *lem);

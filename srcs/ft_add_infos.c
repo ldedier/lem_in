@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/07/07 22:49:15 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/02 12:33:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_transition *ft_new_transition(t_env *e, t_room *from, t_room *to, int ant_num)
 	else
 		from->ant_number = 0;
 	if (to == e->lem.map.end)
-		e->lem.map.toward_end++;
+		e->toward_end++;
 	to->ant_count++;
 	to->ant_number = ant_num;
 	res->from = from;

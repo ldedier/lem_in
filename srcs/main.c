@@ -6,20 +6,35 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/16 19:06:48 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/07/08 15:33:40 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		main(void)
+void	ft_init_lem(t_lem *lem, int argc, char **argv)
+{
+	lem->map.rooms = NULL;
+	if (argc >= 2)
+	{
+		if (argc > 2 || ft_strcmp(argv[1], "-v"))
+			ft_printf("usage!!");
+		else
+			lem->verbosed = 1;
+	}
+}
+
+int		main(int argc, char **argv)
 {
 	t_lem	lem;
 	char	*to_print;
-
-	lem.map.rooms = NULL;
+	
+	ft_init_lem(&lem, argc, argv);
 	if ((to_print = ft_parse(&lem)) == NULL)
-		ft_printf("ERROR\n");
+	{
+		if (!lem.verbosed)
+			ft_printf("ERROR\n");
+	}
 	else
 	{
 		ft_printf("%s\n", to_print);

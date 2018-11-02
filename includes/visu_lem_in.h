@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/20 23:48:10 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/07/07 22:24:26 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct			s_env
 	int					time_per_turn;
 	int					toward_end;
 	t_room				*selected_room;
+	int					reversed;
 }						t_env;
 
 int						ft_init_all(t_env *e);

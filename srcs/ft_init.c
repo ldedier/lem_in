@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/21 00:37:25 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/07/08 14:43:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,6 @@ int			ft_init_textures(t_env *e)
 	e->sdl.ant_textures[3] = ft_load_texture(e, PATH"/resources/ant_3_ref.png");
 
 	e->sdl.fonts[0] = ft_load_font(PATH"/resources/workaholic.ttf", 100);
-//	e->sdl.fonts[0] = ft_load_font(PATH"/resources/grandma.ttf", 100);
-//	e->sdl.fonts[0] = ft_load_font(PATH"/resources/hack.ttf", 200);
-//	e->sdl.fonts[0] = ft_load_font(PATH"/resources/mono.ttf", 200);
 	return (1);
 }
 

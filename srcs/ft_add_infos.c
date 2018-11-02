@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 22:49:50 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/07/07 22:49:15 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	ft_add_static(t_env *e)
 				}
 				ptr2 = ptr2->next;
 			}
-		if (is_static_ant)
-			ft_lstadd(&(e->anim.static_ants_rooms), ft_lstnew_ptr(room, sizeof(t_room)));
+			if (is_static_ant)
+				ft_lstadd(&(e->anim.static_ants_rooms), ft_lstnew_ptr(room, sizeof(t_room)));
 		}
 		ptr = ptr->next;
 	}
@@ -52,7 +52,7 @@ t_transition *ft_new_transition(t_env *e, t_room *from, t_room *to, int ant_num)
 
 	if (!from || !to)
 	{
-		ft_printf("ERROR NEW TRANSITION");
+		ft_printf("transition error, look at the subject output example.\n");
 		exit(1);
 	}
 	res = (t_transition *)(malloc(sizeof(t_transition)));
@@ -111,8 +111,6 @@ void	ft_add_transitions(t_env *e, char *str)
 	while (split[i])
 	{
 		ant_split = ft_strsplit(split[i], '-');
-	//	ft_printf("num ant: %d\n", ft_atoi(&(ant_split[0][1])));
-	//	ft_printf("name room: %s\n\n", ant_split[1]);
 		ft_add_transition(e, ft_atoi(&(ant_split[0][1])), ant_split[1]);
 		i++;
 	}

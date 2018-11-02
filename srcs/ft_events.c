@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:51:24 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/21 00:47:12 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/24 16:25:14 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	ft_toggle_pause(t_env *e)
 }
 
 
+
 void	ft_key_down(t_env *e, SDL_Event event)
 {
 	if (event.key.keysym.sym == SDLK_RIGHT)
@@ -77,11 +78,50 @@ void	ft_key_up(t_env *e, SDL_Event event)
 		e->keys.can_pause = 1;
 }
 
+void 	ft_relink_end(t_list *node, t_list *prev)
+{
+	if (node != NULL)
+	{
+		prev->next = node;
+		node->next = NULL;
+	}
+}
+
+void	ft_put_to_end(t_env *e)
+{
+	t_list *prev;
+	t_list *current;
+	t_room *room;
+	t_list *node;
+
+	node = NULL;
+	prev = NULL;
+	current = e->lem.map.rooms;
+	while (current != NULL)
+	{
+		room = (t_room *)(current->content);
+		if (room == e->selected_room && current->next != NULL)
+		{
+			node = current;
+			if (prev == NULL)
+				e->lem.map.rooms = current->next;
+			else
+				prev->next = current->next;
+		}
+		prev = current;
+		current = current->next;
+	}
+	ft_relink_end(node, prev);
+}
+	
 void	ft_grab_room(t_env *e, int x, int y)
 {
 
-	t_list *ptr;
-	t_room *room;
+	t_list	*ptr;
+	t_room 	*room;
+	t_room	*roomptr;
+
+	roomptr = NULL;
 	ptr = e->lem.map.rooms;
 	while (ptr != NULL)
 	{
@@ -89,13 +129,18 @@ void	ft_grab_room(t_env *e, int x, int y)
 		if (x >= room->corr_x && x <= room->corr_x + e->room_size &&
 				y >= room->corr_y && y <= room->corr_y + e->room_size)
 		{
-			e->selected_room = room;
-			e->grab.grabbed_room = room;
-			e->grab.x_diff = room->corr_x - x;
-			e->grab.y_diff = room->corr_y - y;
-			return;
+			roomptr = room;
 		}
 		ptr = ptr->next;
+	}
+	if (roomptr != NULL)
+	{
+		e->selected_room = roomptr;
+		e->grab.grabbed_room = roomptr;
+		e->grab.x_diff = roomptr->corr_x - x;
+		e->grab.y_diff = roomptr->corr_y - y;
+		ft_put_to_end(e);
+		return;
 	}
 	if (y > GRASS_BORDER)
 		e->selected_room = NULL;

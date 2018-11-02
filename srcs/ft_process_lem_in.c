@@ -6,25 +6,12 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/23 17:59:00 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/03/24 18:24:12 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-
-void	ft_print_transition(t_room *current, int *first)
-{
-	if (*first == 0)
-		ft_printf(" L%d-%s",current->ant_number, current->name);
-	else
-	{
-		*first = 0;
-		ft_printf("L%d-%s",current->ant_number, current->name);
-	}
-
-}
-
+#include <time.h>
 
 t_list	*ft_list_at(t_list *begin_list, unsigned int n)
 {
@@ -76,6 +63,17 @@ void	ft_list_reverse(t_list *begin_list)
 	}
 }
 
+void	ft_print_transition(t_room *current, int *first)
+{
+	if (*first == 0)
+		ft_printf(" L%d-%s",current->ant_number, current->name);
+	else
+	{
+		*first = 0;
+		ft_printf("L%d-%s",current->ant_number, current->name);
+	}
+}
+
 void	ft_process_room(t_room *current, t_map *map, t_list **queue, int *first)
 {
 	t_list *ptr;
@@ -85,10 +83,12 @@ void	ft_process_room(t_room *current, t_map *map, t_list **queue, int *first)
 	current->parsed = 1;
 	while (ptr != NULL)
 	{
+		/*
 		if (rand() % 2 == 0)
 		{
 			ft_list_reverse(ptr);
 		}
+		*/
 		neighbour = (t_room *)(ptr->content);
 		if (neighbour->parsed == 0 || neighbour == map->start)
 		{

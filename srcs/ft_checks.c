@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/22 21:08:15 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/07/07 22:56:30 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,7 @@ int		ft_links_transition_check(char *str, t_lem *lem)
 int		ft_is_valid_room(char **split, t_lem *lem)
 {
 	if (ft_splitlen(split) != 3)
-	{
-		ft_printf("%d\n", ft_splitlen(split));
 		return (0);
-	}
 	else
 	{
 		if (!ft_isdigit_string(split[1]) ||

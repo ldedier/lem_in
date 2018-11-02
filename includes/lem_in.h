@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/20 00:58:54 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/07/08 15:31:44 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct		s_parser
 	t_phase			phase;
 	int				nb_start;
 	int				nb_end;
+	int				nb_lines;
 }					t_parser;
 
 typedef struct		s_lem
@@ -63,6 +64,7 @@ typedef struct		s_lem
 	t_map			map;
 	t_parser		parser;
 	int				turn;
+	int				verbosed;
 }					t_lem;
 
 typedef int         (*t_parse_func)(char *, t_lem *);
@@ -88,4 +90,6 @@ void				ft_init_parser(t_parser *parser);
 void				ft_init_parse_arr(t_parse_func arr[5]);
 void				ft_error(char *error);
 void				ft_file_error(char *filename);
+int					ft_check_post_parse(t_lem *lem);
+int					ft_verbose(t_lem *lem, char *line, char *str);
 #endif

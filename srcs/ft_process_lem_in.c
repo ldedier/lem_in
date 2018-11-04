@@ -124,30 +124,30 @@ void	ft_add_list_ptr(t_list **list_ptr, t_list *list) //to protect
 }
 
 /*
-void	ft_process_fill(t_room *room, t_lem *lem, t_list **path)
-{
-	t_list *current;
+   void	ft_process_fill(t_room *room, t_lem *lem, t_list **path)
+   {
+   t_list *current;
 
-	if (!room->parsed)
-	{
-		room->parsed = 1;
-		ft_lstadd(path, ft_lstnew_ptr(room, sizeof(t_room)));
-		if (room == lem->map.end)
-			ft_add_list_ptr(&(lem->paths.paths_list), *path);
-		else
-		{
-			current = room->neighbours;
-			while (current != NULL)
-			{
-				ft_process_fill((t_room *)(current->content), lem, path);
-				current = current->next;
-			}
-		}
-		room->parsed = 0;
-		ft_lstpop(path);
-	}
-}
-*/
+   if (!room->parsed)
+   {
+   room->parsed = 1;
+   ft_lstadd(path, ft_lstnew_ptr(room, sizeof(t_room)));
+   if (room == lem->map.end)
+   ft_add_list_ptr(&(lem->paths.paths_list), *path);
+   else
+   {
+   current = room->neighbours;
+   while (current != NULL)
+   {
+   ft_process_fill((t_room *)(current->content), lem, path);
+   current = current->next;
+   }
+   }
+   room->parsed = 0;
+   ft_lstpop(path);
+   }
+   }
+ */
 
 void	ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 {
@@ -236,15 +236,15 @@ int		ft_fill_multi_paths(t_lem *lem)
 		mpath->path_count = 1;
 		mpath->paths = NULL;
 		ft_lstadd(&(mpath->paths), ft_lstnew(current->content,
-				sizeof(t_list)));
+					sizeof(t_list)));
 		ft_lstadd(&(lem->paths.multipaths_list),
 				ft_lstnew_ptr(mpath, sizeof(t_multi_path)));
-			
+
 		to_compare = current->next;
 		while (to_compare != NULL)
 		{
 			if (!ft_share_content_multi_path(mpath,
-				(t_list *)(to_compare->content)))
+						(t_list *)(to_compare->content)))
 			{
 				ft_add_path_to_multi_path(mpath,
 						(t_list *)(to_compare->content));
@@ -256,14 +256,21 @@ int		ft_fill_multi_paths(t_lem *lem)
 	return (1);
 }
 
-int		ft_process_lem_in(t_lem *lem)
+int     ft_process_lem_in(t_lem *lem)
 {
+	int verbosed = lem->verbosed;
 	if (!ft_fill_paths(lem))
 		return (-1);
-	ft_affich_list_of_list(lem->paths.paths_list);
-	ft_printf("end of path list\n");
+	if(verbosed)
+	{
+		ft_affich_list_of_list(lem->paths.paths_list);
+		ft_printf("end of path list\n");
+	}
 	if (!ft_fill_multi_paths(lem))
 		return (-1);
-	ft_affich_multi_paths(lem->paths.multipaths_list);
+	if(verbosed)
+	{
+		ft_affich_multi_paths(lem->paths.multipaths_list);
+	}
 	return 0;
 }

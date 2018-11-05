@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/02 20:17:20 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/05 13:26:06 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,19 @@ typedef struct		s_multi_path
 	int				path_count;
 }					t_multi_path;
 
+typedef struct		s_semi_mp
+{
+	size_t			order;
+	t_list			*path;
+}					t_semi_mp;
+
+typedef struct		s_path
+{
+	t_list			*rooms;
+	t_list			*semi_mps;
+	t_list			*mps;
+}					t_path;
+
 typedef struct		s_paths
 {
 	t_list			*paths_list;
@@ -89,7 +102,11 @@ int					ft_phase_start(char *str, t_lem *lem);
 int					ft_phase_end(char *str, t_lem *lem);
 int					ft_phase_links(char *str, t_lem *lem);
 void				ft_affich_map(t_map *map);
+void				ft_affich_list_of_list(t_list *list);
+void				ft_affich_multi_paths(t_list *list);
+void				ft_affich_map(t_map *map);
 void				ft_affich_queue(t_list *queue);
+void				ft_affich_room_list(t_list *room_list);
 int					ft_process_lem_in(t_lem *lem);
 char				*ft_parse(t_lem *lem);
 int					ft_common_checks(char *str);

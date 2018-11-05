@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/02 18:34:33 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/04 21:02:29 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,6 @@ PWD = \"$(shell pwd)\"
 
 DEBUG ?= 0
 
-
 ifeq ($(DEBUG), 1)
 	CFLAGS += -DDEBUG -fsanitize=address
 endif
@@ -31,7 +30,7 @@ INCLUDESDIR = includes
 
 LIBFTDIR = libft
 LIBFT_INCLUDEDIR = includes
-
+LIBFT = $(LIBFTDIR)/libft.a
 
 OK_COLOR = \x1b[32;01m
 EOC = \033[0m
@@ -49,7 +48,6 @@ INCLUDES_NO_PREFIX = lem_in.h visu_lem_in.h
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
 VSOURCES = $(addprefix $(SRCDIR)/, $(VSRCS_NO_PREFIX))
 
-
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))
 VOBJECTS = $(addprefix $(OBJDIR)/, $(VSRCS_NO_PREFIX:%.c=%.o))
 
@@ -64,18 +62,19 @@ SDL2_image = ./frameworks/SDL2_image.framework/Versions/A/SDL2_image
 SDL2_mixer = ./frameworks/SDL2_mixer.framework/Versions/A/SDL2_mixer
 SDL2_ttf = ./frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf
 
-all: $(BINDIR)/$(NAME) $(BINDIR)/$(VISU_NAME)
+all:
+	@make -C $(LIBFTDIR) all
+	@make $(BINDIR)/$(NAME)
+	@make $(BINDIR)/$(VISU_NAME) 
 
 debug:
 	@make all DEBUG=0
 
-$(BINDIR)/$(NAME): $(OBJECTS)
-	@make -C $(LIBFTDIR)
+$(BINDIR)/$(NAME): $(OBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft -fsanitize=address
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 
-$(BINDIR)/$(VISU_NAME): $(VOBJECTS)
-	@make -C $(LIBFTDIR)
+$(BINDIR)/$(VISU_NAME): $(VOBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ -F ./frameworks -framework SDL2\
 		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft -fsanitize=address
 	@echo "$(OK_COLOR)$(VISU_NAME) linked with success !$(EOC)"

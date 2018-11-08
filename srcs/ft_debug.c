@@ -70,6 +70,64 @@ void    ft_affich_multi_paths(t_list *mpaths)
 	}
 }
 
+void	ft_affich_semi_matching_path(t_semi_mp *mp, int rec)
+{
+	ft_printf("order: %d\n", mp->order);
+	ft_affich_path(mp->path, rec);
+	ft_printf("\n");
+}
+
+void	ft_affich_semi_matching_paths(t_list *smps, int rec)
+{
+	t_list *ptr;
+	t_semi_mp *smp;
+
+	ptr = smps;
+	while (ptr != NULL)
+	{
+		smp = (t_semi_mp *)(ptr->content);
+		ft_affich_semi_matching_path(smp, rec);
+		ptr = ptr->next;
+	}
+}
+
+void	ft_affich_path(t_path *path, int rec)
+{
+	ft_printf("new path:\n\nrooms:\n");
+	ft_affich_room_list(path->rooms);
+
+	if (rec)
+	{
+		ft_printf(RED"\nmatching paths:\n");
+		ft_affich_paths(path->mps, 0);
+
+		ft_printf(CYAN"\nsemi matching paths:\n");
+		ft_affich_semi_matching_paths(path->semi_mps, 0);
+		ft_printf(EOC"\nend of path\n");
+	}
+
+}
+
+
+void    ft_affich_paths(t_list *paths, int rec)
+{
+	t_list *ptr;
+	t_path *path;
+
+	ptr = paths;
+	while (ptr != NULL)
+	{
+		path = (t_path *)(ptr->content);
+		ft_affich_path(path, rec);
+		ptr = ptr->next;
+	}
+}
+
+void	ft_affich_room_lite(t_room *room)
+{
+	ft_printf("room name: %s\n", room->name);
+}
+
 void	ft_affich_room(t_room *room)
 {
 	t_list *ptr;

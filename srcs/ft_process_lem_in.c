@@ -73,19 +73,18 @@ t_list	*ft_copy_list(t_list *list)
 	return (res);
 }
 
-void	ft_add_list_ptr_rev(t_list **list_ptr, t_list *list) //to protect
+void	ft_add_path_from_rooms(t_list **paths, t_list *rooms) //to protect
 {
-	t_list	*rooms;
-	t_list	*ptr;
+	t_list	*rooms_cpy;
 	t_path	*path = (t_path *)malloc(sizeof(t_path));
 
-	ptr = ft_lstnew_ptr(path, sizeof(t_path));
-	rooms = ft_copy_list_ptr_rev(list);
+	rooms_cpy = ft_copy_list_ptr_rev(rooms);
 	
-	path->rooms = rooms;
+	path->rooms = rooms_cpy;
+	//ft_affich_room_list(path->rooms);
 	path->semi_mps = NULL;
 	path->mps = NULL;
-	ft_lstadd(list_ptr, ft_lstnew(ptr, sizeof(t_list)));
+	ft_lstadd(paths, ft_lstnew_ptr(path, sizeof(t_path)));
 }
 
 void	ft_add_list_ptr(t_list **list_ptr, t_list *list) //to protect
@@ -120,7 +119,7 @@ void	ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 		}
 		else
 		{
-			ft_add_list_ptr_rev(&(lem->paths.paths_list), *path);
+			ft_add_path_from_rooms(&(lem->paths.paths_list), *path);
 			if (*path == NULL)
 				*max_paths = 0;
 			else
@@ -175,32 +174,69 @@ void	ft_add_path_to_multi_path(t_multi_path *mpath, t_list *list)
 	mpath->path_count++;
 }
 
-int		ft_fill_multi_paths(t_lem *lem)
+t_semi_mp	*ft_new_semi_mp(size_t order, t_path *path)
+{
+	t_semi_mp *res;
+
+	res = (t_semi_mp *)malloc(sizeof(t_semi_mp));
+	res->order = order;
+	res->path = path;
+	return (res);
+}
+
+void	ft_update_relations(t_path *path1, t_path *path2)
+{
+	t_list *current;
+	t_list *current2;
+
+	int i;
+	int j;
+	current = path1->rooms;
+	i = 0;
+	while (current != NULL)
+	{
+		j = 0;
+		current2 = path2->rooms;
+		while (current2 != NULL)
+		{
+			if (current->content == current2->content)
+			{
+				if (i - j)
+				{
+					if (j > i)
+						ft_lstadd(&(path1->semi_mps),
+							ft_lstnew_ptr(ft_new_semi_mp (j - i, path2),
+								sizeof(t_semi_mp)));
+					else
+						ft_lstadd(&(path2->semi_mps),
+							ft_lstnew_ptr(ft_new_semi_mp (i - j, path1),
+								sizeof(t_semi_mp)));
+				}
+				return ;
+			}
+			current2 = current2->next;
+			j++;
+		}
+		current = current->next;
+		i++;
+	}
+	ft_lstadd(&(path1->mps), ft_lstnew_ptr(path2, sizeof(t_path)));
+	ft_lstadd(&(path2->mps), ft_lstnew_ptr(path1, sizeof(t_path)));
+}
+
+int		ft_fill_metadata(t_lem *lem)
 {
 	t_list *current;
 	t_list *to_compare;
-	t_multi_path *mpath;
-
 	current = lem->paths.paths_list;
+	
 	while (current != NULL)
 	{
-		mpath = (t_multi_path *)malloc(sizeof(t_multi_path));
-		mpath->path_count = 1;
-		mpath->paths = NULL;
-		ft_lstadd(&(mpath->paths), ft_lstnew(current->content,
-					sizeof(t_list)));
-		ft_lstadd(&(lem->paths.multipaths_list),
-				ft_lstnew_ptr(mpath, sizeof(t_multi_path)));
-
 		to_compare = current->next;
 		while (to_compare != NULL)
 		{
-			if (!ft_share_content_multi_path(mpath,
-						(t_list *)(to_compare->content)))
-			{
-				ft_add_path_to_multi_path(mpath,
-						(t_list *)(to_compare->content));
-			}
+			ft_update_relations((t_path *)current->content,
+				(t_path *)(to_compare->content));
 			to_compare = to_compare->next;
 		}
 		current = current->next;
@@ -214,14 +250,15 @@ int     ft_process_lem_in(t_lem *lem)
 		return (-1);
 	if (lem->verbosed)
 	{
-		ft_affich_list_of_list(lem->paths.paths_list);
-		ft_printf("end of path list\n");
+//		ft_affich_paths(lem->paths.paths_list);
+//		ft_printf("end of path list\n");
 	}
-	if (!ft_fill_multi_paths(lem))
+	if (!ft_fill_metadata(lem))
 		return (-1);
-	if (lem->verbosed)
-	{
-		ft_affich_multi_paths(lem->paths.multipaths_list);
-	}
+	ft_affich_paths(lem->paths.paths_list, 1);
+//	if (lem->verbosed)
+//	{
+//		ft_affich_multi_paths(lem->paths.multipaths_list);
+//	}
 	return 0;
 }

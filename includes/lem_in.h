@@ -58,22 +58,23 @@ typedef struct		s_multi_path
 	int				path_count;
 }					t_multi_path;
 
+typedef struct		s_path
+{
+	t_list			*rooms; //list of rooms
+	t_list			*semi_mps; // list of semi_mp
+	t_list			*mps; //list of paths
+
+}					t_path;
+
 typedef struct		s_semi_mp
 {
 	size_t			order;
-	t_list			*path;
+	t_path			*path; // path
 }					t_semi_mp;
-
-typedef struct		s_path
-{
-	t_list			*rooms;
-	t_list			*semi_mps;
-	t_list			*mps;
-}					t_path;
 
 typedef struct		s_paths
 {
-	t_list			*paths_list;
+	t_list			*paths_list; // list of t_path
 	t_list			*multipaths_list;
 }					t_paths;
 
@@ -102,9 +103,12 @@ int					ft_phase_start(char *str, t_lem *lem);
 int					ft_phase_end(char *str, t_lem *lem);
 int					ft_phase_links(char *str, t_lem *lem);
 void				ft_affich_map(t_map *map);
+void				ft_affich_paths(t_list *paths, int rec);
+void				ft_affich_path(t_path *path, int rec);
 void				ft_affich_list_of_list(t_list *list);
-void				ft_affich_multi_paths(t_list *list);
 void				ft_affich_map(t_map *map);
+void				ft_affich_room(t_room *room);
+void				ft_affich_room_lite(t_room *room);
 void				ft_affich_queue(t_list *queue);
 void				ft_affich_room_list(t_list *room_list);
 int					ft_process_lem_in(t_lem *lem);

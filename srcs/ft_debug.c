@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 13:34:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/04 20:25:11 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/12 16:26:18 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	ft_affich_path(t_path *path, int rec)
 		ft_affich_paths(path->mps, 0);
 
 		ft_printf(CYAN"\nsemi matching paths:\n");
-		ft_affich_semi_matching_paths(path->semi_mps, 0);
+		ft_affich_semi_matching_paths(path->semi_mps, 1);
 		ft_printf(EOC"\nend of path\n");
 	}
 

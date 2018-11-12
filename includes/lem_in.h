@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/05 13:26:06 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/12 13:37:50 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ typedef struct		s_multi_path
 
 typedef struct		s_path
 {
+	int				length;
 	t_list			*rooms; //list of rooms
 	t_list			*semi_mps; // list of semi_mp
 	t_list			*mps; //list of paths
-
 }					t_path;
 
 typedef struct		s_semi_mp
@@ -74,6 +74,7 @@ typedef struct		s_semi_mp
 
 typedef struct		s_paths
 {
+	int				min_length;
 	t_list			*paths_list; // list of t_path
 	t_list			*multipaths_list;
 }					t_paths;

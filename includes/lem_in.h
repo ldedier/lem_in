@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/13 20:01:09 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/13 20:05:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # define END 2
 # include "libft.h"
 # include <math.h>
+
+typedef struct s_path	t_path;
 
 typedef struct		s_ant
 {
@@ -76,13 +78,13 @@ typedef struct		s_multi_path
 	int				path_count;
 }					t_multi_path;
 
-typedef struct		s_path
+struct		s_path
 {
 	int				length;
 	t_list			*rooms; //list of rooms
-	t_list			*semi_mps; // list of semi_mp
-	t_list			*mps; //list of paths
-}					t_path;
+	t_path			*semi_mp; // list of semi_mp
+	t_list			*mps; //list of path
+};
 
 typedef struct		s_semi_mp
 {
@@ -94,7 +96,6 @@ typedef struct		s_paths
 {
 	int				min_length;
 	t_list			*paths_list; // list of t_path
-	t_list			*multipaths_list;
 }					t_paths;
 
 typedef struct		s_parser

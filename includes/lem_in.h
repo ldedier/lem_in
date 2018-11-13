@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/12 13:37:50 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/13 20:01:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,15 @@
 # include "libft.h"
 # include <math.h>
 
+typedef struct		s_ant
+{
+	int				id;
+	t_list			*rooms;
+}					t_ant;
+
 typedef struct		s_room
 {
+	t_list			*neighbours;
 	char			*name;
 	int				x;
 	int				y;
@@ -29,7 +36,6 @@ typedef struct		s_room
 	int				corr_y_init;
 	int				ant_number;
 	int				ant_count;
-	t_list			*neighbours;
 	int				parsed;
 }					t_room;
 
@@ -51,6 +57,18 @@ typedef enum		e_phase
 	e_phase_end,
 	e_phase_links
 }					t_phase;
+
+typedef struct		s_deploy_path
+{
+	t_list			*path;
+	int				length;
+}					t_deploy_path;
+
+typedef struct		s_deploy_platform
+{
+	t_list			*paths;
+	int				min_length;
+}					t_deploy_platform;
 
 typedef struct		s_multi_path
 {

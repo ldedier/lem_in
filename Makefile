@@ -6,14 +6,14 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/04 21:02:29 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/13 16:00:23 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= lem-in
 VISU_NAME	= lem-in_visu
 
-CC      = gcc
+CC      = gcc -g3
 
 PWD = \"$(shell pwd)\"
 

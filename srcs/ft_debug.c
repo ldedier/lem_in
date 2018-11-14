@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 13:34:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/13 20:05:14 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 11:44:46 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,12 @@ void    ft_affich_multi_paths(t_list *mpaths)
 
 void	ft_affich_semi_matching_path(t_semi_mp *mp, int rec)
 {
-	ft_printf("order: %d\n", mp->order);
-	ft_affich_path(mp->path, rec);
-	ft_printf("\n");
+	if(mp)
+	{
+		ft_printf("order: %d\n", mp->order);
+		ft_affich_path(mp->path, rec);
+		ft_printf("\n");
+	}
 }
 
 /*

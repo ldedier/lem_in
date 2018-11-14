@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/13 20:01:12 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 13:50:32 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to prot
 	rooms_cpy = ft_copy_list_ptr_rev(rooms);
 	path->length = length;
 	path->rooms = rooms_cpy;
-	path->semi_mps = NULL;
+	path->semi_mp = NULL;
 	path->mps = NULL;
 	ft_lstadd(paths, ft_lstnew_ptr(path, sizeof(t_path)));
 }
@@ -153,6 +153,12 @@ t_semi_mp	*ft_new_semi_mp(size_t order, t_path *path)
 	return (res);
 }
 
+int		ft_is_better_smp(t_path *current, t_path *to_compare)
+{
+	return (ft_lstlength(current->mps) > ft_lstlength(to_compare->mps));
+
+}
+
 void	ft_update_matching_smps(t_path *path1, t_path *path2)
 {
 	t_list *current;
@@ -172,9 +178,9 @@ void	ft_update_matching_smps(t_path *path1, t_path *path2)
 			{
 				if (j > i)
 				{
-					ft_lstadd(&(path1->semi_mps),
-							ft_lstnew_ptr(ft_new_semi_mp (j - i, path2),
-								sizeof(t_semi_mp)));
+					if (!path1->semi_mp ||
+							ft_is_better_smp(path2, path1->semi_mp->path))
+						path1->semi_mp = ft_new_semi_mp(j - i, path2);
 					return ;
 				}
 			}
@@ -294,19 +300,10 @@ int		ft_fill_mps(t_lem *lem)
 	return (1);
 }
 
-int		ft_is_compatible_smp_to_single_path(t_path *smp, t_path *single)
+int		ft_is_compatible_smp_to_single_path(t_path *smp, t_path *single) //CHECK
 {
-	t_list	*mps;
-
-//	if (ft_lstlength(smp->mps) <= ft_lstlength(single->mps)) //todo
-//		return (0);
-	mps = single->mps;
-	while (mps != NULL)
-	{
-		if (ft_share_rooms(mps->content, smp))
-			return (0);
-		mps = mps->next;
-	}
+	if (ft_lstlength(smp->mps) <= ft_lstlength(single->mps)) //todo
+		return (0);
 	return (1);
 }
 
@@ -323,7 +320,7 @@ int		ft_fill_matching_smps(t_lem *lem)
 			to_compare = lem->paths.paths_list;
 			while (to_compare != NULL)
 			{
-				if (current != to_compare && 
+				if (current != to_compare &&
 						((t_path *)(to_compare->content))->mps != NULL &&
 						ft_is_compatible_smp_to_single_path(to_compare->content,
 							current->content))
@@ -346,10 +343,17 @@ int		ft_fill_metadata(t_lem *lem)
 	return (1);
 }
 
+int		ft_nb_mps_smp(t_path *path)
+{
+	if (path->semi_mp)
+		return ft_lstlength(path->semi_mp->path->mps);
+	return (0);
+}
+
 int		ft_is_better_than(t_path *path, t_path *to_compare)
 {
-	return (ft_lstlength(path->mps) > ft_lstlength(to_compare->mps) 
-			|| ft_lstlength(path->semi_mps) > ft_lstlength(to_compare->semi_mps));
+	return (ft_lstlength(path->mps) > ft_lstlength(to_compare->mps)
+			|| ft_nb_mps_smp(path) > ft_nb_mps_smp(to_compare));
 }
 
 t_path	*ft_chosen_path(t_lem *lem)
@@ -425,33 +429,32 @@ t_ant	*ft_new_ant(t_list *rooms)
 	return (ant);
 }
 
-int		ft_deploy_ant(t_list **ants, t_list *rooms, int *ants_released)
+int		ft_deploy_ant(t_deploy *deploy, t_list *rooms)
 {
 	t_ant *ant;
 
 	if (!(ant = ft_new_ant(rooms)))
 		return (1);
-	if (ft_add_to_list_ptr_back(ants, ant, sizeof(t_ant)))
+	if (ft_add_to_list_ptr_back(&(deploy->ants), ant, sizeof(t_ant)))
 		return (1);
-	*ants_released += 1;
+	deploy->ants_released++;
 	return (0);
 }
 
-int		ft_deploy_ants(t_list **ants, int *ants_released,
-		t_lem *lem, t_deploy_platform *p)
+int		ft_deploy_ants(t_deploy *deploy, t_lem *lem)
 {
 	int		total_ants;
 	t_list	*ptr;
 	t_path	*path;
 
 	total_ants = lem->map.total_ants;
-	ptr = p->paths;
-	while (ptr != NULL && *ants_released < lem->map.total_ants)
+	ptr = deploy->p.paths;
+	while (ptr != NULL && deploy->ants_released < lem->map.total_ants)
 	{
 		path = (t_path *)(ptr->content);
-		if (path->length == p->min_length ||
-				lem->map.total_ants - *ants_released >= path->length)
-			ft_deploy_ant(ants, path->rooms, ants_released);
+		if (path->length == deploy->p.min_length ||
+				lem->map.total_ants - deploy->ants_released >= path->length)
+			ft_deploy_ant(deploy, path->rooms);
 		ptr = ptr->next;
 	}
 	return (0);
@@ -509,34 +512,45 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 	return (0);
 }
 
+void	ft_affich_progress_ant(int id, char *room_name, int first)
+{
+	if (first)
+		ft_printf("L%d-%s", id, room_name);
+	else
+		ft_printf(" L%d-%s", id, room_name);
+}
+
 int		ft_progress_ant(t_ant *ant, t_lem *lem)
 {
 	if (ant->rooms)
 	{
-		ft_printf("L%d-%s ", ant->id, ((t_room *)(ant->rooms->content))->name);
+		ft_affich_progress_ant(ant->id, ((t_room *)(ant->rooms->content))->name,
+				lem->first);
+		lem->first = 0;
 		ant->rooms = ant->rooms->next;
 		return (0);
 	}
 	else
 	{
-		ft_printf("L%d-%s ", ant->id, lem->map.end->name);
+		ft_affich_progress_ant(ant->id, lem->map.end->name, lem->first);
+		lem->first = 0;
 		return (1);
 	}
 }
 
-void	ft_progress_ants(t_list **ants, int *ants_end, t_lem *lem)
+void	ft_progress_ants(t_deploy *deploy, t_lem *lem)
 {
-	t_list *temp = *ants;
+	t_list *temp = deploy->ants;
 	t_list  *prev;
 
 	prev = NULL;	
 	while (temp != NULL && ft_progress_ant((t_ant *)(temp->content), lem))
 	{
-		*ants = temp->next;
+		deploy->ants = temp->next;
 		free(temp->content);
 		free(temp);
-		temp = *ants;
-		*ants_end += 1;
+		temp = deploy->ants;
+		deploy->ants_end += 1;
 	}
 	if (temp != NULL)
 	{
@@ -555,73 +569,68 @@ void	ft_progress_ants(t_list **ants, int *ants_end, t_lem *lem)
 			prev->next = temp->next;
 			free(temp->content);
 			free(temp);
-			*ants_end += 1;
+			deploy->ants_end += 1;
 			temp = prev->next;
 		}
 	}
 }
 
-/*
-void	ft_progress_ants(t_list **ants, int *ants_end, t_lem *lem)
+int		ft_deploy_ants_smp(t_path *chosen, t_deploy *deploy, t_lem *lem)
 {
-	t_list	*current;
-	t_list	*prev;
-	t_ant	*ant;
-
-	current = *ants;
-	prev = NULL;
-	while (current != NULL)
-	{
-		ant = (t_ant *)(current->content);
-		if (ft_progress_ant(ant, lem))
-		{
-			*ants_end += 1;
-			   if (prev == NULL)
-			 *ants = (*ants)->next;
-			 else
-			 prev->next = prev->next->next;
-			 free(current->content);
-			 free(current);
-		}
-		prev = current;
-		current = current->next;
-	}
+	if (deploy->ants_released < lem->map.total_ants)
+		ft_deploy_ant(deploy, chosen->rooms);
+	if (deploy->ants_released < lem->map.total_ants)
+		ft_deploy_ant(deploy, chosen->semi_mp->path->rooms);
+	return (0);
 }
-*/
 
-int		ft_process_print_no_smps(t_lem *lem, t_path *chosen)
+int		ft_process_print_no_smp(t_lem *lem, t_path *chosen, t_deploy *deploy)
 {
-	t_list	*ants;
-	int ants_end;
-	int ants_released;
-	t_deploy_platform p;
-
-	ants = NULL;
-	ants_released = 0;
-	ants_end = 0;
-	ft_populate_platform(&p, chosen);
-	while (ants_end < lem->map.total_ants)
+	ft_populate_platform(&(deploy->p), chosen);
+	while (deploy->ants_end < lem->map.total_ants)
 	{
-		if (ft_deploy_ants(&ants, &ants_released, lem, &p))
+		lem->first = 1;
+		if (ft_deploy_ants(deploy, lem))
 			return (1);
-		ft_progress_ants(&ants, &ants_end, lem);
+		ft_progress_ants(deploy, lem);
 		ft_printf("\n");
 	}
 	return (0);
 }
 
+int		ft_process_print_smp(t_lem *lem, t_path *chosen, t_deploy *deploy)
+{
+	size_t i;
+
+	i = 0;
+	while (deploy->ants_end < lem->map.total_ants && i < chosen->semi_mp->order)
+	{
+		lem->first = 1;
+		if (ft_deploy_ants_smp(chosen, deploy, lem))
+			return (1);
+		ft_progress_ants(deploy, lem);
+		ft_printf("\n");
+		i++;
+	}
+	return ft_process_print_no_smp(lem, chosen->semi_mp->path, deploy);
+}
+
+void	ft_init_deploy(t_deploy *deploy)
+{
+	deploy->ants_released = 0;
+	deploy->ants_end = 0;
+	deploy->ants = NULL;
+}
+
 int		ft_process_print(t_lem *lem, t_path *chosen)
 {
-	(void)lem;
-	(void)chosen;
-	//	int i;
+	t_deploy	deploy;
 
-	if (!ft_lstlength(chosen->semi_mps))
-		ft_process_print_no_smps(lem, chosen);
+	ft_init_deploy(&deploy);
+	if (!chosen->semi_mp)
+		ft_process_print_no_smp(lem, chosen, &deploy);
 	else
-	{
-
-	}
+		ft_process_print_smp(lem, chosen, &deploy);
 	return (0);
 }
 
@@ -642,7 +651,6 @@ int     ft_process_lem_in(t_lem *lem)
 	if (!ft_fill_metadata(lem))
 		return (-1);
 	chosen = ft_chosen_path(lem);
-//	ft_affich_path(chosen, 1);
 	ft_print_solution(lem, chosen);
 	return 0;
 }

@@ -1,9 +1,0 @@
-make
-if [ -z $1 ]
-then
-	./lem-in < maps/map09
-	./lem-in < maps/map09 | grep L | wc -l
-	#./lem-in < maps/map09 | ./lem-in_visu
-else
-	./lem-in < maps/$1 | ./lem-in_visu
-fi

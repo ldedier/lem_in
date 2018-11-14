@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/13 20:05:20 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 13:32:41 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,31 +66,25 @@ typedef struct		s_deploy_path
 	int				length;
 }					t_deploy_path;
 
-typedef struct		s_deploy_platform
-{
-	t_list			*paths;
-	int				min_length;
-}					t_deploy_platform;
-
 typedef struct		s_multi_path
 {
 	t_list			*paths;
 	int				path_count;
 }					t_multi_path;
 
-struct		s_path
-{
-	int				length;
-	t_list			*rooms; //list of rooms
-	t_path			*semi_mp; // list of semi_mp
-	t_list			*mps; //list of path
-};
-
 typedef struct		s_semi_mp
 {
 	size_t			order;
 	t_path			*path; // path
 }					t_semi_mp;
+
+struct		s_path
+{
+	int				length;
+	t_list			*rooms; //list of rooms
+	t_list			*mps; //list of path
+	t_semi_mp		*semi_mp;
+};
 
 typedef struct		s_paths
 {
@@ -106,12 +100,27 @@ typedef struct		s_parser
 	int				nb_lines;
 }					t_parser;
 
+typedef struct		s_deploy_platform
+{
+	t_list			*paths;
+	int				min_length;
+}					t_deploy_platform;
+
+typedef struct			s_deploy
+{
+	int 				ants_released;
+	int 				ants_end;
+	t_list 				*ants;
+	t_deploy_platform	p;	
+}						t_deploy;
+
 typedef struct		s_lem
 {
 	t_paths			paths;
 	t_map			map;
 	t_parser		parser;
 	int				turn;
+	int				first;
 	int				verbosed;
 }					t_lem;
 

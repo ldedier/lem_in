@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/23 17:53:09 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 14:08:13 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_init_ant_room(t_room *room)
 	room->ant_number = 0;
 	room->ant_count = 0;
 	room->neighbours = NULL;
+	room->parsed = 0;
 }
 
 int		ft_add_room(char *str, t_lem *lem, int role)

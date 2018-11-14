@@ -6,72 +6,12 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 13:50:32 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 15:56:47 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 #include <time.h>
-
-void    ft_reset_pathfinding(t_map *map)
-{
-	t_list *ptr;
-
-	ptr = map->rooms;
-	while (ptr != NULL)
-	{
-		((t_room *)(ptr->content))->parsed = 0;
-		ptr = ptr->next;
-	}
-}
-
-t_list	*ft_copy_list_ptr(t_list *list)
-{
-	t_list *res;
-	t_list *current;
-
-	res = (t_list *)malloc(sizeof(t_list));
-	res = NULL;
-	current = list;
-	while (current != NULL)
-	{
-		ft_lstpushback(&res, ft_lstnew_ptr(current->content, sizeof(t_list)));
-		current = current->next;
-	}
-	return (res);
-}
-
-t_list	*ft_copy_list_ptr_rev(t_list *list)
-{
-	t_list *res;
-	t_list *current;
-
-	res = (t_list *)malloc(sizeof(t_list));
-	res = NULL;
-	current = list;
-	while (current != NULL)
-	{
-		ft_lstadd(&res, ft_lstnew_ptr(current->content, sizeof(t_list)));
-		current = current->next;
-	}
-	return (res);
-}
-
-t_list	*ft_copy_list(t_list *list)
-{
-	t_list *res;
-	t_list *current;
-
-	res = (t_list *)malloc(sizeof(t_list));
-	res = NULL;
-	current = list;
-	while (current != NULL)
-	{
-		ft_lstadd(&res, ft_lstnew(current->content, sizeof(t_list)));
-		current = current->next;
-	}
-	return (res);
-}
 
 void	ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to protect
 {
@@ -83,14 +23,6 @@ void	ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to prot
 	path->semi_mp = NULL;
 	path->mps = NULL;
 	ft_lstadd(paths, ft_lstnew_ptr(path, sizeof(t_path)));
-}
-
-void	ft_add_list_ptr(t_list **list_ptr, t_list *list) //to protect
-{
-	t_list *copied_list;
-
-	copied_list = ft_copy_list_ptr(list);
-	ft_lstadd(list_ptr, ft_lstnew(copied_list, sizeof(t_list)));
 }
 
 void	ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
@@ -135,9 +67,9 @@ int		ft_fill_paths(t_lem *lem)
 	t_list	*path;
 	int		max_paths;
 
-	max_paths = 100000;
+	max_paths = 10000000;
 	path = NULL;
-	ft_reset_pathfinding(&(lem->map));
+//	ft_reset_pathfinding(&(lem->map));
 	ft_process_fill(lem->map.start, lem, &path, &max_paths);
 	return (1);
 }
@@ -156,7 +88,6 @@ t_semi_mp	*ft_new_semi_mp(size_t order, t_path *path)
 int		ft_is_better_smp(t_path *current, t_path *to_compare)
 {
 	return (ft_lstlength(current->mps) > ft_lstlength(to_compare->mps));
-
 }
 
 void	ft_update_matching_smps(t_path *path1, t_path *path2)
@@ -339,7 +270,9 @@ int		ft_fill_matching_smps(t_lem *lem)
 int		ft_fill_metadata(t_lem *lem)
 {
 	ft_fill_mps(lem);
+//	ft_printf("MPS OK\n");
 	ft_fill_matching_smps(lem);
+//	ft_printf("SMPS OK\n");
 	return (1);
 }
 
@@ -392,28 +325,6 @@ int		ft_print_all_in_one(t_lem *lem)
 	}
 	if (lem->map.total_ants > 0)
 		ft_printf("L%d-%s\n", i, lem->map.end->name);
-	return (0);
-}
-
-int		ft_add_to_list_ptr(t_list **list, void *content, size_t size)
-{
-	t_list *node;
-
-	if (!(node = ft_lstnew_ptr(content, size)))
-		return (1);
-	else
-		ft_lstadd(list, node);
-	return (0);
-}
-
-int		ft_add_to_list_ptr_back(t_list **list, void *content, size_t size)
-{
-	t_list *node;
-
-	if (!(node = ft_lstnew_ptr(content, size)))
-		return (1);
-	else
-		ft_lstpushback(list, node);
 	return (0);
 }
 
@@ -648,8 +559,10 @@ int     ft_process_lem_in(t_lem *lem)
 	t_path *chosen;
 	if (!ft_fill_paths(lem))
 		return (-1);
+//	ft_printf("FILL OK\n");
 	if (!ft_fill_metadata(lem))
 		return (-1);
+//	ft_printf("META OK\n");
 	chosen = ft_chosen_path(lem);
 	ft_print_solution(lem, chosen);
 	return 0;

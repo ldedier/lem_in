@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 13:32:41 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 15:59:14 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,5 +155,11 @@ void				ft_init_parse_arr(t_parse_func arr[5]);
 void				ft_error(char *error);
 void				ft_file_error(char *filename);
 int					ft_check_post_parse(t_lem *lem);
+int					ft_add_to_list_ptr(t_list **list, void *content,
+						size_t size);
+int					ft_add_to_list_ptr_back(t_list **list, void *content,
+						size_t size);
+t_list				*ft_copy_list_ptr_rev(t_list *list);
+t_list				*ft_copy_list_ptr(t_list *list);
 int					ft_verbose(t_lem *lem, char *line, char *str);
 #endif

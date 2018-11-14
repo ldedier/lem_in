@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/07/07 22:58:00 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 15:43:23 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	ft_init_env(t_env *e)
 {
 	e->lem.map.rooms = NULL;
 	e->anim.transitions = NULL;
+	e->vants = NULL;
+	e->ant_number = 1;
 	e->anim.static_ants_rooms = NULL;
 	e->anim.pause = 0;
 	e->keys.can_pause = 1;

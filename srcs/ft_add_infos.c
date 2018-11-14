@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/02 12:33:20 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 16:25:05 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,54 +50,85 @@ t_transition *ft_new_transition(t_env *e, t_room *from, t_room *to, int ant_num)
 {
 	t_transition *res;
 
-	if (!from || !to)
-	{
-		ft_printf("transition error, look at the subject output example.\n");
-		exit(1);
-	}
 	res = (t_transition *)(malloc(sizeof(t_transition)));
-	from->ant_count--;
-	if (from == e->lem.map.start)
-	{
-		if (from->ant_count == 0)
-			from->ant_number = 0;
-		else
-			from->ant_number++;
-	}
-	else
-		from->ant_number = 0;
-	if (to == e->lem.map.end)
-		e->toward_end++;
-	to->ant_count++;
-	to->ant_number = ant_num;
 	res->from = from;
 	res->to = to;
 	res->ant_num = ant_num;
+	if (to == e->lem.map.end)
+		e->toward_end++;
+	from->ant_count--;
+	to->ant_count++;
 	return (res);
 }
 
-void	ft_add_transition(t_env *e, int ant_numero, char *room_name)
+t_room	*ft_get_neighbour(t_room *room, char *room_name)
 {
-	t_room *from;
-	t_room *to;
-	t_list *ptr;
-	t_room *room;
-	t_transition *transition;
+	t_list	*ptr;
+	t_room *neighbour;
 
-	ptr = e->lem.map.rooms;
-	from = NULL;
-	to = NULL;
-	while (ptr != NULL && (from == NULL || to == NULL))
+	ptr = room->neighbours;
+	while (ptr != NULL)
 	{
-		room = (t_room *)(ptr->content);
-		if (room->ant_number == ant_numero)
-			from = room;
-		else if (!ft_strcmp(room->name, room_name))
-			to = room;
+		neighbour = (t_room *)(ptr->content);
+		if (!ft_strcmp(neighbour->name, room_name))
+			return (neighbour);
 		ptr = ptr->next;
 	}
-	transition = ft_new_transition(e, from, to, ant_numero);
-	ft_lstpushback(&(e->anim.transitions), ft_lstnew_ptr(transition, sizeof(t_transition)));
+	return (NULL);
+}
+
+
+t_vant	*ft_new_vant(int id, t_room *room)
+{
+	t_vant	*vant;
+
+	if (!(vant = (t_vant *)malloc(sizeof(t_vant))))
+		return (NULL);
+	vant->id = id;
+	vant->room = room;
+	return (vant);
+}
+
+int		ft_add_transition(t_env *e, int id, char *room_name)
+{
+	t_list			*ptr;
+	t_vant			*vant;
+	t_transition	*transition;
+	t_room			*room;
+
+	ptr = e->vants;
+	while (ptr != NULL)
+	{
+		vant = (t_vant *)(ptr->content);
+		if (vant->id == id)
+		{
+			if (!(room = ft_get_neighbour(vant->room, room_name)))
+				return (1);
+			transition = ft_new_transition(e, vant->room, room, id);
+			if (ft_add_to_list_ptr(&(e->anim.transitions),
+					transition, sizeof(t_transition)))
+				return (1);
+			vant->room = room;
+			return (0);
+		}
+		ptr = ptr->next;
+	}
+	if (id != e->ant_number++)
+		return (1);
+	if (!(room = ft_get_neighbour(e->lem.map.start, room_name)))
+		return (1);
+	if (!(vant = ft_new_vant(id, room)))
+		return (1);
+	transition = ft_new_transition(e, e->lem.map.start, room, id);
+	vant->room = room;
+	if (ft_add_to_list_ptr(&(e->anim.transitions),
+					transition, sizeof(t_transition)))
+				return (1);
+	if (ft_add_to_list_ptr(&(e->vants),
+					vant, sizeof(t_vant)))
+				return (1);
+
+	return (0);
 }
 
 void	ft_add_transitions(t_env *e, char *str)
@@ -107,7 +138,7 @@ void	ft_add_transitions(t_env *e, char *str)
 	char **ant_split;
 
 	i = 0;
-	split = ft_strsplit(str,' ');
+	split = ft_strsplit(str, ' ');
 	while (split[i])
 	{
 		ant_split = ft_strsplit(split[i], '-');

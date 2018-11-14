@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/13 16:00:23 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/14 15:59:37 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,12 +36,12 @@ OK_COLOR = \x1b[32;01m
 EOC = \033[0m
 
 SRCS_NO_PREFIX = main.c ft_parse_tools.c ft_debug.c ft_process_lem_in.c ft_parse_lem.c\
-				 ft_checks.c ft_parse_phases.c ft_add_data.c ft_tools.c
+				 ft_checks.c ft_parse_phases.c ft_add_data.c ft_tools.c ft_lists.c
 
 VSRCS_NO_PREFIX = main_visu.c ft_init.c ft_parse_lem.c ft_parse_tools.c\
 				 ft_checks.c ft_parse_phases.c ft_add_data.c ft_debug.c ft_tools.c\
 				 ft_render.c ft_events.c ft_center.c ft_add_infos.c ft_stats.c\
-				 ft_process_visu.c ft_visu_tools.c
+				 ft_process_visu.c ft_visu_tools.c ft_lists.c
 
 INCLUDES_NO_PREFIX = lem_in.h visu_lem_in.h
 

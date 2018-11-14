@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:30:10 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/02 13:01:22 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 14:27:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,7 @@ void ft_render(t_env *e)
 {
 	SDL_SetRenderDrawColor( e->sdl.renderer, 100, 100, 100, 255);
 	SDL_RenderClear(e->sdl.renderer);
-	//	SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[BG], NULL, NULL);
+//		SDL_RenderCopy(e->sdl.renderer, e->sdl.textures[BG], NULL, NULL);
 	ft_render_dashboard(e);
 	ft_render_links(e);
 	ft_render_rooms(e);

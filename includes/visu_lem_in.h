@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/07/07 22:24:26 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 15:45:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,11 @@
 
 # define TIME_PER_TURN	3000
 
-typedef struct			s_image
+typedef struct			s_vant
 {
-	void				*ptr;
-	int					*data;
-	int					width;
-	int					height;
-	int					bpp;
-	int					line_size;
-	int					endian;
-}						t_image;
+	int					id;
+	t_room				*room;
+}						t_vant;
 
 typedef struct			s_transition
 {
@@ -78,11 +73,11 @@ typedef struct			s_stats
 typedef struct			s_anim
 {
 	t_list				*transitions;
-	double				progress;
 	t_list				*static_ants_rooms;
 	Uint32				start;
 	Uint32				previous;
 	Uint32				current;
+	double				progress;
 	int					pause;
 	int					current_animation;
 }						t_anim;
@@ -116,12 +111,14 @@ typedef struct			s_env
 	t_keys				keys;
 	t_stats				stats;
 	t_lem				lem;
+	t_list				*vants;
 	t_sdl				sdl;
 	t_grab				grab;
+	t_room				*selected_room;
 	int					room_size;
+	int					ant_number;
 	int					time_per_turn;
 	int					toward_end;
-	t_room				*selected_room;
 	int					reversed;
 }						t_env;
 

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:30:10 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 14:27:58 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 22:35:25 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@ void	ft_render_rooms(t_env *e)
 	ptr = e->lem.map.rooms;
 	pos.w = e->room_size;
 	pos.h = e->room_size;
-	//SDL_Texture *circle;
-	//circle = SDL_CreateTexture(e->sld.renderer, 32, access, ROOM_SIZE, ROOM_SIZE);
-	//circle = SDL_CreateTexture(e->sdl.renderer, SDL_PIXELFORMAT_RGBA8888,
-	//		                        SDL_TEXTUREACCESS_STREAMING, ROOM_SIZE, ROOM_SIZE);
-
 	while (ptr != NULL)
 	{
 		room = (t_room *)(ptr->content);	

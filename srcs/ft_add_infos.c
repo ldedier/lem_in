@@ -6,11 +6,13 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 16:25:05 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 22:26:59 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visu_lem_in.h"
+
+
 
 void	ft_add_static(t_env *e)
 {
@@ -46,18 +48,21 @@ void	ft_add_static(t_env *e)
 	}
 }
 
-t_transition *ft_new_transition(t_env *e, t_room *from, t_room *to, int ant_num)
+void		ft_apply_transition(t_env *e, t_room *from, t_room *to)
+{
+	if (to == e->lem.map.end)
+		e->toward_end++;
+	from->ant_count--;
+	to->ant_count++;
+}
+
+t_transition *ft_new_transition(t_room *from, t_room *to)
 {
 	t_transition *res;
 
 	res = (t_transition *)(malloc(sizeof(t_transition)));
 	res->from = from;
 	res->to = to;
-	res->ant_num = ant_num;
-	if (to == e->lem.map.end)
-		e->toward_end++;
-	from->ant_count--;
-	to->ant_count++;
 	return (res);
 }
 
@@ -75,6 +80,22 @@ t_room	*ft_get_neighbour(t_room *room, char *room_name)
 		ptr = ptr->next;
 	}
 	return (NULL);
+}
+
+int		ft_already_in_transitions(t_list *transitions, t_room *from, t_room *to)
+{
+	t_list *ptr;
+	t_transition *transition;
+
+	ptr = transitions;
+	while (ptr != NULL)
+	{
+		transition = (t_transition *)(ptr->content);
+		if (from == transition->from && to == transition->to)
+			return (1);
+		ptr = ptr->next;
+	}
+	return (0);
 }
 
 
@@ -104,26 +125,37 @@ int		ft_add_transition(t_env *e, int id, char *room_name)
 		{
 			if (!(room = ft_get_neighbour(vant->room, room_name)))
 				return (1);
-			transition = ft_new_transition(e, vant->room, room, id);
-			if (ft_add_to_list_ptr(&(e->anim.transitions),
+			if (!ft_already_in_transitions(e->anim.transitions, vant->room, room))
+			{
+				transition = ft_new_transition(vant->room, room);
+				ft_apply_transition(e, vant->room, room);
+				if (ft_add_to_list_ptr(&(e->anim.transitions),
 					transition, sizeof(t_transition)))
 				return (1);
-			vant->room = room;
+				vant->room = room;
+			}
+			else
+				ft_apply_transition(e, vant->room, room);
+
 			return (0);
 		}
 		ptr = ptr->next;
 	}
-	if (id != e->ant_number++)
-		return (1);
 	if (!(room = ft_get_neighbour(e->lem.map.start, room_name)))
 		return (1);
 	if (!(vant = ft_new_vant(id, room)))
 		return (1);
-	transition = ft_new_transition(e, e->lem.map.start, room, id);
-	vant->room = room;
-	if (ft_add_to_list_ptr(&(e->anim.transitions),
+	if (!ft_already_in_transitions(e->anim.transitions, e->lem.map.start, room))
+	{
+		transition = ft_new_transition(e->lem.map.start, room);
+		ft_apply_transition(e, e->lem.map.start, room);
+		vant->room = room;
+		if (ft_add_to_list_ptr(&(e->anim.transitions),
 					transition, sizeof(t_transition)))
-				return (1);
+			return (1);
+	}
+	else
+		ft_apply_transition(e, e->lem.map.start, room);
 	if (ft_add_to_list_ptr(&(e->vants),
 					vant, sizeof(t_vant)))
 				return (1);

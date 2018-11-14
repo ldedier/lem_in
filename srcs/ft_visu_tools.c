@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/25 01:57:26 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 21:57:59 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	ft_affich_transitions(t_env *e)
 		tr = (t_transition *)(ptr->content);
 		ft_printf("from: %s\n", tr->from->name);
 		ft_printf("to: %s\n", tr->to->name);
-		ft_printf("by ant #%d\n\n", tr->ant_num);
 		ptr = ptr->next;
 	}
 }

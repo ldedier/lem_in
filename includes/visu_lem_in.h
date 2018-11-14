@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 15:45:20 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/14 21:57:38 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef struct			s_transition
 {
 	t_room				*from;
 	t_room				*to;
-	int					ant_num;
 	int					angle;
 }						t_transition;
 

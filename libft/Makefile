@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/03/19 17:13:49 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/15 16:36:45 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,13 +54,14 @@ SRCS_NO_PREFIX = ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c\
 	   ft_get_casted_values_func.c ft_get_casted_values_func_2.c\
 	   ft_get_casted_values_func_3.c ft_may_error.c ft_splitlen.c\
 	   ft_fmax.c ft_fmin.c ft_clamp.c ft_strndup.c ft_strnjoin_free.c\
-	   ft_strjoin_free.c ft_strichr.c
+	   ft_strjoin_free.c ft_strichr.c ft_add_to_list_ptr.c\
+	   ft_add_to_list_ptr_back.c ft_lstdel_ptr.c ft_lstpop_ptr.c 
 
 SOURCES = $(addprefix $(SRCDIR)/, $(SRCS_NO_PREFIX))
 OBJECTS = $(addprefix $(OBJDIR)/, $(SRCS_NO_PREFIX:%.c=%.o))
 
 INC_PATH = -I $(INCLUDESDIR)
-INCLUDES_NO_PREFIX = libft.h ft_printf.h
+INCLUDES_NO_PREFIX = libft.h ft_printf.h get_next_line.h
 INCLUDES = $(addprefix $(INCLUDESDIR)/, $(INCLUDES_NO_PREFIX))
 
 CFLAGS += $(INC_PATH)

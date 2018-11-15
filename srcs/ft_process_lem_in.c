@@ -6,45 +6,54 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 15:56:47 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 18:07:40 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-#include <time.h>
 
-void	ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to protect
+int		ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to protect
 {
 	t_list	*rooms_cpy;
-	t_path	*path = (t_path *)malloc(sizeof(t_path));
-	rooms_cpy = ft_copy_list_ptr_rev(rooms);
+	t_path	*path;
+   
+	if (!(path = (t_path *)malloc(sizeof(t_path))))
+		return (1);
+	if (!(rooms_cpy = ft_copy_list_ptr_rev(rooms)))
+		return (1);
 	path->length = length;
 	path->rooms = rooms_cpy;
 	path->semi_mp = NULL;
 	path->mps = NULL;
-	ft_lstadd(paths, ft_lstnew_ptr(path, sizeof(t_path)));
+	if (ft_add_to_list_ptr(paths, path, sizeof(t_path)))
+		return (1);
+	return (0);
 }
 
-void	ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
+int		ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 {
-	t_list *current;
-	int length;
+	t_list	*current;
+	int		length;
 
 	if (!room->parsed && *max_paths != 0)
 	{
 		room->parsed = 1;
 		if (room != lem->map.start && room != lem->map.end)
-			ft_lstadd(path, ft_lstnew_ptr(room, sizeof(t_room)));
+		{
+			if (ft_add_to_list_ptr(path, room, sizeof(t_room)))
+				return (1);
+		}
 		if (room != lem->map.end)
 		{
 			current = room->neighbours;
 			while (current != NULL)
 			{
-				ft_process_fill((t_room *)(current->content), lem, path, max_paths);
+				if (ft_process_fill((t_room *)(current->content), lem, path, max_paths))
+					return (1);
 				current = current->next;
 			}
 			if (room != lem->map.start)
-				ft_lstpop(path);
+				ft_lstpop_ptr(path);
 		}
 		else
 		{
@@ -60,6 +69,7 @@ void	ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 		}
 		room->parsed = 0;
 	}
+	return (0);
 }
 
 int		ft_fill_paths(t_lem *lem)
@@ -69,9 +79,9 @@ int		ft_fill_paths(t_lem *lem)
 
 	max_paths = 10000000;
 	path = NULL;
-//	ft_reset_pathfinding(&(lem->map));
-	ft_process_fill(lem->map.start, lem, &path, &max_paths);
-	return (1);
+	if (ft_process_fill(lem->map.start, lem, &path, &max_paths))
+		return (1);
+	return (0);
 }
 
 t_semi_mp	*ft_new_semi_mp(size_t order, t_path *path)
@@ -90,7 +100,7 @@ int		ft_is_better_smp(t_path *current, t_path *to_compare)
 	return (ft_lstlength(current->mps) > ft_lstlength(to_compare->mps));
 }
 
-void	ft_update_matching_smps(t_path *path1, t_path *path2)
+int		ft_update_matching_smps(t_path *path1, t_path *path2)
 {
 	t_list *current;
 	t_list *current2;
@@ -111,8 +121,11 @@ void	ft_update_matching_smps(t_path *path1, t_path *path2)
 				{
 					if (!path1->semi_mp ||
 							ft_is_better_smp(path2, path1->semi_mp->path))
-						path1->semi_mp = ft_new_semi_mp(j - i, path2);
-					return ;
+					{
+						if (!(path1->semi_mp = ft_new_semi_mp(j - i, path2)))
+							return (1);
+					}
+					return (0);
 				}
 			}
 			current2 = current2->next;
@@ -121,6 +134,7 @@ void	ft_update_matching_smps(t_path *path1, t_path *path2)
 		current = current->next;
 		i++;
 	}
+	return (0);
 }
 
 int		ft_share_rooms(t_path *path1, t_path *path2)
@@ -159,7 +173,7 @@ int		ft_overlaps_path_list(t_list **path_list, t_path* path)
 		if (ft_share_rooms(current, path))
 		{
 			if (overlapping || current->length <= path->length)
-				return 1;
+				return (1);
 			else
 				overlapping = ptr;
 		}
@@ -178,13 +192,17 @@ int		ft_overlaps_path_list(t_list **path_list, t_path* path)
 	return (0);
 }
 
-void	ft_add_to_mps(t_list **mps, t_path *path)
+int		ft_add_to_mps(t_list **mps, t_path *path)
 {
 	if (!ft_overlaps_path_list(mps, path))
-		ft_lstadd(mps, ft_lstnew_ptr(path, sizeof(t_path)));
+	{
+		if (ft_add_to_list_ptr(mps, path, sizeof(t_path)))
+			return (1);
+	}
+	return (0);
 }
 
-void	ft_update_mps(t_path *path1, t_path *path2)
+int		ft_update_mps(t_path *path1, t_path *path2)
 {
 	t_list *current;
 	t_list *current2;
@@ -200,15 +218,18 @@ void	ft_update_mps(t_path *path1, t_path *path2)
 		while (current2 != NULL)
 		{
 			if (current->content == current2->content)
-				return;
+				return (0);
 			current2 = current2->next;
 			j++;
 		}
 		current = current->next;
 		i++;
 	}
-	ft_add_to_mps(&(path1->mps), path2);
-	ft_add_to_mps(&(path2->mps), path1);
+	if (ft_add_to_mps(&(path1->mps), path2))
+		return (1);
+	if (ft_add_to_mps(&(path2->mps), path1))
+		return (1);
+	return (0);
 }
 
 int		ft_fill_mps(t_lem *lem)
@@ -228,7 +249,7 @@ int		ft_fill_mps(t_lem *lem)
 		}
 		current = current->next;
 	}
-	return (1);
+	return (0);
 }
 
 int		ft_is_compatible_smp_to_single_path(t_path *smp, t_path *single) //CHECK
@@ -256,24 +277,25 @@ int		ft_fill_matching_smps(t_lem *lem)
 						ft_is_compatible_smp_to_single_path(to_compare->content,
 							current->content))
 				{
-					ft_update_matching_smps((t_path *)current->content,
-							(t_path *)(to_compare->content));
+					if(ft_update_matching_smps((t_path *)current->content,
+							(t_path *)(to_compare->content)))
+						return (1);
 				}
 				to_compare = to_compare->next;
 			}
 		}
 		current = current->next;
 	}
-	return (1);
+	return (0);
 }
 
 int		ft_fill_metadata(t_lem *lem)
 {
-	ft_fill_mps(lem);
-//	ft_printf("MPS OK\n");
-	ft_fill_matching_smps(lem);
-//	ft_printf("SMPS OK\n");
-	return (1);
+	if (ft_fill_mps(lem))
+		return (1);
+	if (ft_fill_matching_smps(lem))
+		return (1);
+	return (0);
 }
 
 int		ft_nb_mps_smp(t_path *path)
@@ -347,7 +369,10 @@ int		ft_deploy_ant(t_deploy *deploy, t_list *rooms)
 	if (!(ant = ft_new_ant(rooms)))
 		return (1);
 	if (ft_add_to_list_ptr_back(&(deploy->ants), ant, sizeof(t_ant)))
+	{
+		free(ant);
 		return (1);
+	}
 	deploy->ants_released++;
 	return (0);
 }
@@ -422,6 +447,8 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 	p->min_length = min;
 	return (0);
 }
+
+
 
 void	ft_affich_progress_ant(int id, char *room_name, int first)
 {
@@ -542,6 +569,7 @@ int		ft_process_print(t_lem *lem, t_path *chosen)
 		ft_process_print_no_smp(lem, chosen, &deploy);
 	else
 		ft_process_print_smp(lem, chosen, &deploy);
+	ft_lstdel_ptr(&(deploy.p.paths));
 	return (0);
 }
 
@@ -557,13 +585,11 @@ int		ft_print_solution(t_lem *lem, t_path *chosen)
 int     ft_process_lem_in(t_lem *lem)
 {
 	t_path *chosen;
-	if (!ft_fill_paths(lem))
-		return (-1);
-//	ft_printf("FILL OK\n");
-	if (!ft_fill_metadata(lem))
-		return (-1);
-//	ft_printf("META OK\n");
-	chosen = ft_chosen_path(lem);
+	if (ft_fill_paths(lem))
+		return (1);
+	if (ft_fill_metadata(lem))
+		return (1);
+	chosen = ft_chosen_path(lem); //check has path !
 	ft_print_solution(lem, chosen);
 	return 0;
 }

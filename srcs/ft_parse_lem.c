@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/07/08 14:55:40 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 14:16:59 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,25 @@ char	*ft_parse(t_lem *lem)
 	t_parse_func parse_arr[5];
 	ft_init_parser(&(lem->parser));
 	ft_init_parse_arr(parse_arr);
-	res = ft_strnew(0);
+	if (!(res = ft_strnew(0)))
+		return (NULL);
 	while ((ret = get_next_line(0, &str)) > 0)
 	{
 		if (parse_arr[lem->parser.phase](str, lem) == -1)
 			return (NULL);
-		if (!(res = ft_strjoin(res, str)))
+		if (!(res = ft_strjoin_free(res, str)))
 			return (NULL);
-		if (!(res = ft_strjoin(res, "\n")))
+		if (!(res = ft_strjoin_free(res, "\n")))
 			return (NULL);
 		lem->parser.nb_lines++;
+		ft_strdel(&str);
 	}
+	ft_strdel(&str);
 	if (ft_check_post_parse(lem) == -1)
+	{
+		ft_strdel(&res);
 		return (NULL);
+	}
 	else
 		return (res);
 }

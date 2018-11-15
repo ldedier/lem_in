@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_add_to_list_ptr_back.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/08 15:42:52 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 14:24:58 by ldedier          ###   ########.fr       */
+/*   Created: 2018/11/15 12:29:56 by ldedier           #+#    #+#             */
+/*   Updated: 2018/11/15 12:33:57 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_GET_NEXT_LINE_H
-# define FT_GET_NEXT_LINE_H
+#include "libft.h"
 
-# include <limits.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
-# define BUFF_SIZE 4096
-
-typedef struct	s_gnl
+int     ft_add_to_list_ptr_back(t_list **list, void *content, size_t size)
 {
-	int			fd;
-	char		*rest;
-	char		*whole_buffer;
-}				t_gnl;
+	t_list *node;
 
-int				get_next_line(int const fd, char **line);
-
-#endif
+	if (!(node = ft_lstnew_ptr(content, size)))
+		return (1);
+	else
+		ft_lstpushback(list, node);
+	return (0);
+}

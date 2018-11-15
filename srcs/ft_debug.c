@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 13:34:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 11:44:46 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 17:49:37 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,45 +39,16 @@ void    ft_affich_list_of_list(t_list *lol)
 	}
 }
 
-void    ft_affich_multi_path(t_multi_path *mpath)
-{
-	t_list *paths;
-	ft_printf("nb paths: %d\n", mpath->path_count);
-	paths = mpath->paths;
-	int i;
-
-	i = 0;
-	while (paths != NULL)
-	{
-		ft_printf("path #%d:\n", ++i);
-		ft_affich_room_list((t_list *)(paths->content));
-		paths = paths->next;
-	}
-	ft_printf("multipath end\n");
-}
-
-void    ft_affich_multi_paths(t_list *mpaths)
-{
-	t_list *ptr;
-	t_multi_path *mpath;
-
-	ptr = mpaths;
-	while (ptr != NULL)
-	{
-		mpath = (t_multi_path *)(ptr->content);
-		ft_affich_multi_path(mpath);
-		ptr = ptr->next;
-	}
-}
-
 void	ft_affich_semi_matching_path(t_semi_mp *mp, int rec)
 {
-	if(mp)
+	if (mp)
 	{
 		ft_printf("order: %d\n", mp->order);
 		ft_affich_path(mp->path, rec);
 		ft_printf("\n");
 	}
+	else
+		ft_printf("none\n");
 }
 
 /*
@@ -98,19 +69,23 @@ void	ft_affich_semi_matching_paths(t_list *smps, int rec)
 
 void	ft_affich_path(t_path *path, int rec)
 {
-	ft_printf("new path:\n\nrooms:\n");
-	ft_affich_room_list(path->rooms);
-
-	if (rec)
+	if(path)
 	{
-		ft_printf(RED"\nmatching paths:\n");
-		ft_affich_paths(path->mps, 0);
+		ft_printf("new path:\n\nrooms:\n");
+		ft_affich_room_list(path->rooms);
 
-		ft_printf(CYAN"\nsemi matching paths:\n");
-		ft_affich_semi_matching_path(path->semi_mp, 1);
-		ft_printf(EOC"\nend of path\n");
+		if (rec)
+		{
+			ft_printf(RED"\nmatching paths:\n");
+			ft_affich_paths(path->mps, 0);
+
+			ft_printf(CYAN"\nsemi matching paths:\n");
+			ft_affich_semi_matching_path(path->semi_mp, 1);
+			ft_printf(EOC"\nend of path\n");
+		}
 	}
-
+	else
+		ft_printf("deleted !!\n");
 }
 
 

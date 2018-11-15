@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 18:21:30 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 17:14:01 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 16:35:27 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int					ft_isseparator(int c);
 int					ft_isseparator_light(int c);
 void				ft_lstpushback(t_list **alst, t_list *newelem);
-void				*ft_lstpop(t_list **lst);
+void				*ft_lstpop_ptr(t_list **lst);
+void				ft_lstpop(t_list **lst);
 int					ft_lstlength(t_list *list);
 void				ft_sort_tab(int *tab, size_t size);
 t_tree				*ft_newtree(void *content);
@@ -114,4 +115,9 @@ int					ft_strichr(const char *s, int c);
 char				*ft_strjoin_free(char *s1, char *s2);
 char				*ft_strnjoin_free(char *s1, char *s2, size_t n);
 char				*ft_strndup(const char *s, int n);
+int					ft_add_to_list_ptr(t_list **list, void *content,
+						size_t size);
+int					ft_add_to_list_ptr_back(t_list **list, void *content,
+						size_t size);
+void				ft_lstdel_ptr(t_list **list);
 #endif

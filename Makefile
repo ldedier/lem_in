@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/14 15:59:37 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/15 13:00:25 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,12 +71,12 @@ debug:
 	@make all DEBUG=0
 
 $(BINDIR)/$(NAME): $(OBJECTS) $(LIBFT)
-	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft -fsanitize=address
+	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 
 $(BINDIR)/$(VISU_NAME): $(VOBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ -F ./frameworks -framework SDL2\
-		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft -fsanitize=address
+		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft
 	@echo "$(OK_COLOR)$(VISU_NAME) linked with success !$(EOC)"
 	@install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2 $(SDL2) $(VISU_NAME)
 	@install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image $(SDL2_image) $(VISU_NAME)

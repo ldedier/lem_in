@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 15:59:14 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 16:43:08 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,6 @@ typedef enum		e_phase
 	e_phase_end,
 	e_phase_links
 }					t_phase;
-
-typedef struct		s_deploy_path
-{
-	t_list			*path;
-	int				length;
-}					t_deploy_path;
-
-typedef struct		s_multi_path
-{
-	t_list			*paths;
-	int				path_count;
-}					t_multi_path;
 
 typedef struct		s_semi_mp
 {

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstpop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/07 19:55:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/02/19 20:44:49 by ldedier          ###   ########.fr       */
+/*   Created: 2018/11/15 16:34:35 by ldedier           #+#    #+#             */
+/*   Updated: 2018/11/15 16:35:05 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_lstpop(t_list **list)
+void	ft_lstpop(t_list **list)
 {
 	void	*content;
 	t_list	*ptr;
@@ -23,7 +23,6 @@ void	*ft_lstpop(t_list **list)
 		content = ptr->content;
 		*list = (*list)->next;
 		free(ptr);
-		return (content);
+		free(content);
 	}
-	return (NULL);
 }

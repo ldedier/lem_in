@@ -6,15 +6,13 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 22:26:59 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 14:02:51 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visu_lem_in.h"
 
-
-
-void	ft_add_static(t_env *e)
+int		ft_add_static(t_env *e)
 {
 	e->anim.static_ants_rooms = NULL;
 	t_list *ptr;
@@ -42,10 +40,14 @@ void	ft_add_static(t_env *e)
 				ptr2 = ptr2->next;
 			}
 			if (is_static_ant)
-				ft_lstadd(&(e->anim.static_ants_rooms), ft_lstnew_ptr(room, sizeof(t_room)));
+			{
+				if (ft_add_to_list_ptr(&(e->anim.static_ants_rooms), room, sizeof(t_room)))
+					return (1);
+			}
 		}
 		ptr = ptr->next;
 	}
+	return (0);
 }
 
 void		ft_apply_transition(t_env *e, t_room *from, t_room *to)

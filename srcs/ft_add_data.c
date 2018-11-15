@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 14:08:13 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 14:06:41 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,33 @@ void	ft_init_ant_room(t_room *room)
 	room->parsed = 0;
 }
 
+int		ft_free_turn_split(char **split, int ret)
+{
+	ft_free_split(split);
+	return (ret);
+}
+
 int		ft_add_room(char *str, t_lem *lem, int role)
 {
 	char	**split;
 	t_room	*room;
 
-	split = ft_strsplit(str, ' ');
+	if (!(split = ft_strsplit(str, ' ')))
+		return (-1);
 	if (ft_is_valid_room(split, lem))
 	{
-		room = malloc(sizeof(t_room));
+		if (!(room = (t_room *)malloc(sizeof(t_room))))
+			return (ft_free_turn_split(split, -1));
 		room->name = ft_strdup(split[0]);
 		room->x = ft_atoi(split[1]);
 		room->y = ft_atoi(split[2]);
 		ft_init_ant_room(room);
-		ft_lstadd(&(lem->map.rooms), ft_lstnew_ptr(room, sizeof(t_room)));
+		if (ft_add_to_list_ptr(&(lem->map.rooms), room, sizeof(t_room)))
+		{
+			ft_free_split(split);
+			free(room);
+			return (-1);
+		}
 		if (role == START)
 		{
 			room->ant_number = 1;
@@ -43,11 +56,13 @@ int		ft_add_room(char *str, t_lem *lem, int role)
 		else if (role == END)
 			lem->map.end = room;
 		lem->parser.phase = e_phase_rooms;
+		ft_free_split(split);
 		return (0);
 	}
 	else
 	{
 		ft_printf("ROOM ERROR\n");
+		ft_free_split(split);
 		return (-1);
 	}
 }
@@ -86,12 +101,15 @@ int		ft_add_link(char *str, t_lem *lem)
 	split = ft_strsplit(str, '-');
 	r1 = ft_get_room((lem->map.rooms), split[0]);
 	r2 = ft_get_room((lem->map.rooms), split[1]);
+	ft_free_split(split);
 	if (r1 && r2)
 	{
 		if (ft_not_linked_yet(r1, r2))
 		{
-			ft_lstadd(&(r1->neighbours), ft_lstnew_ptr(r2, sizeof(t_room)));
-			ft_lstadd(&(r2->neighbours), ft_lstnew_ptr(r1, sizeof(t_room)));
+			if (ft_add_to_list_ptr(&(r1->neighbours), r2, sizeof(t_room)))
+				return (-1);
+			if (ft_add_to_list_ptr(&(r2->neighbours), r1, sizeof(t_room)))
+				return (-1);
 		}
 		return (1);
 	}

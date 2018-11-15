@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 21:57:38 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/15 14:03:27 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void					ft_update_corr_pos(t_env *e);
 void					ft_update_room(t_map *map, int ant_num, char *room_name);
 void					ft_add_transitions(t_env *e, char *str);
 void					ft_affich_transitions(t_env *e);
-void					ft_add_static(t_env *e);
+int						ft_add_static(t_env *e);
 void					ft_gather_stats(t_env *e);
 void					ft_process(t_env *e);
 void					ft_process_end(t_env *e);

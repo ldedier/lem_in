@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 21:57:59 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 14:47:12 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ int		ft_parse_visu(t_lem *lem)
 	{
 		if (parse_arr[lem->parser.phase](str, lem) == -1)
 			return (-1);
+		ft_strdel(&(str));
 	}
+	ft_strdel(&(str));
 	if (ft_check_post_parse(lem) == -1)
 		return (-1);
 	else

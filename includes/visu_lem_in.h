@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 14:03:27 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 18:01:15 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,22 @@
 
 # define GRASS_BORDER	200
 # define ROOM_SIZE		150
+
 # define ANT			0
-# define BG				1
-# define ROOM			2
-# define START_SPRITE	3
-# define END_SPRITE		4
-# define ROOM_SEL		5
-# define START_SEL		6
-# define END_SEL		7
+# define ROOM			1
+# define START_SPRITE	2
+# define END_SPRITE		3
+# define ROOM_SEL		4
+# define START_SEL		5
+# define END_SEL		6
 
 # define TIME_PER_TURN	3000
+
+typedef struct			s_alpha
+{
+	double				w;
+	double				h;
+}						t_alpha;
 
 typedef struct			s_vant
 {
@@ -52,9 +58,9 @@ typedef struct			s_sdl
 	SDL_Window			*window;
 	SDL_Renderer		*renderer;
 	SDL_Surface			*surface;
-	SDL_Texture			*textures[10];
+	SDL_Texture			*textures[7];
 	SDL_Texture			*ant_textures[4];
-	TTF_Font			*fonts[3];
+	TTF_Font			*font;
 }						t_sdl;
 
 typedef struct			s_stats
@@ -81,15 +87,6 @@ typedef struct			s_anim
 	int					current_animation;
 }						t_anim;
 
-typedef struct			s_keys
-{
-	int					down;
-	int					up;
-	int					right;
-	int					left;
-	int					can_pause;
-}						t_keys;
-
 typedef struct			s_grab
 {
 	int					x_diff;
@@ -107,7 +104,6 @@ typedef struct			s_env
 {
 	t_dim				dim;
 	t_anim				anim;
-	t_keys				keys;
 	t_stats				stats;
 	t_lem				lem;
 	t_list				*vants;
@@ -118,13 +114,11 @@ typedef struct			s_env
 	int					ant_number;
 	int					time_per_turn;
 	int					toward_end;
-	int					reversed;
 }						t_env;
 
 int						ft_init_all(t_env *e);
-void					ft_render(t_env *e);
-void					ft_key_down(t_env *e, SDL_Event event);
-void					ft_key_up(t_env *e, SDL_Event event);
+int						ft_render(t_env *e);
+void					ft_key_down(t_env *e, SDL_Keycode code);
 void					ft_mouse_down(t_env *e, SDL_Event event);
 void					ft_mouse_up(t_env *e, SDL_Event event);
 void					ft_mouse_motion(t_env *e, SDL_Event event);
@@ -134,10 +128,11 @@ void					ft_add_transitions(t_env *e, char *str);
 void					ft_affich_transitions(t_env *e);
 int						ft_add_static(t_env *e);
 void					ft_gather_stats(t_env *e);
-void					ft_process(t_env *e);
+void					ft_process(t_env *e, const Uint8 *keys);
 void					ft_process_end(t_env *e);
 int						ft_parse_visu(t_lem *lem);
-void					ft_render_visu(t_env *e, char *str);
+int						ft_render_visu(t_env *e, char *str);
 void					ft_render_visu_end(t_env *e);
 void					ft_reset_pos(t_env *e);
+int						ft_dist(int x1, int y1, int x2, int y2);
 #endif

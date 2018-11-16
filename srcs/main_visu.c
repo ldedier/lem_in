@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/14 15:43:23 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 16:53:16 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,55 @@ void	ft_init_env(t_env *e)
 	e->lem.map.rooms = NULL;
 	e->anim.transitions = NULL;
 	e->vants = NULL;
-	e->ant_number = 1;
 	e->anim.static_ants_rooms = NULL;
+	e->ant_number = 1;
 	e->anim.pause = 0;
-	e->keys.can_pause = 1;
 	e->time_per_turn = TIME_PER_TURN;
-	e->reversed = 0;
+}
+
+void __attribute__((destructor)) end();
+
+void    end(void)
+{
+//	  ft_printf("destructor loop\n");
+//	  while(1);
+}
+
+
+void	ft_free_textures(t_env *e)
+{
+	int i;
+
+	i = 0;
+	while (i < 8)
+	{
+		SDL_DestroyTexture(e->sdl.textures[i]);
+		i++;
+	}
+	i = 0;
+	while (i < 4)
+	{
+		SDL_DestroyTexture(e->sdl.ant_textures[i]);
+		i++;
+	}
+}
+
+void	ft_free_all(t_env *e)
+{
+	ft_lstdel_value(&(e->vants));
+	ft_delete_rooms(&(e->lem.map.rooms));
+	ft_free_textures(e);
+	TTF_CloseFont(e->sdl.font);
+	SDL_FreeSurface(e->sdl.surface);
+	SDL_DestroyRenderer(e->sdl.renderer);
+	SDL_DestroyWindow(e->sdl.window);
 }
 
 int main(int argc, char **argv)
 {
 	t_env	e;
 	char	*str;
+
 	(void) argc;
 	(void) argv;
 	ft_init_env(&e);
@@ -42,11 +79,16 @@ int main(int argc, char **argv)
 	while (get_next_line(0, &str) > 0)
 	{
 		e.lem.turn++;
-		ft_render_visu(&e, str);
-		e.anim.transitions = NULL;
-		e.anim.static_ants_rooms = NULL;
-		//TO FREE
+		if (!ft_render_visu(&e, str))
+		{
+			ft_strdel(&(str));
+			ft_free_all(&e);
+			return (0);
+		}
+		 ft_strdel(&(str));
 	}
+	ft_strdel(&(str));
 	ft_render_visu_end(&e);
+	ft_free_all(&e);
 	return (0);
 }

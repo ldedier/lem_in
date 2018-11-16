@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lem-in.h                                           :+:      :+:    :+:   */
+/*   lem_in.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/01 22:02:08 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 16:43:08 by ldedier          ###   ########.fr       */
+/*   Created: 2018/11/16 16:07:12 by ldedier           #+#    #+#             */
+/*   Updated: 2018/11/16 16:08:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,4 +150,5 @@ int					ft_add_to_list_ptr_back(t_list **list, void *content,
 t_list				*ft_copy_list_ptr_rev(t_list *list);
 t_list				*ft_copy_list_ptr(t_list *list);
 int					ft_verbose(t_lem *lem, char *line, char *str);
+void				ft_delete_rooms(t_list **rooms);
 #endif

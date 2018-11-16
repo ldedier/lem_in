@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 13:34:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 17:49:37 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 11:49:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,12 @@ void	ft_affich_semi_matching_paths(t_list *smps, int rec)
 
 void	ft_affich_path(t_path *path, int rec)
 {
-	if(path)
+	t_list *rooms;
+	if (path != NULL)
 	{
 		ft_printf("new path:\n\nrooms:\n");
+		rooms = path->rooms;
+		ft_printf("HEHEHE\n");
 		ft_affich_room_list(path->rooms);
 
 		if (rec)

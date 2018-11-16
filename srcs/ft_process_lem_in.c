@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 18:07:40 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 17:53:01 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@ int		ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to prot
    
 	if (!(path = (t_path *)malloc(sizeof(t_path))))
 		return (1);
-	if (!(rooms_cpy = ft_copy_list_ptr_rev(rooms)))
-		return (1);
+	if (rooms)
+	{
+		if (!(rooms_cpy = ft_copy_list_ptr_rev(rooms)))
+			return (1);
+	}
+	else
+		rooms_cpy = NULL;
 	path->length = length;
 	path->rooms = rooms_cpy;
 	path->semi_mp = NULL;
@@ -61,7 +66,8 @@ int		ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 			if ((length < lem->paths.min_length) ||
 					(lem->paths.min_length == -1))
 				lem->paths.min_length = length;
-			ft_add_path_from_rooms(&(lem->paths.paths_list), *path, length);
+			if (ft_add_path_from_rooms(&(lem->paths.paths_list), *path, length))
+				return (1);
 			if (*path == NULL)
 				*max_paths = 0;
 			else
@@ -95,6 +101,21 @@ t_semi_mp	*ft_new_semi_mp(size_t order, t_path *path)
 	return (res);
 }
 
+int		ft_populate_smp(t_semi_mp **smp, size_t order, t_path *path)
+{
+	if (!(*smp))
+	{
+		if (!(*smp = ft_new_semi_mp(order, path)))
+			return (1);
+	}
+	else
+	{
+		(*smp)->order = order;
+		(*smp)->path = path;
+	}
+	return (0);
+}
+
 int		ft_is_better_smp(t_path *current, t_path *to_compare)
 {
 	return (ft_lstlength(current->mps) > ft_lstlength(to_compare->mps));
@@ -122,7 +143,7 @@ int		ft_update_matching_smps(t_path *path1, t_path *path2)
 					if (!path1->semi_mp ||
 							ft_is_better_smp(path2, path1->semi_mp->path))
 					{
-						if (!(path1->semi_mp = ft_new_semi_mp(j - i, path2)))
+						if (ft_populate_smp(&(path1->semi_mp), j - i, path2))
 							return (1);
 					}
 					return (0);
@@ -277,7 +298,7 @@ int		ft_fill_matching_smps(t_lem *lem)
 						ft_is_compatible_smp_to_single_path(to_compare->content,
 							current->content))
 				{
-					if(ft_update_matching_smps((t_path *)current->content,
+					if (ft_update_matching_smps((t_path *)current->content,
 							(t_path *)(to_compare->content)))
 						return (1);
 				}
@@ -431,7 +452,13 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 	int min;
 	int val;
 
-	p->paths = chosen->mps;
+	if(chosen->mps)
+	{
+		if (!(p->paths = ft_copy_list_ptr_rev(chosen->mps)))
+			return (1);
+	}
+	else
+		p->paths = NULL;
 	if (ft_add_to_list_ptr(&(p->paths), chosen, sizeof(t_path)))
 		return (1);
 	ft_list_sort(&(p->paths));
@@ -447,8 +474,6 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 	p->min_length = min;
 	return (0);
 }
-
-
 
 void	ft_affich_progress_ant(int id, char *room_name, int first)
 {
@@ -524,7 +549,8 @@ int		ft_deploy_ants_smp(t_path *chosen, t_deploy *deploy, t_lem *lem)
 
 int		ft_process_print_no_smp(t_lem *lem, t_path *chosen, t_deploy *deploy)
 {
-	ft_populate_platform(&(deploy->p), chosen);
+	if (ft_populate_platform(&(deploy->p), chosen))
+		return (1);
 	while (deploy->ants_end < lem->map.total_ants)
 	{
 		lem->first = 1;
@@ -587,8 +613,11 @@ int     ft_process_lem_in(t_lem *lem)
 	t_path *chosen;
 	if (ft_fill_paths(lem))
 		return (1);
-	if (ft_fill_metadata(lem))
-		return (1);
+	if (lem->paths.min_length)
+	{
+		if (ft_fill_metadata(lem))
+			return (1);
+	}
 	chosen = ft_chosen_path(lem); //check has path !
 	ft_print_solution(lem, chosen);
 	return 0;

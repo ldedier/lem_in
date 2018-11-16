@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_abs.c                                           :+:      :+:    :+:   */
+/*   ft_lstdel_value.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/16 15:56:25 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 12:12:59 by ldedier          ###   ########.fr       */
+/*   Created: 2018/11/16 15:53:02 by ldedier           #+#    #+#             */
+/*   Updated: 2018/11/16 15:53:06 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_abs(int a)
+#include "libft.h"
+
+void	ft_lstdel_value(t_list **list)
 {
-	if (a > 0)
-		return (a);
-	return (-a);
+	while (*list != NULL)
+		ft_lstpop(list);
 }

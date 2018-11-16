@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:51:24 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/24 16:25:14 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 16:50:31 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,51 +31,21 @@ void	ft_reset_pos(t_env *e)
 
 void	ft_toggle_pause(t_env *e)
 {
-	if (e->keys.can_pause)
+	if (e->anim.pause == 0)
+		e->anim.pause = 1;
+	else
 	{
-		if (e->anim.pause == 0)
-			e->anim.pause = 1;
-		else
-		{
-			e->anim.previous = SDL_GetTicks();
-			e->anim.pause = 0;
-		}
-		e->keys.can_pause = 0;
+		e->anim.previous = SDL_GetTicks();
+		e->anim.pause = 0;
 	}
 }
 
-
-
-void	ft_key_down(t_env *e, SDL_Event event)
+void	ft_key_down(t_env *e, SDL_Keycode code)
 {
-	if (event.key.keysym.sym == SDLK_RIGHT)
-		e->keys.right = 1;
-	if (event.key.keysym.sym == SDLK_LEFT)
-		e->keys.left = 1;
-	if (event.key.keysym.sym == SDLK_UP)
-		e->keys.up = 1;
-	if (event.key.keysym.sym == SDLK_DOWN)
-		e->keys.down = 1;
-	if (event.key.keysym.sym == SDLK_r)
+	if (code == SDLK_r)
 		ft_reset_pos(e);
-	if (event.key.keysym.sym == SDLK_SPACE)
+	if (code == SDLK_SPACE)
 		ft_toggle_pause(e);
-
-}
-
-void	ft_key_up(t_env *e, SDL_Event event)
-{
-
-	if (event.key.keysym.sym == SDLK_RIGHT)
-		e->keys.right = 0;
-	if (event.key.keysym.sym == SDLK_LEFT)
-		e->keys.left = 0;
-	if (event.key.keysym.sym == SDLK_UP)
-		e->keys.up = 0;
-	if (event.key.keysym.sym == SDLK_DOWN)
-		e->keys.down = 0;
-	if (event.key.keysym.sym == SDLK_SPACE)
-		e->keys.can_pause = 1;
 }
 
 void 	ft_relink_end(t_list *node, t_list *prev)

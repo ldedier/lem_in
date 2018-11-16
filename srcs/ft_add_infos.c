@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 14:02:51 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 16:26:46 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ int		ft_add_transition(t_env *e, int id, char *room_name)
 			}
 			else
 				ft_apply_transition(e, vant->room, room);
-
 			return (0);
 		}
 		ptr = ptr->next;
@@ -167,9 +166,9 @@ int		ft_add_transition(t_env *e, int id, char *room_name)
 
 void	ft_add_transitions(t_env *e, char *str)
 {
-	char **split;
-	int i;
-	char **ant_split;
+	char	**split;
+	int		i;
+	char	**ant_split;
 
 	i = 0;
 	split = ft_strsplit(str, ' ');
@@ -177,6 +176,8 @@ void	ft_add_transitions(t_env *e, char *str)
 	{
 		ant_split = ft_strsplit(split[i], '-');
 		ft_add_transition(e, ft_atoi(&(ant_split[0][1])), ant_split[1]);
+		ft_free_split(ant_split);
 		i++;
 	}
+	ft_free_split(split);
 }

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 18:09:03 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 16:06:57 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void __attribute__((destructor)) end();
 
 void	end(void)
 {
-	ft_printf("destructor loop\n");
-	while(1);
+//	ft_printf("destructor loop\n");
+//	while(1);
 }
 
 void	ft_init_lem(t_lem *lem, int argc, char **argv)
@@ -45,12 +45,8 @@ void	ft_delete_paths(t_list **paths)
 	while (ptr != NULL)
 	{
 		path = (t_path *)(ptr->content);
-		ft_printf("AVANT DE DELETE\n\n\n");
-	//	ft_affich_path(path, 1); //EXPLODE
-	//	ft_lstdel_ptr(&(path->mps)); //EXPLODE
+		ft_lstdel_ptr(&(path->mps));
 		ft_lstdel_ptr(&(path->rooms));
-		ft_printf("DELETED MPS\n\n\n");
-//		ft_affich_path(path, 1); //EXPLODE
 		if (path->semi_mp)
 			free(path->semi_mp);
 		free(path);
@@ -59,25 +55,6 @@ void	ft_delete_paths(t_list **paths)
 	}
 	ft_lstdel_ptr(paths);
 }
-
-void	ft_delete_rooms(t_list **rooms)
-{
-	t_list	*ptr;
-	t_room	*room;
-
-	ptr = *rooms;
-	while (ptr != NULL)
-	{
-		room = (t_room *)(ptr->content);
-		ft_lstdel_ptr(&(room->neighbours));
-		ft_strdel(&(room->name));
-		free(room);
-		ptr = ptr->next;
-	}
-	ft_lstdel_ptr(rooms);
-}
-
-
 
 int		main(int argc, char **argv)
 {

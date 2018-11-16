@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:51:24 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 16:50:31 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/16 18:37:08 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	ft_reset_pos(t_env *e)
 		ptr = ptr->next;
 	}
 }
-
 
 void	ft_toggle_pause(t_env *e)
 {
@@ -129,6 +128,7 @@ void	ft_mouse_up(t_env *e, SDL_Event event)
 
 void	ft_mouse_motion(t_env *e, SDL_Event event)
 {
+	(void)event;
 	if (e->grab.grabbed_room)
 	{
 		e->grab.grabbed_room->corr_x = ft_clamp(0, event.motion.x + e->grab.x_diff, e->dim.width - e->room_size);

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 14:47:12 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/17 16:54:22 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		ft_parse_visu(t_lem *lem)
 		ft_strdel(&(str));
 	}
 	ft_strdel(&(str));
-	if (ft_check_post_parse(lem) == -1)
+	if (ft_is_valid_post_parse(lem) == -1)
 		return (-1);
 	else
 		return (0);

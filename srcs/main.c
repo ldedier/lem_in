@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 16:06:57 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/17 16:52:33 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,21 @@ int		main(int argc, char **argv)
 	if ((to_print = ft_parse(&lem)) == NULL)
 	{
 		if (!lem.verbosed)
-			ft_printf("ERROR\n");
+			ft_printf("malloc error\n");
 	}
 	else
 	{
-		ft_printf("%s\n", to_print);
-		ft_strdel(&to_print);
-		if (ft_process_lem_in(&lem) == -1 && !lem.verbosed)
+		if (ft_is_valid_post_parse(&lem))
+		{
+			ft_printf("%s\n", to_print);
+			if (ft_process_lem_in(&lem) == -1 && !lem.verbosed)
+				ft_printf("malloc error\n");
+			ft_delete_paths(&(lem.paths.paths_list));
+			ft_delete_rooms(&(lem.map.rooms));
+		}
+		else
 			ft_printf("ERROR\n");
-		ft_delete_paths(&(lem.paths.paths_list));
-		ft_delete_rooms(&(lem.map.rooms));
+		ft_strdel(&to_print);
 	}
 	return (0);
 }

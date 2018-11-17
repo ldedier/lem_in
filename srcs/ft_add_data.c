@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 14:06:41 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/17 16:27:58 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,19 @@ int		ft_add_room(char *str, t_lem *lem, int role)
 	{
 		if (!(room = (t_room *)malloc(sizeof(t_room))))
 			return (ft_free_turn_split(split, -1));
-		room->name = ft_strdup(split[0]);
+		if (!(room->name = ft_strdup(split[0])))
+		{
+			free(room);
+			return (ft_free_turn_split(split, -1));
+		}
 		room->x = ft_atoi(split[1]);
 		room->y = ft_atoi(split[2]);
 		ft_init_ant_room(room);
 		if (ft_add_to_list_ptr(&(lem->map.rooms), room, sizeof(t_room)))
 		{
-			ft_free_split(split);
+			free(room->name);
 			free(room);
-			return (-1);
+			return (ft_free_turn_split(split, -1));
 		}
 		if (role == START)
 		{

@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 16:07:12 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 16:08:20 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/17 16:47:07 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void				ft_init_parser(t_parser *parser);
 void				ft_init_parse_arr(t_parse_func arr[5]);
 void				ft_error(char *error);
 void				ft_file_error(char *filename);
-int					ft_check_post_parse(t_lem *lem);
+int					ft_is_valid_post_parse(t_lem *lem);
 int					ft_add_to_list_ptr(t_list **list, void *content,
 						size_t size);
 int					ft_add_to_list_ptr_back(t_list **list, void *content,

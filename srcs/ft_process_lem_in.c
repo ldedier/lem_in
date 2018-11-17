@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 17:53:01 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/17 15:56:08 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -460,7 +460,10 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 	else
 		p->paths = NULL;
 	if (ft_add_to_list_ptr(&(p->paths), chosen, sizeof(t_path)))
+	{
+		ft_lstdel_ptr(&(p->paths));
 		return (1);
+	}
 	ft_list_sort(&(p->paths));
 	min = chosen->length;
 	ptr = p->paths;
@@ -559,6 +562,7 @@ int		ft_process_print_no_smp(t_lem *lem, t_path *chosen, t_deploy *deploy)
 		ft_progress_ants(deploy, lem);
 		ft_printf("\n");
 	}
+	ft_lstdel_value(&(deploy->ants));
 	return (0);
 }
 

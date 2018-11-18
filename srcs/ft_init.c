@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 16:43:08 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 18:34:17 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ int			ft_init_sdl(t_env *e)
 		return (0);
 	if (SDL_SetRenderDrawColor(e->sdl.renderer, 0, 0, 0, 255) < 0)
 		return (0);
-	e->sdl.surface = SDL_CreateRGBSurface(0,
+	e->sdl.w_surface = SDL_CreateRGBSurface(0,
 			e->dim.width, e->dim.height, 32, 0, 0, 0, 0);
-	if (e->sdl.surface == NULL)
+	if (e->sdl.w_surface == NULL)
 		return (0);
 	return (1);
 }
@@ -96,5 +96,9 @@ int			ft_init_all(t_env *e)
 		return (0);
 	if (!ft_init_textures(e))
 		return (0);
+	e->sdl.color.r = 255;
+	e->sdl.color.g = 255;
+	e->sdl.color.b = 255;
+	e->sdl.color.a = 255;
 	return (1);
 }

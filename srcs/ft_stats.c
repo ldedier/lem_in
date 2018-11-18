@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 03:03:57 by ldedier           #+#    #+#             */
-/*   Updated: 2018/03/19 03:03:59 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 17:27:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,4 @@ void	ft_gather_stats(t_env *e)
 		ft_update_stats(room, e);
 		ptr = ptr->next;
 	}
-}
-
-void	ft_debug_stats(t_stats* stats)
-{
-	ft_printf("top:%d\n", stats->top);
-	ft_printf("bottom:%d\n", stats->bottom);
-	ft_printf("left:%d\n", stats->left);
-	ft_printf("right:%d\n", stats->right);
 }

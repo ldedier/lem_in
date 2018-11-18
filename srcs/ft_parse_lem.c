@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 16:47:23 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 17:25:23 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,25 @@ void	ft_init_parse_arr(t_parse_func parse_arr[5])
 int		ft_is_valid_post_parse(t_lem *lem)
 {
 	if (lem->parser.nb_start == 0 || lem->parser.nb_end == 0)
-		return (0);	
+		return (0);
+	if (!ft_is_solvable(&(lem->map)))
+		return (0);
 	return (1);
 }
 
 char	*ft_free_turn_str(char *res, char **to_del)
 {
 	ft_strdel(to_del);
-	return res;
+	return (res);
 }
 
 char	*ft_parse(t_lem *lem)
 {
-	char	*res;
-	char	*str;
-	int		ret;
-
-	t_parse_func parse_arr[5];
+	char			*res;
+	char			*str;
+	int				ret;
+	t_parse_func	parse_arr[5];
+	
 	ft_init_parser(&(lem->parser));
 	ft_init_parse_arr(parse_arr);
 	if (!(res = ft_strnew(0)))

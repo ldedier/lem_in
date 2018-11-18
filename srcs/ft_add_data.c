@@ -6,67 +6,77 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 16:27:58 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 17:18:51 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	ft_init_ant_room(t_room *room)
+void	ft_init_ant_room(t_room *room, int role, t_lem *lem)
 {
-	room->ant_number = 0;
 	room->ant_count = 0;
 	room->neighbours = NULL;
 	room->parsed = 0;
+	if (role == START)
+	{
+		room->ant_count = lem->map.total_ants;
+		lem->map.start = room;
+	}
+	else if (role == END)
+		lem->map.end = room;
 }
 
-int		ft_free_turn_split(char **split, int ret)
+t_room 	*ft_new_room_from_split(char **split)
 {
+	t_room *room;
+
+	if (!(room = (t_room *)malloc(sizeof(t_room))))
+		return (NULL);
+	if (!(room->name = ft_strdup(split[0])))
+	{
+		free(room);
+		return (NULL);
+	}
+	room->x = ft_atoi(split[1]);
+	room->y = ft_atoi(split[2]);
+	return (room);
+}
+
+int		ft_process_add_room(char **split, t_lem *lem, int role)
+{
+	t_room	*room;
+
+	if (!(room = ft_new_room_from_split(split)))
+	{
+		ft_free_split(split);
+		return (-1);
+	}
+	if (ft_add_to_list_ptr(&(lem->map.rooms), room, sizeof(t_room)))
+	{
+		free(room->name);
+		free(room);
+		ft_free_split(split);
+		return (-1);
+	}
+	ft_init_ant_room(room, role, lem);
+	lem->parser.phase = e_phase_rooms;
 	ft_free_split(split);
-	return (ret);
+	return (0);
+
 }
 
 int		ft_add_room(char *str, t_lem *lem, int role)
 {
 	char	**split;
-	t_room	*room;
 
 	if (!(split = ft_strsplit(str, ' ')))
 		return (-1);
 	if (ft_is_valid_room(split, lem))
-	{
-		if (!(room = (t_room *)malloc(sizeof(t_room))))
-			return (ft_free_turn_split(split, -1));
-		if (!(room->name = ft_strdup(split[0])))
-		{
-			free(room);
-			return (ft_free_turn_split(split, -1));
-		}
-		room->x = ft_atoi(split[1]);
-		room->y = ft_atoi(split[2]);
-		ft_init_ant_room(room);
-		if (ft_add_to_list_ptr(&(lem->map.rooms), room, sizeof(t_room)))
-		{
-			free(room->name);
-			free(room);
-			return (ft_free_turn_split(split, -1));
-		}
-		if (role == START)
-		{
-			room->ant_number = 1;
-			room->ant_count = lem->map.total_ants;
-			lem->map.start = room;
-		}
-		else if (role == END)
-			lem->map.end = room;
-		lem->parser.phase = e_phase_rooms;
-		ft_free_split(split);
-		return (0);
-	}
+		return (ft_process_add_room(split, lem, role));
 	else
 	{
-		ft_printf("ROOM ERROR\n");
 		ft_free_split(split);
+		ft_verbose(lem, str, "invalid room");
 		return (-1);
 	}
 }
@@ -96,16 +106,8 @@ int		ft_not_linked_yet(t_room *r1, t_room *r2)
 	return (1);
 }
 
-int		ft_add_link(char *str, t_lem *lem)
+int		ft_process_add_link(t_room *r1, t_room *r2, char *str, t_lem *lem)
 {
-	t_room	*r1;
-	t_room	*r2;
-	char	**split;
-
-	split = ft_strsplit(str, '-');
-	r1 = ft_get_room((lem->map.rooms), split[0]);
-	r2 = ft_get_room((lem->map.rooms), split[1]);
-	ft_free_split(split);
 	if (r1 && r2)
 	{
 		if (ft_not_linked_yet(r1, r2))
@@ -118,5 +120,30 @@ int		ft_add_link(char *str, t_lem *lem)
 		return (1);
 	}
 	else
+	{
+		ft_verbose(lem, str, "invalid room name");
 		return (-1);
+	}
+}
+
+int		ft_add_link(char *str, t_lem *lem)
+{
+	t_room	*r1;
+	t_room	*r2;
+	char	**split;
+
+	split = ft_strsplit(str, '-');
+	if (ft_splitlen(split) == 2)
+	{
+		r1 = ft_get_room((lem->map.rooms), split[0]);
+		r2 = ft_get_room((lem->map.rooms), split[1]);
+	}
+	else
+	{
+		ft_free_split(split);
+		ft_verbose(lem, str, "invalid link");
+		return (-1);
+	}
+	ft_free_split(split);
+	return (ft_process_add_link(r1, r2, str, lem));
 }

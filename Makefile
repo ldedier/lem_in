@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/16 16:10:09 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/18 18:16:06 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,13 +37,14 @@ EOC = \033[0m
 
 SRCS_NO_PREFIX = main.c ft_parse_tools.c ft_debug.c ft_process_lem_in.c\
 				 ft_parse_lem.c ft_checks.c ft_parse_phases.c ft_add_data.c\
-				 ft_tools.c ft_lists.c ft_rooms.c
+				 ft_tools.c ft_lists.c ft_rooms.c ft_solvable.c
 
 VSRCS_NO_PREFIX = main_visu.c ft_init.c ft_parse_lem.c ft_parse_tools.c\
 				 ft_checks.c ft_parse_phases.c ft_add_data.c ft_debug.c\
 				 ft_tools.c  ft_render.c ft_events.c ft_center.c ft_add_infos.c\
 				 ft_stats.c ft_process_visu.c ft_visu_tools.c ft_lists.c\
-				 ft_rooms.c
+				 ft_rooms.c ft_solvable.c
+
 
 INCLUDES_NO_PREFIX = lem_in.h visu_lem_in.h
 
@@ -73,12 +74,12 @@ debug:
 	@make all DEBUG=0
 
 $(BINDIR)/$(NAME): $(OBJECTS) $(LIBFT)
-	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft 
+	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 
 $(BINDIR)/$(VISU_NAME): $(VOBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ -F ./frameworks -framework SDL2\
-		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft
+		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft -fsanitize=address
 	@echo "$(OK_COLOR)$(VISU_NAME) linked with success !$(EOC)"
 	@install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2 $(SDL2) $(VISU_NAME)
 	@install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image $(SDL2_image) $(VISU_NAME)

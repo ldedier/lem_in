@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 19:45:22 by ldedier           #+#    #+#             */
-/*   Updated: 2018/07/08 15:07:07 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 16:56:34 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ int		ft_phase_links(char *str, t_lem *lem)
 
 	if ((ret = ft_common_checks(str)))
 		return (ret);
-	return (ft_add_link(str, lem));
+	ret = ft_add_link(str, lem);
+	return (ret);
 }

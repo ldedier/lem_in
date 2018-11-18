@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:54:59 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 18:05:09 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 19:42:24 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void	ft_update_corr_pos(t_env *e)
 	ft_update_room_size(e);
 	alpha = ft_get_alpha(e);
 	x_margin = (e->dim.width / 20) - (e->stats.left * alpha.w);
-	y_margin = ((e->dim.height - GRASS_BORDER) / 20) - (e->stats.top * alpha.h) + GRASS_BORDER;
+	y_margin = ((e->dim.height - GRASS_BORDER) / 20) -
+		(e->stats.top * alpha.h) + GRASS_BORDER;
 	while (ptr != NULL)
 	{
 		room = (t_room *)(ptr->content);

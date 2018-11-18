@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:51:24 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 16:50:31 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 17:28:09 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	ft_reset_pos(t_env *e)
 		ptr = ptr->next;
 	}
 }
-
 
 void	ft_toggle_pause(t_env *e)
 {

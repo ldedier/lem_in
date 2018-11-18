@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 16:52:33 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 16:18:10 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ void	end(void)
 //	while(1);
 }
 
-void	ft_init_lem(t_lem *lem, int argc, char **argv)
+void	ft_print_usage()
+{
+	ft_printf("./lem-in [optional: -v] < [map_name] | ./lem-in_visu\n");
+}
+
+int		ft_init_lem(t_lem *lem, int argc, char **argv)
 {
 	lem->map.rooms = NULL;
 	lem->paths.paths_list = NULL;
@@ -29,10 +34,14 @@ void	ft_init_lem(t_lem *lem, int argc, char **argv)
 	if (argc >= 2)
 	{
 		if (argc > 2 || ft_strcmp(argv[1], "-v"))
-			ft_printf("usage!!");
+		{
+			ft_print_usage();
+			return (1);
+		}
 		else
 			lem->verbosed = 1;
 	}
+	return(0);
 }
 
 void	ft_delete_paths(t_list **paths)
@@ -61,25 +70,23 @@ int		main(int argc, char **argv)
 	t_lem	lem;
 	char	*to_print;
 
-	ft_init_lem(&lem, argc, argv);
+	if (ft_init_lem(&lem, argc, argv))
+		return (1);
 	if ((to_print = ft_parse(&lem)) == NULL)
-	{
-		if (!lem.verbosed)
-			ft_printf("malloc error\n");
-	}
+		ft_printf("malloc error\n");
 	else
 	{
 		if (ft_is_valid_post_parse(&lem))
 		{
 			ft_printf("%s\n", to_print);
-			if (ft_process_lem_in(&lem) == -1 && !lem.verbosed)
+			if (ft_process_lem_in(&lem) == -1)
 				ft_printf("malloc error\n");
-			ft_delete_paths(&(lem.paths.paths_list));
-			ft_delete_rooms(&(lem.map.rooms));
 		}
 		else
 			ft_printf("ERROR\n");
 		ft_strdel(&to_print);
 	}
+	ft_delete_paths(&(lem.paths.paths_list));
+	ft_delete_rooms(&(lem.map.rooms));
 	return (0);
 }

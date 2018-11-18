@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 13:34:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 11:49:58 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 12:59:55 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	ft_affich_room(t_room *room)
 {
 	t_list *ptr;
 	ft_printf("room name: %s\n", room->name);
-	ft_printf("ants number: %d\n", room->ant_number);
+//	ft_printf("ants number: %d\n", room->ant_number);
 	ft_printf("ants count: %d\n", room->ant_count);
 	ft_printf("parsed: %d\n", room->parsed);
 

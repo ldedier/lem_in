@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 15:56:08 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 21:33:39 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,8 @@ int		ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to prot
    
 	if (!(path = (t_path *)malloc(sizeof(t_path))))
 		return (1);
-	if (rooms)
-	{
-		if (!(rooms_cpy = ft_copy_list_ptr_rev(rooms)))
+	if (ft_copy_list_ptr_rev(rooms, &rooms_cpy))
 			return (1);
-	}
-	else
-		rooms_cpy = NULL;
 	path->length = length;
 	path->rooms = rooms_cpy;
 	path->semi_mp = NULL;
@@ -35,11 +30,49 @@ int		ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to prot
 	return (0);
 }
 
-int		ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
+int		ft_process_fill_end(t_list **path, t_lem *lem, int *max_paths)
+{
+	int length;
+
+	length = ft_lstlength(*path);
+	if ((length < lem->paths.min_length) ||
+			(lem->paths.min_length == -1))
+		lem->paths.min_length = length;
+	if (ft_add_path_from_rooms(&(lem->paths.paths_list), *path, length))
+		return (1);
+	if (*path == NULL)
+		*max_paths = 0;
+	else
+		*max_paths -= 1;
+	return (0);
+}
+
+int		ft_process_fill_2(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 {
 	t_list	*current;
-	int		length;
 
+	if (room != lem->map.end)
+	{
+		current = room->neighbours;
+		while (current != NULL)
+		{
+			if (ft_process_fill((t_room *)(current->content), lem, path, max_paths))
+				return (1);
+			current = current->next;
+		}
+		if (room != lem->map.start)
+			ft_lstpop_ptr(path);
+	}
+	else
+	{
+		if (ft_process_fill_end(path, lem, max_paths))
+			return (1);
+	}
+	return (0);
+}
+
+int		ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
+{
 	if (!room->parsed && *max_paths != 0)
 	{
 		room->parsed = 1;
@@ -48,31 +81,8 @@ int		ft_process_fill(t_room *room, t_lem *lem, t_list **path, int *max_paths)
 			if (ft_add_to_list_ptr(path, room, sizeof(t_room)))
 				return (1);
 		}
-		if (room != lem->map.end)
-		{
-			current = room->neighbours;
-			while (current != NULL)
-			{
-				if (ft_process_fill((t_room *)(current->content), lem, path, max_paths))
-					return (1);
-				current = current->next;
-			}
-			if (room != lem->map.start)
-				ft_lstpop_ptr(path);
-		}
-		else
-		{
-			length = ft_lstlength(*path);
-			if ((length < lem->paths.min_length) ||
-					(lem->paths.min_length == -1))
-				lem->paths.min_length = length;
-			if (ft_add_path_from_rooms(&(lem->paths.paths_list), *path, length))
-				return (1);
-			if (*path == NULL)
-				*max_paths = 0;
-			else
-				*max_paths -= 1;
-		}
+		if (ft_process_fill_2(room, lem, path, max_paths))
+			return (1);
 		room->parsed = 0;
 	}
 	return (0);
@@ -85,6 +95,7 @@ int		ft_fill_paths(t_lem *lem)
 
 	max_paths = 10000000;
 	path = NULL;
+	ft_reset_pathfinding(&(lem->map));
 	if (ft_process_fill(lem->map.start, lem, &path, &max_paths))
 		return (1);
 	return (0);
@@ -223,6 +234,15 @@ int		ft_add_to_mps(t_list **mps, t_path *path)
 	return (0);
 }
 
+int		ft_process_add_to_mps(t_path *path1, t_path *path2)
+{
+	if (ft_add_to_mps(&(path1->mps), path2))
+		return (1);
+	if (ft_add_to_mps(&(path2->mps), path1))
+		return (1);
+	return (0);
+}
+
 int		ft_update_mps(t_path *path1, t_path *path2)
 {
 	t_list *current;
@@ -246,9 +266,7 @@ int		ft_update_mps(t_path *path1, t_path *path2)
 		current = current->next;
 		i++;
 	}
-	if (ft_add_to_mps(&(path1->mps), path2))
-		return (1);
-	if (ft_add_to_mps(&(path2->mps), path1))
+	if (ft_process_add_to_mps(path1, path2))
 		return (1);
 	return (0);
 }
@@ -314,6 +332,7 @@ int		ft_fill_metadata(t_lem *lem)
 {
 	if (ft_fill_mps(lem))
 		return (1);
+	ft_printf("POPOqoUDIHIUQWHPOP\n");
 	if (ft_fill_matching_smps(lem))
 		return (1);
 	return (0);
@@ -452,13 +471,8 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 	int min;
 	int val;
 
-	if(chosen->mps)
-	{
-		if (!(p->paths = ft_copy_list_ptr_rev(chosen->mps)))
+	if (ft_copy_list_ptr_rev(chosen->mps, &(p->paths)))
 			return (1);
-	}
-	else
-		p->paths = NULL;
 	if (ft_add_to_list_ptr(&(p->paths), chosen, sizeof(t_path)))
 	{
 		ft_lstdel_ptr(&(p->paths));
@@ -504,41 +518,58 @@ int		ft_progress_ant(t_ant *ant, t_lem *lem)
 	}
 }
 
-void	ft_progress_ants(t_deploy *deploy, t_lem *lem)
+void	ft_progress_all_at_head(t_list **temp, t_list **prev, t_lem *lem,
+			t_deploy *deploy)
 {
-	t_list *temp = deploy->ants;
-	t_list  *prev;
-
-	prev = NULL;	
-	while (temp != NULL && ft_progress_ant((t_ant *)(temp->content), lem))
+	while (*temp != NULL && ft_progress_ant((t_ant *)((*temp)->content), lem))
 	{
-		deploy->ants = temp->next;
-		free(temp->content);
-		free(temp);
-		temp = deploy->ants;
+		deploy->ants = (*temp)->next;
+		free((*temp)->content);
+		free(*temp);
+		*temp = deploy->ants;
 		deploy->ants_end += 1;
 	}
-	if (temp != NULL)
+	if (*temp != NULL)
 	{
-		prev = temp;
-		temp = temp->next;
+		*prev = *temp;
+		*temp = (*temp)->next;
 	}
-	while (temp != NULL)
+}
+
+void	ft_progress_all_at_body(t_list **temp, t_list **prev, t_lem *lem,
+			t_deploy *deploy)
+{
+	while (*temp != NULL)
 	{
-		while (temp != NULL && !ft_progress_ant((t_ant *)(temp->content), lem))
+		while (*temp != NULL && !ft_progress_ant((t_ant *)((*temp)->content), lem))
 		{
-			prev = temp;
-			temp = temp->next;
+			*prev = *temp;
+			*temp = (*temp)->next;
 		}
-		if (temp != NULL)
+		if (*temp != NULL)
 		{
-			prev->next = temp->next;
-			free(temp->content);
-			free(temp);
+			(*prev)->next = (*temp)->next;
+			free((*temp)->content);
+			free(*temp);
 			deploy->ants_end += 1;
-			temp = prev->next;
+			*temp = (*prev)->next;
 		}
 	}
+}
+
+/*
+** make progress and delete all ants arrived at the end
+*/
+
+void	ft_progress_ants(t_deploy *deploy, t_lem *lem)
+{
+	t_list *temp;
+	t_list  *prev;
+
+	temp = deploy->ants;
+	prev = NULL;
+	ft_progress_all_at_head(&temp, &prev, lem, deploy);
+	ft_progress_all_at_body(&temp, &prev, lem, deploy);
 }
 
 int		ft_deploy_ants_smp(t_path *chosen, t_deploy *deploy, t_lem *lem)
@@ -617,6 +648,7 @@ int     ft_process_lem_in(t_lem *lem)
 	t_path *chosen;
 	if (ft_fill_paths(lem))
 		return (1);
+	ft_printf("LOOL %d\n", ft_lstlength(lem->paths.paths_list));
 	if (lem->paths.min_length)
 	{
 		if (ft_fill_metadata(lem))

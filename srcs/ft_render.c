@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:51:01 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 17:35:43 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 19:42:05 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,24 +163,50 @@ void	ft_render_static_ants(t_env *e)
 	}
 }
 
+int		ft_use_texture_with_surface(t_env *e, char *str)
+{
+	if (!(e->sdl.surface = TTF_RenderText_Solid(e->sdl.font, str, e->sdl.color)))
+		return (1);
+	if (!(e->sdl.texture = SDL_CreateTextureFromSurface(e->sdl.renderer, e->sdl.surface)))
+	{
+		SDL_FreeSurface(e->sdl.surface);
+		return (1);
+	}
+	SDL_FreeSurface(e->sdl.surface);
+	return (0);
+}
+
+void	ft_fill_rect_x_y(SDL_Rect *rect, int x, int y)
+{
+	rect->x = x;
+	rect->y = y;
+}
+
+void	ft_fill_rect_w_h(SDL_Rect *rect, int w, int h)
+{
+	rect->w = w;
+	rect->h = h;
+}
+
+int		ft_free_turn(char *str, int ret)
+{
+	free(str);
+	return (ret);
+}
+
 int		ft_render_selected_room(t_env *e)
 {
 	char		*str;
 	SDL_Rect	pos;
-	SDL_Color color = {255, 255, 255, 255};
-	SDL_Surface *textSurface;
-	SDL_Texture *texture;
-	str = ft_strjoin("room: ", e->selected_room->name);
-	
-	textSurface = TTF_RenderText_Solid(e->sdl.font, str, color);
-	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
-	pos.x = 1280 - (ft_strlen(str) * 10);
-	pos.y = 140;
-	pos.w = ft_strlen(str) * 20;
-	pos.h = 45;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
+
+	if (!(str = ft_strjoin("room: ", e->selected_room->name)))
+		return (1);
+	if (ft_use_texture_with_surface(e, str))
+		return (1);
+	ft_fill_rect_x_y(&pos, 1280 - (ft_strlen(str) * 10), 140);
+	ft_fill_rect_w_h(&pos, ft_strlen(str) * 20, 45);
+	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
+	SDL_DestroyTexture(e->sdl.texture);
 	ft_strdel(&str);
 	return (0);
 }
@@ -190,155 +216,119 @@ int		ft_render_turn(t_env *e)
 	char		*str;
 	char		*str2;
 	SDL_Rect	pos;
-	SDL_Color color = {255, 255, 255, 255};
-	SDL_Surface *textSurface;
-	SDL_Texture *texture;
-	str2 = ft_itoa(e->lem.turn);
-	str = ft_strjoin("turn #", str2);
-
-	pos.x = 1280 - ft_strlen(str) * 15;
-	pos.y = 65;
-	pos.w = ft_strlen(str) * 30;
-	pos.h = 70;
-
-	textSurface = TTF_RenderText_Solid(e->sdl.font, str, color);
-	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	ft_strdel(&str);
+	
+	if (!(str2 = ft_itoa(e->lem.turn)))
+		return (1);
+	if (!(str = ft_strjoin("turn #", str2)))
+		return (ft_free_turn(str2, 1));
 	ft_strdel(&str2);
+	ft_fill_rect_x_y(&pos,  1280 - ft_strlen(str) * 15, 65);
+	ft_fill_rect_w_h(&pos, ft_strlen(str) * 30, 70);
+	if (ft_use_texture_with_surface(e, str))
+		return (ft_free_turn(str, 1));
+	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
+	SDL_DestroyTexture(e->sdl.texture);
+	ft_strdel(&str);
 	return (0);
 }
-int		ft_render_speed(t_env *e)
+
+int ft_render_speed_value(t_env *e)
 {
 	char		*str;
 	char		*str2;
 	SDL_Rect	pos;
-	SDL_Color color = {255, 255, 255, 255};
-	SDL_Surface *textSurface = TTF_RenderText_Solid(e->sdl.font, "time per turn:", color);
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
 
-	pos.x = 2200;
-	pos.y = 60;
-	pos.w = 14 * 20;
-	pos.h = 45;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	str2 = ft_itoa(e->time_per_turn);
-	str = ft_strjoin_free(str2, " ms");
-	textSurface = TTF_RenderText_Solid(e->sdl.font, str, color);
-	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
-	pos.x = 2330 - (ft_strlen(str) * 10);
-	pos.y = 110;
-	pos.w = ft_strlen(str) * 20;
-	pos.h = 45;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
+	if (!(str2 = ft_itoa(e->time_per_turn)))
+		return (1);
+	if (!(str = ft_strjoin(str2, " ms")))
+		return (ft_free_turn(str2, 1));
+	ft_strdel(&str2);
+	if (ft_use_texture_with_surface(e, str))
+		return (ft_free_turn(str, 1));
+	ft_fill_rect_x_y(&pos, 2330 - (ft_strlen(str) * 10), 110);
+	ft_fill_rect_w_h(&pos, ft_strlen(str) * 20, 45);
+	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
+	SDL_DestroyTexture(e->sdl.texture);
+	ft_strdel(&str);
+	return (0);
+}
+int		ft_render_speed(t_env *e)
+{
+	SDL_Rect	pos;
+
+	if (ft_use_texture_with_surface(e, "time per turn"))
+		return (1);
+	ft_fill_rect_x_y(&pos, 2200, 60);
+	ft_fill_rect_w_h(&pos, 14 * 20, 45);
+	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
+	SDL_DestroyTexture(e->sdl.texture);
+	return (ft_render_speed_value(e));
+}
+
+int		ft_render_nb_ants_rect(SDL_Rect *pos, char *title,
+			int value, t_env *e)
+{
+	char		*str;
+	char		*str2;
+
+	if (ft_use_texture_with_surface(e, title))
+		return (1);
+	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, pos);
+	SDL_DestroyTexture(e->sdl.texture);
+	if (!(str2 = ft_itoa(value)))
+		return (1);
+	if (!(str = ft_strjoin(str2, value == 1 ?" ant" : " ants")))
+		return (ft_free_turn(str2, 1));
+	ft_strdel(&str2);
+	if (ft_use_texture_with_surface(e, str))
+		return (ft_free_turn(str, 1));
+	pos->x = 250;
+	pos->w = ft_strlen(str) * 20;
+	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, pos);
+	SDL_DestroyTexture(e->sdl.texture);
 	ft_strdel(&str);
 	return (0);
 }
 
 int		ft_render_nb_ants_start(t_env *e)
 {
-	char		*str;
-	char		*str2;
 	SDL_Rect	pos;
-	SDL_Color color = {255, 255, 255, 255};
-	SDL_Surface *textSurface = TTF_RenderText_Solid(e->sdl.font, "beginning:", color);
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
 
 	pos.x = 20;
 	pos.y = 20;
 	pos.w = 10 * 20;
 	pos.h = 45;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	str2 = ft_itoa(e->lem.map.start->ant_count);
-	if (e->lem.map.start->ant_count == 1)
-		str = ft_strjoin_free(str2, " ant");
-	else
-		str = ft_strjoin_free(str2, " ants");
-	textSurface = TTF_RenderText_Solid(e->sdl.font, str, color);
-	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
-	pos.x = 250;
-	pos.w = ft_strlen(str) * 20;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	ft_strdel(&str);
-	return (0);
+
+	return (ft_render_nb_ants_rect(&pos, "beginning:",
+		e->lem.map.start->ant_count, e));
 }
 
 int		ft_render_nb_ants_end(t_env *e)
 {
-	char		*str;
-	char		*str2;
 	SDL_Rect	pos;
-	SDL_Color color = {255, 255, 255, 255};
-	SDL_Surface *textSurface = TTF_RenderText_Solid(e->sdl.font, "end:", color);
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
 
 	pos.x = 20;
 	pos.y = 80;
 	pos.w = 4 * 20;
 	pos.h = 45;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	str2 = ft_itoa(e->lem.map.end->ant_count - e->toward_end);
 
-
-	if (e->lem.map.end->ant_count - e->toward_end == 1)
-		str = ft_strjoin(str2, " ant");
-	else
-		str = ft_strjoin(str2, " ants");
-	textSurface = TTF_RenderText_Solid(e->sdl.font, str, color);
-	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
-	pos.x = 250;
-	pos.w = ft_strlen(str) * 20;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	ft_strdel(&str);
-	ft_strdel(&str2);
-	return (0);
+	return (ft_render_nb_ants_rect(&pos, "end:",
+		e->lem.map.end->ant_count - e->toward_end, e));
 }
 
 int		ft_render_nb_ants_others(t_env *e)
 {
-	char		*str;
-	char		*str2;
+
 	SDL_Rect	pos;
-	SDL_Color color = {255, 255, 255, 255};
-	SDL_Surface *textSurface = TTF_RenderText_Solid(e->sdl.font, "others:", color);
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
 
 	pos.x = 20;
 	pos.y = 140;
 	pos.w = 7 * 20;
 	pos.h = 45;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	str2 = ft_itoa(e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->toward_end)));
-	if (e->lem.map.total_ants - (e->lem.map.start->ant_count + (e->lem.map.end->ant_count - e->toward_end)) == 1)
-		str = ft_strjoin(str2, " ant");
-	else
-		str = ft_strjoin(str2, " ants");
-	textSurface = TTF_RenderText_Solid(e->sdl.font, str, color);
-	texture = SDL_CreateTextureFromSurface(e->sdl.renderer, textSurface);
-	SDL_FreeSurface(textSurface);
-	pos.x = 250;
-	pos.w = ft_strlen(str) * 20;
-	SDL_RenderCopy(e->sdl.renderer, texture, NULL, &pos);
-	SDL_DestroyTexture(texture);
-	ft_strdel(&str);
-	ft_strdel(&str2);
-	return (0);
+
+	return (ft_render_nb_ants_rect(&pos, "others:",
+		e->lem.map.total_ants - (e->lem.map.start->ant_count +
+			(e->lem.map.end->ant_count - e->toward_end)), e));
 }
 
 int		ft_render_nb_ants(t_env *e)
@@ -390,69 +380,98 @@ int		ft_render(t_env *e)
 	return (0);
 }
 
+int		ft_add_current_ants(t_env *e, char *str)
+{
+	if (ft_add_transitions(e, str))
+	{
+		ft_lstdel_value(&(e->anim.transitions));
+		ft_lstdel_ptr(&(e->anim.static_ants_rooms));
+		return (1);
+	}
+	if (ft_add_static(e))
+	{
+		ft_lstdel_value(&(e->anim.transitions));
+		ft_lstdel_ptr(&(e->anim.static_ants_rooms));
+		return (1);
+	}
+	return (0);
+}
+
+void		ft_process_current_turn(t_env *e, int *loop)
+{
+	SDL_Event	event;
+	
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT ||
+				(event.type == SDL_KEYDOWN &&
+				 event.key.keysym.sym == SDLK_ESCAPE))
+			*loop = 0;
+		else if (event.type == SDL_KEYDOWN && !event.key.repeat)
+			ft_key_down(e, event.key.keysym.sym);
+		else if (event.type == SDL_MOUSEBUTTONDOWN)
+			ft_mouse_down(e, event);
+		else if (event.type == SDL_MOUSEBUTTONUP)
+			ft_mouse_up(e, event);
+		else if (event.type == SDL_MOUSEMOTION)
+			ft_mouse_motion(e, event);
+	}
+	if (!e->anim.pause)
+		ft_process_animation(e);
+	ft_process(e, SDL_GetKeyboardState(NULL));
+	ft_render(e);
+	SDL_Delay(20);
+}
+
 int		ft_render_visu(t_env *e, char *str)
 {
-	int loop;
-	SDL_Event event;
+	int			loop;
 
 	e->toward_end = 0;
-	ft_add_transitions(e, str);
-	ft_add_static(e);
+	if (ft_add_current_ants(e, str))
+		return (-1);
 	e->anim.start = SDL_GetTicks();
 	e->anim.previous = e->anim.start;
 	e->anim.progress = 0;
 	loop = 1;
 	while (loop == 1 && e->anim.progress < 1)
-	{
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT ||
-					(event.type == SDL_KEYDOWN &&
-					 	event.key.keysym.sym == SDLK_ESCAPE))
-				loop = 0;
-			else if (event.type == SDL_KEYDOWN && !event.key.repeat)
-				ft_key_down(e, event.key.keysym.sym);
-			else if (event.type == SDL_MOUSEBUTTONDOWN)
-				ft_mouse_down(e, event);
-			else if (event.type == SDL_MOUSEBUTTONUP)
-				ft_mouse_up(e, event);
-			else if (event.type == SDL_MOUSEMOTION)
-				ft_mouse_motion(e, event);
-		}
-		if (!e->anim.pause)
-			ft_process_animation(e);
-		ft_process(e, SDL_GetKeyboardState(NULL));
-		ft_render(e);
-		SDL_Delay(20);
-	}
+		ft_process_current_turn(e, &loop);
 	ft_lstdel_value(&(e->anim.transitions));
 	ft_lstdel_ptr(&(e->anim.static_ants_rooms));
 	return (loop);
 }
 
+void	ft_process_end_events(t_env *e, int *loop)
+{
+	SDL_Event event;
+
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT ||
+				(event.type == SDL_KEYDOWN &&
+				 event.key.keysym.sym == SDLK_ESCAPE))
+			*loop = 0;
+		else if (event.type == SDL_MOUSEBUTTONDOWN)
+			ft_mouse_down(e, event);
+		else if (event.type == SDL_MOUSEBUTTONUP)
+			ft_mouse_up(e, event);
+		else if (event.type == SDL_MOUSEMOTION)
+			ft_mouse_motion(e, event);
+		else if (event.type == SDL_KEYDOWN &&
+				event.key.keysym.sym == SDLK_r)
+			ft_reset_pos(e);
+	}
+}
+
 void	ft_render_visu_end(t_env *e)
 {
 	int loop;
-	SDL_Event event;
 
 	e->toward_end = 0;
 	loop = 1;
 	while (loop)
 	{
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT ||
-					(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
-				loop = 0;
-			else if (event.type == SDL_MOUSEBUTTONDOWN)
-				ft_mouse_down(e, event);
-			else if (event.type == SDL_MOUSEBUTTONUP)
-				ft_mouse_up(e, event);
-			else if (event.type == SDL_MOUSEMOTION)
-				ft_mouse_motion(e, event);
-			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r)
-				ft_reset_pos(e);
-		}
+		ft_process_end_events(e, &loop);
 		ft_process_end(e);
 		ft_render(e);
 		SDL_Delay(20);

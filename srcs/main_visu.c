@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 15:48:57 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 18:34:30 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,26 @@ void	ft_free_all(t_env *e)
 	ft_delete_rooms(&(e->lem.map.rooms));
 	ft_free_textures(e);
 	TTF_CloseFont(e->sdl.font);
-	SDL_FreeSurface(e->sdl.surface);
+	SDL_FreeSurface(e->sdl.w_surface);
 	SDL_DestroyRenderer(e->sdl.renderer);
 	SDL_DestroyWindow(e->sdl.window);
+}
+
+int		ft_process_main(char *str, t_env *e)
+{
+	int ret;
+
+	e->lem.turn++;
+	if (!(ret = ft_render_visu(e, str)))
+	{
+		if (ret == -1)
+			ft_printf("malloc error\n");
+		ft_strdel(&(str));
+		ft_free_all(e);
+		return (1);
+	}
+	ft_strdel(&(str));
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -78,14 +95,8 @@ int main(int argc, char **argv)
 	e.lem.turn = 0;
 	while (get_next_line(0, &str) > 0)
 	{
-		e.lem.turn++;
-		if (!ft_render_visu(&e, str))
-		{
-			ft_strdel(&(str));
-			ft_free_all(&e);
+		if (ft_process_main(str, &e))
 			return (0);
-		}
-		 ft_strdel(&(str));
 	}
 	ft_strdel(&(str));
 	ft_render_visu_end(&e);

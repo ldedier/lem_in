@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/16 18:01:15 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 19:27:47 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ typedef struct			s_sdl
 	SDL_Rect			screen;
 	SDL_Window			*window;
 	SDL_Renderer		*renderer;
+	SDL_Surface			*w_surface;
 	SDL_Surface			*surface;
+	SDL_Texture			*texture;
+	SDL_Color			color;
 	SDL_Texture			*textures[7];
 	SDL_Texture			*ant_textures[4];
 	TTF_Font			*font;
@@ -124,7 +127,7 @@ void					ft_mouse_up(t_env *e, SDL_Event event);
 void					ft_mouse_motion(t_env *e, SDL_Event event);
 void					ft_update_corr_pos(t_env *e);
 void					ft_update_room(t_map *map, int ant_num, char *room_name);
-void					ft_add_transitions(t_env *e, char *str);
+int						ft_add_transitions(t_env *e, char *str);
 void					ft_affich_transitions(t_env *e);
 int						ft_add_static(t_env *e);
 void					ft_gather_stats(t_env *e);

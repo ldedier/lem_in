@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 16:07:12 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 16:47:07 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 21:20:52 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct		s_room
 	int				corr_y;
 	int				corr_x_init;
 	int				corr_y_init;
-	int				ant_number;
 	int				ant_count;
 	int				parsed;
 }					t_room;
@@ -129,6 +128,8 @@ void				ft_affich_room_lite(t_room *room);
 void				ft_affich_queue(t_list *queue);
 void				ft_affich_room_list(t_list *room_list);
 int					ft_process_lem_in(t_lem *lem);
+int					ft_process_fill(t_room *room, t_lem *lem, t_list **paths,
+						int *max_paths);
 char				*ft_parse(t_lem *lem);
 int					ft_common_checks(char *str);
 int					ft_is_valid_room(char **split, t_lem *lem);
@@ -147,8 +148,10 @@ int					ft_add_to_list_ptr(t_list **list, void *content,
 						size_t size);
 int					ft_add_to_list_ptr_back(t_list **list, void *content,
 						size_t size);
-t_list				*ft_copy_list_ptr_rev(t_list *list);
-t_list				*ft_copy_list_ptr(t_list *list);
+int					ft_copy_list_ptr_rev(t_list *list, t_list **res);
+int					ft_copy_list_ptr(t_list *list, t_list **res);
 int					ft_verbose(t_lem *lem, char *line, char *str);
 void				ft_delete_rooms(t_list **rooms);
+void				ft_reset_pathfinding(t_map *map);
+int					ft_is_solvable(t_map *map);
 #endif

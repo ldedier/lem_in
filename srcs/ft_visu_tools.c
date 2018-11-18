@@ -6,26 +6,11 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/17 16:54:22 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/18 17:05:56 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visu_lem_in.h"
-
-void	ft_affich_transitions(t_env *e)
-{
-	t_list *ptr;
-	t_transition *tr;
-
-	ptr = e->anim.transitions;
-	while (ptr != NULL)
-	{
-		tr = (t_transition *)(ptr->content);
-		ft_printf("from: %s\n", tr->from->name);
-		ft_printf("to: %s\n", tr->to->name);
-		ptr = ptr->next;
-	}
-}
 
 int		ft_parse_visu(t_lem *lem)
 {

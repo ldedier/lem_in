@@ -21,7 +21,7 @@ t_alpha ft_get_alpha(t_env *e)
 	w_alpha = (double)((double)(9.0 * e->dim.width) / ((double)(10.0 *
 				((double)e->stats.right - e->stats.left)))) -
 				(double)e->room_size / (double)(e->stats.right - e->stats.left);
-	h_alpha = (double)((9.0 * (e->dim.height - GRASS_BORDER)) /
+	h_alpha = (double)((9.0 * (e->dim.height - e->react.grass_border)) /
 				((double)(10.0 * ((double)e->stats.bottom - e->stats.top)))) -
 				(double)e->room_size / (double)(e->stats.bottom - e->stats.top);
 	res.w = w_alpha;
@@ -59,8 +59,9 @@ int		ft_iz_okay(t_env *e)
 
 void	ft_update_room_size(t_env *e)
 {
-
-	e->room_size = ROOM_SIZE;
+	ft_printf("%d\n", e->dim.width);
+	e->room_size = ROOM_SIZE * ft_fmax((double)e->dim.width / 2560.0,
+		(double)e->dim.height / 1440.0);
 	while (!ft_iz_okay(e) && e->room_size > 10)
 		e->room_size -= 10;
 }
@@ -77,8 +78,8 @@ void	ft_update_corr_pos(t_env *e)
 	ft_update_room_size(e);
 	alpha = ft_get_alpha(e);
 	x_margin = (e->dim.width / 20) - (e->stats.left * alpha.w);
-	y_margin = ((e->dim.height - GRASS_BORDER) / 20) -
-		(e->stats.top * alpha.h) + GRASS_BORDER;
+	y_margin = ((e->dim.height - e->react.grass_border) / 20) -
+		(e->stats.top * alpha.h) + e->react.grass_border;
 	while (ptr != NULL)
 	{
 		room = (t_room *)(ptr->content);

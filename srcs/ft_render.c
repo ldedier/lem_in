@@ -198,13 +198,16 @@ int		ft_render_selected_room(t_env *e)
 {
 	char		*str;
 	SDL_Rect	pos;
+	double		scale;
 
+	scale = 10.0 * e->react.w_scale;
 	if (!(str = ft_strjoin("room: ", e->selected_room->name)))
 		return (1);
 	if (ft_use_texture_with_surface(e, str))
 		return (1);
-	ft_fill_rect_x_y(&pos, 1280 - (ft_strlen(str) * 10), 140);
-	ft_fill_rect_w_h(&pos, ft_strlen(str) * 20, 45);
+	ft_fill_rect_x_y(&pos, (e->dim.width / 2) - (ft_strlen(str) * scale),
+		e->react.h_scale * 140);
+	ft_fill_rect_w_h(&pos, ft_strlen(str) * 2 * scale, 45 * e->react.h_scale);
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
 	SDL_DestroyTexture(e->sdl.texture);
 	ft_strdel(&str);
@@ -216,14 +219,17 @@ int		ft_render_turn(t_env *e)
 	char		*str;
 	char		*str2;
 	SDL_Rect	pos;
-	
+	int			scale;
+
+	scale = 15.0 * e->react.w_scale;
 	if (!(str2 = ft_itoa(e->lem.turn)))
 		return (1);
 	if (!(str = ft_strjoin("turn #", str2)))
 		return (ft_free_turn(str2, 1));
 	ft_strdel(&str2);
-	ft_fill_rect_x_y(&pos,  1280 - ft_strlen(str) * 15, 65);
-	ft_fill_rect_w_h(&pos, ft_strlen(str) * 30, 70);
+	ft_fill_rect_x_y(&pos,  (e->dim.width / 2) - ft_strlen(str) * scale,
+		65 * e->react.h_scale);
+	ft_fill_rect_w_h(&pos, ft_strlen(str) * 2 * scale, 70 * e->react.h_scale);
 	if (ft_use_texture_with_surface(e, str))
 		return (ft_free_turn(str, 1));
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
@@ -237,7 +243,9 @@ int ft_render_speed_value(t_env *e)
 	char		*str;
 	char		*str2;
 	SDL_Rect	pos;
+	int			scale;
 
+	scale = 10.0 * e->react.w_scale;
 	if (!(str2 = ft_itoa(e->time_per_turn)))
 		return (1);
 	if (!(str = ft_strjoin(str2, " ms")))
@@ -245,8 +253,9 @@ int ft_render_speed_value(t_env *e)
 	ft_strdel(&str2);
 	if (ft_use_texture_with_surface(e, str))
 		return (ft_free_turn(str, 1));
-	ft_fill_rect_x_y(&pos, 2330 - (ft_strlen(str) * 10), 110);
-	ft_fill_rect_w_h(&pos, ft_strlen(str) * 20, 45);
+	ft_fill_rect_x_y(&pos, e->dim.width - ((230.0 / 2560) * e->dim.width) -
+		(ft_strlen(str) * scale), 110 * e->react.h_scale);
+	ft_fill_rect_w_h(&pos, ft_strlen(str) * 2 * scale, 45 * e->react.h_scale);
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
 	SDL_DestroyTexture(e->sdl.texture);
 	ft_strdel(&str);
@@ -255,11 +264,16 @@ int ft_render_speed_value(t_env *e)
 int		ft_render_speed(t_env *e)
 {
 	SDL_Rect	pos;
+	int scale;
+
+	scale = 10.0 * e->react.w_scale;
 
 	if (ft_use_texture_with_surface(e, "time per turn"))
 		return (1);
-	ft_fill_rect_x_y(&pos, 2200, 60);
-	ft_fill_rect_w_h(&pos, 14 * 20, 45);
+
+	ft_fill_rect_x_y(&pos, e->dim.width - ((230.0 / 2560) * e->dim.width) -
+		(14 * scale), 60 * e->react.h_scale);
+	ft_fill_rect_w_h(&pos, 14 * 2 * scale, 45 * e->react.h_scale);
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, &pos);
 	SDL_DestroyTexture(e->sdl.texture);
 	return (ft_render_speed_value(e));
@@ -277,13 +291,13 @@ int		ft_render_nb_ants_rect(SDL_Rect *pos, char *title,
 	SDL_DestroyTexture(e->sdl.texture);
 	if (!(str2 = ft_itoa(value)))
 		return (1);
-	if (!(str = ft_strjoin(str2, value == 1 ?" ant" : " ants")))
+	if (!(str = ft_strjoin(str2, value == 1 ? " ant" : " ants")))
 		return (ft_free_turn(str2, 1));
 	ft_strdel(&str2);
 	if (ft_use_texture_with_surface(e, str))
 		return (ft_free_turn(str, 1));
-	pos->x = 250;
-	pos->w = ft_strlen(str) * 20;
+	pos->x = 250 * e->react.w_scale;
+	pos->w = ft_strlen(str) * 20 * e->react.w_scale;
 	SDL_RenderCopy(e->sdl.renderer, e->sdl.texture, NULL, pos);
 	SDL_DestroyTexture(e->sdl.texture);
 	ft_strdel(&str);
@@ -294,10 +308,10 @@ int		ft_render_nb_ants_start(t_env *e)
 {
 	SDL_Rect	pos;
 
-	pos.x = 20;
-	pos.y = 20;
-	pos.w = 10 * 20;
-	pos.h = 45;
+	pos.x = 20 * e->react.w_scale;
+	pos.y = 20 * e->react.h_scale;
+	pos.w = 200 * e->react.w_scale;
+	pos.h = 45 * e->react.h_scale;
 
 	return (ft_render_nb_ants_rect(&pos, "beginning:",
 		e->lem.map.start->ant_count, e));
@@ -307,10 +321,10 @@ int		ft_render_nb_ants_end(t_env *e)
 {
 	SDL_Rect	pos;
 
-	pos.x = 20;
-	pos.y = 80;
-	pos.w = 4 * 20;
-	pos.h = 45;
+	pos.x = 20 * e->react.w_scale;
+	pos.y = 80 * e->react.h_scale;
+	pos.w = 80 * e->react.w_scale;
+	pos.h = 45 * e->react.h_scale;
 
 	return (ft_render_nb_ants_rect(&pos, "end:",
 		e->lem.map.end->ant_count - e->toward_end, e));
@@ -321,10 +335,10 @@ int		ft_render_nb_ants_others(t_env *e)
 
 	SDL_Rect	pos;
 
-	pos.x = 20;
-	pos.y = 140;
-	pos.w = 7 * 20;
-	pos.h = 45;
+	pos.x = 20 * e->react.w_scale;
+	pos.y = 140 * e->react.h_scale;
+	pos.w = 140 * e->react.w_scale;
+	pos.h = 45 * e->react.h_scale;
 
 	return (ft_render_nb_ants_rect(&pos, "others:",
 		e->lem.map.total_ants - (e->lem.map.start->ant_count +
@@ -349,7 +363,7 @@ int		ft_render_dashboard(t_env *e)
 	rect.x = 0;
 	rect.y = 0;
 	rect.w = e->dim.width;
-	rect.h = GRASS_BORDER;
+	rect.h = e->react.grass_border;
 	SDL_SetRenderDrawColor( e->sdl.renderer, 50, 50, 50, 255);
 	SDL_RenderFillRect(e->sdl.renderer, &rect);
 	if (ft_render_nb_ants(e))

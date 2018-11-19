@@ -100,5 +100,8 @@ int			ft_init_all(t_env *e)
 	e->sdl.color.g = 255;
 	e->sdl.color.b = 255;
 	e->sdl.color.a = 255;
+	e->react.w_scale = (double)e->dim.width / 2560.0;
+	e->react.h_scale = (double)e->dim.height / 1440.0;
+	e->react.grass_border = e->react.h_scale * GRASS_BORDER;
 	return (1);
 }

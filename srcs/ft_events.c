@@ -111,7 +111,7 @@ void	ft_grab_room(t_env *e, int x, int y)
 		ft_put_to_end(e);
 		return;
 	}
-	if (y > GRASS_BORDER)
+	if (y > e->react.grass_border)
 		e->selected_room = NULL;
 }	
 
@@ -131,6 +131,6 @@ void	ft_mouse_motion(t_env *e, SDL_Event event)
 	if (e->grab.grabbed_room)
 	{
 		e->grab.grabbed_room->corr_x = ft_clamp(0, event.motion.x + e->grab.x_diff, e->dim.width - e->room_size);
-		e->grab.grabbed_room->corr_y = ft_clamp(GRASS_BORDER, event.motion.y + e->grab.y_diff, e->dim.height - e->room_size);
+		e->grab.grabbed_room->corr_y = ft_clamp(e->react.grass_border, event.motion.y + e->grab.y_diff, e->dim.height - e->room_size);
 	}
 }

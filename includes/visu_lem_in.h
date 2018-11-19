@@ -103,8 +103,16 @@ typedef struct			s_dim
 	int					height;
 }						t_dim;
 
+typedef struct			s_reactive
+{
+	double				w_scale;
+	double				h_scale;
+	int					grass_border;
+}						t_reactive;
+
 typedef struct			s_env
 {
+	t_reactive			react;
 	t_dim				dim;
 	t_anim				anim;
 	t_stats				stats;

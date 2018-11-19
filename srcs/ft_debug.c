@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 13:34:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 12:59:55 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 12:49:15 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void    ft_affich_room_list(t_list *room_list)
 	{
 		room = (t_room *)(ptr->content);
 		ft_printf("name: %s\n", room->name);
+		ft_printf("dist: %d\n", room->dist);
 		ptr = ptr->next;
 	}
 	ft_printf("\n");

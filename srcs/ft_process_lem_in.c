@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 21:33:39 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 13:02:42 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int		ft_fill_paths(t_lem *lem)
 	t_list	*path;
 	int		dist;
 
-	lem->paths.max_paths = 10000000;
+	lem->paths.max_paths = 100000000;
 	path = NULL;
 	dist = 0;
 	ft_reset_pathfinding(&(lem->map));
@@ -338,7 +338,6 @@ int		ft_fill_metadata(t_lem *lem)
 {
 	if (ft_fill_mps(lem))
 		return (1);
-	ft_printf("POPOqoUDIHIUQWHPOP\n");
 	if (ft_fill_matching_smps(lem))
 		return (1);
 	return (0);
@@ -652,15 +651,15 @@ int		ft_print_solution(t_lem *lem, t_path *chosen)
 int     ft_process_lem_in(t_lem *lem)
 {
 	t_path *chosen;
+
 	if (ft_fill_paths(lem))
 		return (1);
-	ft_printf("LOOL %d\n", ft_lstlength(lem->paths.paths_list));
 	if (lem->paths.min_length)
 	{
 		if (ft_fill_metadata(lem))
 			return (1);
 	}
-	chosen = ft_chosen_path(lem); //check has path !
+	chosen = ft_chosen_path(lem);
 	ft_print_solution(lem, chosen);
 	return 0;
 }

@@ -38,6 +38,7 @@ typedef struct		s_room
 	int				corr_y_init;
 	int				ant_count;
 	int				parsed;
+	int				dist;
 }					t_room;
 
 typedef struct		s_map
@@ -47,6 +48,7 @@ typedef struct		s_map
 	t_list			*rooms;
 	int				total_ants;
 	int				toward_end;
+	int				is_solvable;
 }					t_map;
 
 
@@ -75,6 +77,7 @@ struct		s_path
 
 typedef struct		s_paths
 {
+	int				max_paths;
 	int				min_length;
 	t_list			*paths_list; // list of t_path
 }					t_paths;
@@ -128,8 +131,7 @@ void				ft_affich_room_lite(t_room *room);
 void				ft_affich_queue(t_list *queue);
 void				ft_affich_room_list(t_list *room_list);
 int					ft_process_lem_in(t_lem *lem);
-int					ft_process_fill(t_room *room, t_lem *lem, t_list **paths,
-						int *max_paths);
+int					ft_process_fill(t_room *room, t_lem *lem, t_list **paths, int *dist);
 char				*ft_parse(t_lem *lem);
 int					ft_common_checks(char *str);
 int					ft_is_valid_room(char **split, t_lem *lem);

@@ -33,9 +33,7 @@ int		ft_is_valid_post_parse(t_lem *lem)
 {
 	if (lem->parser.nb_start == 0 || lem->parser.nb_end == 0)
 		return (0);
-	if (!ft_is_solvable(&(lem->map)))
-		return (0);
-	return (1);
+	return (ft_is_solvable(&(lem->map)));
 }
 
 char	*ft_free_turn_str(char *res, char **to_del)

@@ -28,6 +28,7 @@ void	ft_print_usage()
 int		ft_init_lem(t_lem *lem, int argc, char **argv)
 {
 	lem->map.rooms = NULL;
+	lem->map.is_solvable = 0;
 	lem->paths.paths_list = NULL;
 	lem->verbosed = 0;
 	lem->paths.min_length = -1;
@@ -76,7 +77,7 @@ int		main(int argc, char **argv)
 		ft_printf("malloc error\n");
 	else
 	{
-		if (ft_is_valid_post_parse(&lem))
+		if (ft_is_valid_post_parse(&lem) == 1)
 		{
 			ft_printf("%s\n", to_print);
 			if (ft_process_lem_in(&lem) == -1)

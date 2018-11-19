@@ -13,20 +13,21 @@
 #include "lem_in.h"
 
 int		ft_process_solve(t_room *current, t_map *map,
-			t_list **queue)
+			t_list **queue, int dist)
 {
 	t_list *ptr;
 	t_room *neighbour;
 
 	ptr = current->neighbours;
 	current->parsed = 1;
+	current->dist = dist;
 	while (ptr != NULL)
 	{
 		neighbour = (t_room *)(ptr->content);
 		if (neighbour->parsed == 0)
 		{
 			if (neighbour == map->end)
-				return (1);
+				map->is_solvable = 1;
 			else if (ft_add_to_list_ptr_back(queue, neighbour, sizeof(t_room)))
 				return (-1);
 		}
@@ -52,7 +53,9 @@ int		ft_is_solvable(t_map *map)
 	t_list	*queue;
 	t_room	*current;
 	int		ret;
+	int		dist;
 
+	dist = 0;
 	queue = NULL;
 	ft_reset_pathfinding(map);
 	if (ft_add_to_list_ptr_back(&queue, map->start, sizeof(t_room)))
@@ -60,11 +63,12 @@ int		ft_is_solvable(t_map *map)
 	while (queue != NULL)
 	{
 		current = (t_room *)(ft_lstpop_ptr(&queue));
-		if ((ret = ft_process_solve(current, map, &queue)))
+		if ((ret = ft_process_solve(current, map, &queue, dist)))
 		{
 			ft_lstdel_ptr(&queue);
-			return (ret);
+			return (-1);
 		}
+		dist++;
 	}
-	return (0);
+	return (map->is_solvable);
 }

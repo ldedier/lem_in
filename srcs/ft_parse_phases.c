@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 19:45:22 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 16:56:34 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 17:21:49 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 int		ft_phase_nb_ants(char *str, t_lem *lem)
 {
 	int ret;
+
 	if ((ret = ft_common_checks(str)))
 		return (ret);
-	if (!ft_isdigit_string(str))
-		return (ft_verbose(lem, str, 
+	if (!ft_isdigit_string(str) || !ft_is_atoiable(str) || ft_atoi(str) <= 0)
+		return (ft_verbose(lem, str,
 			"does not describe a valid number of ants"));
 	else
 	{

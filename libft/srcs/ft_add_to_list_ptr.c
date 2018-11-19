@@ -6,13 +6,13 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:29:16 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/15 12:29:47 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 16:09:17 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int     ft_add_to_list_ptr(t_list **list, void *content, size_t size)
+int			ft_add_to_list_ptr(t_list **list, void *content, size_t size)
 {
 	t_list *node;
 

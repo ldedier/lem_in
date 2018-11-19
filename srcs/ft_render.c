@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:51:01 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 19:42:05 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 15:54:25 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	ft_render_links(t_env *e)
 {
-	t_list *ptr;
-	t_list *neigh_ptr;
-	t_room *room;
-	SDL_Rect pos;
+	t_list		*ptr;
+	t_list		*neigh_ptr;
+	t_room		*room;
+	SDL_Rect	pos;
 
 	ptr = e->lem.map.rooms;
 	pos.w = e->room_size;
 	pos.h = e->room_size;
-	SDL_SetRenderDrawColor( e->sdl.renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(e->sdl.renderer, 255, 255, 255, 255);
 	while (ptr != NULL)
 	{
 		room = (t_room *)(ptr->content);
@@ -39,7 +39,7 @@ void	ft_render_links(t_env *e)
 	}
 }
 
-void ft_render_room(t_env *e, t_room *room, SDL_Rect *pos)
+void		ft_render_room(t_env *e, t_room *room, SDL_Rect *pos)
 {
 	if (room == e->lem.map.start)
 		SDL_RenderCopy(e->sdl.renderer,
@@ -55,18 +55,18 @@ void ft_render_room(t_env *e, t_room *room, SDL_Rect *pos)
 				NULL, pos);
 }
 
-
 void	ft_render_rooms(t_env *e)
 {
-	t_list *ptr;
-	t_room *room;
-	SDL_Rect pos;
+	t_list		*ptr;
+	t_room		*room;
+	SDL_Rect	pos;
+
 	ptr = e->lem.map.rooms;
 	pos.w = e->room_size;
 	pos.h = e->room_size;
 	while (ptr != NULL)
 	{
-		room = (t_room *)(ptr->content);	
+		room = (t_room *)(ptr->content);
 		pos.x = room->corr_x;
 		pos.y = room->corr_y;
 		ft_render_room(e, room, &pos);
@@ -77,6 +77,7 @@ void	ft_render_rooms(t_env *e)
 /*
 ** return the position of moving ant at the very instant
 */
+
 SDL_Rect	ft_get_pos(t_env *e, t_transition *tr)
 {
 	SDL_Rect res;
@@ -92,27 +93,27 @@ SDL_Rect	ft_get_pos(t_env *e, t_transition *tr)
 	return (res);
 }
 
-int	ft_get_angle(t_env *e, t_transition *tr)
+int			ft_get_angle(t_env *e, t_transition *tr)
 {
-	return (((atan2(tr->to->corr_y + e->room_size / 2 - 
+	return (((atan2(tr->to->corr_y + e->room_size / 2 -
 				(tr->from->corr_y + e->room_size / 2),
 				tr->to->corr_x + e->room_size / 2 -
 					(tr->from->corr_x + e->room_size / 2)) * 180 / M_PI) + 90));
 }
 
-int		ft_dist_transition(t_transition *tr)
+int			ft_dist_transition(t_transition *tr)
 {
-	return ft_dist(tr->from->corr_x, tr->from->corr_y,
-					tr->to->corr_x, tr->to->corr_y);
+	return (ft_dist(tr->from->corr_x, tr->from->corr_y,
+					tr->to->corr_x, tr->to->corr_y));
 }
 
 void	ft_render_ants(t_env *e)
 {
-	t_list *ptr;
-	t_transition *tr;
-	SDL_Rect pos;
-	SDL_Point center;
-	int current_animation;
+	t_list			*ptr;
+	t_transition	*tr;
+	SDL_Rect		pos;
+	SDL_Point		center;
+	int				current_animation;
 
 	ptr = e->anim.transitions;
 	while (ptr != NULL)
@@ -137,16 +138,17 @@ void	ft_process_animation(t_env *e)
 
 	e->anim.current = SDL_GetTicks();
 	diff = e->anim.current - e->anim.previous;
-	e->anim.progress = ft_fmin(1, e->anim.progress + (double)diff / e->time_per_turn);
+	e->anim.progress = ft_fmin(1, e->anim.progress +
+		(double)diff / e->time_per_turn);
 	e->anim.previous = e->anim.current;
 }
 
 void	ft_render_static_ants(t_env *e)
 {
-	t_list *ptr;
-	t_room *room;
-	SDL_Rect pos;
-	SDL_Point center;
+	t_list		*ptr;
+	t_room		*room;
+	SDL_Rect	pos;
+	SDL_Point	center;
 
 	ptr = e->anim.static_ants_rooms;
 	while (ptr != NULL)
@@ -158,16 +160,19 @@ void	ft_render_static_ants(t_env *e)
 		pos.h = e->room_size / 2;
 		center.x = pos.w / 2;
 		center.y = pos.h / 2;
-		SDL_RenderCopyEx(e->sdl.renderer, e->sdl.textures[ANT], NULL, &pos, 0, &center, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(e->sdl.renderer, e->sdl.textures[ANT],
+			NULL, &pos, 0, &center, SDL_FLIP_NONE);
 		ptr = ptr->next;
 	}
 }
 
 int		ft_use_texture_with_surface(t_env *e, char *str)
 {
-	if (!(e->sdl.surface = TTF_RenderText_Solid(e->sdl.font, str, e->sdl.color)))
+	if (!(e->sdl.surface = TTF_RenderText_Solid(e->sdl.font,
+			str, e->sdl.color)))
 		return (1);
-	if (!(e->sdl.texture = SDL_CreateTextureFromSurface(e->sdl.renderer, e->sdl.surface)))
+	if (!(e->sdl.texture = SDL_CreateTextureFromSurface(e->sdl.renderer,
+			e->sdl.surface)))
 	{
 		SDL_FreeSurface(e->sdl.surface);
 		return (1);
@@ -227,7 +232,7 @@ int		ft_render_turn(t_env *e)
 	if (!(str = ft_strjoin("turn #", str2)))
 		return (ft_free_turn(str2, 1));
 	ft_strdel(&str2);
-	ft_fill_rect_x_y(&pos,  (e->dim.width / 2) - ft_strlen(str) * scale,
+	ft_fill_rect_x_y(&pos, (e->dim.width / 2) - ft_strlen(str) * scale,
 		65 * e->react.h_scale);
 	ft_fill_rect_w_h(&pos, ft_strlen(str) * 2 * scale, 70 * e->react.h_scale);
 	if (ft_use_texture_with_surface(e, str))
@@ -238,7 +243,7 @@ int		ft_render_turn(t_env *e)
 	return (0);
 }
 
-int ft_render_speed_value(t_env *e)
+int		ft_render_speed_value(t_env *e)
 {
 	char		*str;
 	char		*str2;
@@ -261,16 +266,15 @@ int ft_render_speed_value(t_env *e)
 	ft_strdel(&str);
 	return (0);
 }
+
 int		ft_render_speed(t_env *e)
 {
 	SDL_Rect	pos;
-	int scale;
+	int			scale;
 
 	scale = 10.0 * e->react.w_scale;
-
 	if (ft_use_texture_with_surface(e, "time per turn"))
 		return (1);
-
 	ft_fill_rect_x_y(&pos, e->dim.width - ((230.0 / 2560) * e->dim.width) -
 		(14 * scale), 60 * e->react.h_scale);
 	ft_fill_rect_w_h(&pos, 14 * 2 * scale, 45 * e->react.h_scale);
@@ -312,7 +316,6 @@ int		ft_render_nb_ants_start(t_env *e)
 	pos.y = 20 * e->react.h_scale;
 	pos.w = 200 * e->react.w_scale;
 	pos.h = 45 * e->react.h_scale;
-
 	return (ft_render_nb_ants_rect(&pos, "beginning:",
 		e->lem.map.start->ant_count, e));
 }
@@ -325,21 +328,18 @@ int		ft_render_nb_ants_end(t_env *e)
 	pos.y = 80 * e->react.h_scale;
 	pos.w = 80 * e->react.w_scale;
 	pos.h = 45 * e->react.h_scale;
-
 	return (ft_render_nb_ants_rect(&pos, "end:",
 		e->lem.map.end->ant_count - e->toward_end, e));
 }
 
 int		ft_render_nb_ants_others(t_env *e)
 {
-
 	SDL_Rect	pos;
 
 	pos.x = 20 * e->react.w_scale;
 	pos.y = 140 * e->react.h_scale;
 	pos.w = 140 * e->react.w_scale;
 	pos.h = 45 * e->react.h_scale;
-
 	return (ft_render_nb_ants_rect(&pos, "others:",
 		e->lem.map.total_ants - (e->lem.map.start->ant_count +
 			(e->lem.map.end->ant_count - e->toward_end)), e));
@@ -350,7 +350,7 @@ int		ft_render_nb_ants(t_env *e)
 	if (ft_render_nb_ants_start(e))
 		return (1);
 	if (ft_render_nb_ants_end(e))
-		return (1);	
+		return (1);
 	if (ft_render_nb_ants_others(e))
 		return (1);
 	return (0);
@@ -359,12 +359,12 @@ int		ft_render_nb_ants(t_env *e)
 int		ft_render_dashboard(t_env *e)
 {
 	SDL_Rect rect;
-	
+
 	rect.x = 0;
 	rect.y = 0;
 	rect.w = e->dim.width;
 	rect.h = e->react.grass_border;
-	SDL_SetRenderDrawColor( e->sdl.renderer, 50, 50, 50, 255);
+	SDL_SetRenderDrawColor(e->sdl.renderer, 50, 50, 50, 255);
 	SDL_RenderFillRect(e->sdl.renderer, &rect);
 	if (ft_render_nb_ants(e))
 		return (1);
@@ -382,7 +382,7 @@ int		ft_render_dashboard(t_env *e)
 
 int		ft_render(t_env *e)
 {
-	SDL_SetRenderDrawColor( e->sdl.renderer, 100, 100, 100, 255);
+	SDL_SetRenderDrawColor(e->sdl.renderer, 100, 100, 100, 255);
 	SDL_RenderClear(e->sdl.renderer);
 	if (ft_render_dashboard(e))
 		return (1);
@@ -414,12 +414,12 @@ int		ft_add_current_ants(t_env *e, char *str)
 void		ft_process_current_turn(t_env *e, int *loop)
 {
 	SDL_Event	event;
-	
+
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT ||
 				(event.type == SDL_KEYDOWN &&
-				 event.key.keysym.sym == SDLK_ESCAPE))
+					event.key.keysym.sym == SDLK_ESCAPE))
 			*loop = 0;
 		else if (event.type == SDL_KEYDOWN && !event.key.repeat)
 			ft_key_down(e, event.key.keysym.sym);
@@ -463,7 +463,7 @@ void	ft_process_end_events(t_env *e, int *loop)
 	{
 		if (event.type == SDL_QUIT ||
 				(event.type == SDL_KEYDOWN &&
-				 event.key.keysym.sym == SDLK_ESCAPE))
+					event.key.keysym.sym == SDLK_ESCAPE))
 			*loop = 0;
 		else if (event.type == SDL_MOUSEBUTTONDOWN)
 			ft_mouse_down(e, event);

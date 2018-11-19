@@ -6,7 +6,7 @@
 #    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/19 12:42:42 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/19 18:12:56 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ debug:
 	@make all DEBUG=0
 
 $(BINDIR)/$(NAME): $(OBJECTS) $(LIBFT)
-	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft -fsanitize=address
+	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 
 $(BINDIR)/$(VISU_NAME): $(VOBJECTS) $(LIBFT)

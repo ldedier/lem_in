@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 16:18:10 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 18:26:02 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	end(void)
 //	while(1);
 }
 
-void	ft_print_usage()
+void	ft_print_usage(void)
 {
 	ft_printf("./lem-in [optional: -v] < [map_name] | ./lem-in_visu\n");
 }
@@ -42,7 +42,7 @@ int		ft_init_lem(t_lem *lem, int argc, char **argv)
 		else
 			lem->verbosed = 1;
 	}
-	return(0);
+	return (0);
 }
 
 void	ft_delete_paths(t_list **paths)
@@ -51,7 +51,6 @@ void	ft_delete_paths(t_list **paths)
 	t_path	*path;
 
 	ptr = *paths;
-	
 	while (ptr != NULL)
 	{
 		path = (t_path *)(ptr->content);
@@ -84,7 +83,10 @@ int		main(int argc, char **argv)
 				ft_printf("malloc error\n");
 		}
 		else
-			ft_printf("ERROR\n");
+		{
+			if (!lem.verbosed)
+				ft_printf("ERROR\n");
+		}
 		ft_strdel(&to_print);
 	}
 	ft_delete_paths(&(lem.paths.paths_list));

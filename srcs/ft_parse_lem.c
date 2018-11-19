@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 17:25:23 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 17:29:18 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,23 @@ void	ft_init_parse_arr(t_parse_func parse_arr[5])
 
 int		ft_is_valid_post_parse(t_lem *lem)
 {
-	if (lem->parser.nb_start == 0 || lem->parser.nb_end == 0)
+	int ret;
+
+	if (lem->parser.nb_start == 0)
+	{
+		ft_verbose_no_line(lem, "map has no start");
 		return (0);
-	return (ft_is_solvable(&(lem->map)));
+	}
+	if (lem->parser.nb_end == 0)
+	{
+		ft_verbose_no_line(lem, "map has no end");
+		return (0);
+	}
+	if ((ret = ft_is_solvable(&(lem->map))) == 0)
+		ft_verbose_no_line(lem, "map start and end are not linked");
+	else if(ret == -1)
+		ft_printf("malloc error\n");
+	return (ret);
 }
 
 char	*ft_free_turn_str(char *res, char **to_del)
@@ -48,7 +62,7 @@ char	*ft_parse(t_lem *lem)
 	char			*str;
 	int				ret;
 	t_parse_func	parse_arr[5];
-	
+
 	ft_init_parser(&(lem->parser));
 	ft_init_parse_arr(parse_arr);
 	if (!(res = ft_strnew(0)))

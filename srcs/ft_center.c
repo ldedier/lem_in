@@ -6,17 +6,17 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 02:54:59 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 19:42:24 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 15:56:02 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visu_lem_in.h"
 
-t_alpha ft_get_alpha(t_env *e)
+t_alpha		ft_get_alpha(t_env *e)
 {
-	double w_alpha;
-	double h_alpha;
-	t_alpha res;
+	double	w_alpha;
+	double	h_alpha;
+	t_alpha	res;
 
 	w_alpha = (double)((double)(9.0 * e->dim.width) / ((double)(10.0 *
 				((double)e->stats.right - e->stats.left)))) -
@@ -29,13 +29,13 @@ t_alpha ft_get_alpha(t_env *e)
 	return (res);
 }
 
-int		ft_iz_okay(t_env *e)
+int			ft_iz_okay(t_env *e)
 {
-	t_alpha alpha;
-	t_list *ptr;
-	t_list *ptr2;
-	t_room *room;
-	t_room *room2;
+	t_alpha	alpha;
+	t_list	*ptr;
+	t_list	*ptr2;
+	t_room	*room;
+	t_room	*room2;
 
 	ptr = e->lem.map.rooms;
 	alpha = ft_get_alpha(e);
@@ -57,22 +57,21 @@ int		ft_iz_okay(t_env *e)
 	return (1);
 }
 
-void	ft_update_room_size(t_env *e)
+void		ft_update_room_size(t_env *e)
 {
-	ft_printf("%d\n", e->dim.width);
-	e->room_size = ROOM_SIZE * ft_fmax((double)e->dim.width / 2560.0,
+	e->room_size = ROOM_SIZE * ft_fmin((double)e->dim.width / 2560.0,
 		(double)e->dim.height / 1440.0);
 	while (!ft_iz_okay(e) && e->room_size > 10)
 		e->room_size -= 10;
 }
 
-void	ft_update_corr_pos(t_env *e)
+void		ft_update_corr_pos(t_env *e)
 {
-	t_list *ptr;
-	t_room *room;
-	int x_margin;
-	int y_margin;
-	t_alpha alpha;
+	t_list	*ptr;
+	t_room	*room;
+	int		x_margin;
+	int		y_margin;
+	t_alpha	alpha;
 
 	ptr = e->lem.map.rooms;
 	ft_update_room_size(e);
@@ -91,7 +90,7 @@ void	ft_update_corr_pos(t_env *e)
 	}
 }
 
-int	ft_dist(int x1, int y1, int x2, int y2)
+int			ft_dist(int x1, int y1, int x2, int y2)
 {
 	return (sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
 }

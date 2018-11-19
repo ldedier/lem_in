@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 20:29:01 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 15:46:22 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,20 @@ t_transition	*ft_get_transition_to(t_list *transitions, t_room *to)
 
 int		ft_add_static(t_env *e)
 {
-	t_list *ptr;
-	t_room *room;
-	
+	t_list	*ptr;
+	t_room	*room;
+
 	ptr = e->lem.map.rooms;
 	while (ptr != NULL)
 	{
 		room = (t_room *)(ptr->content);
-		if (room->ant_count && room != e->lem.map.start && room != e->lem.map.end)
+		if (room->ant_count && room != e->lem.map.start &&
+				room != e->lem.map.end)
 		{
 			if (!ft_get_transition_to(e->anim.transitions, room))
 			{
-				if (ft_add_to_list_ptr(&(e->anim.static_ants_rooms), room, sizeof(t_room)))
+				if (ft_add_to_list_ptr(&(e->anim.static_ants_rooms),
+						room, sizeof(t_room)))
 					return (1);
 			}
 		}
@@ -58,7 +60,7 @@ void		ft_apply_transition(t_env *e, t_room *from, t_room *to)
 	to->ant_count++;
 }
 
-t_transition *ft_new_transition(t_room *from, t_room *to)
+t_transition	*ft_new_transition(t_room *from, t_room *to)
 {
 	t_transition *res;
 
@@ -71,7 +73,7 @@ t_transition *ft_new_transition(t_room *from, t_room *to)
 t_room	*ft_get_neighbour(t_room *room, char *room_name)
 {
 	t_list	*ptr;
-	t_room *neighbour;
+	t_room	*neighbour;
 
 	ptr = room->neighbours;
 	while (ptr != NULL)
@@ -86,8 +88,8 @@ t_room	*ft_get_neighbour(t_room *room, char *room_name)
 
 int		ft_already_in_transitions(t_list *transitions, t_room *from, t_room *to)
 {
-	t_list *ptr;
-	t_transition *transition;
+	t_list			*ptr;
+	t_transition	*transition;
 
 	ptr = transitions;
 	while (ptr != NULL)
@@ -99,7 +101,6 @@ int		ft_already_in_transitions(t_list *transitions, t_room *from, t_room *to)
 	}
 	return (0);
 }
-
 
 t_vant	*ft_new_vant(int id, t_room *room)
 {
@@ -191,7 +192,6 @@ int		ft_add_transition(t_env *e, int id, char *room_name)
 		ptr = ptr->next;
 	}
 	return (ft_create_ant_to(id, room_name, e));
-
 }
 
 int		ft_free_turn_splits(char **split, char **split2, int ret)

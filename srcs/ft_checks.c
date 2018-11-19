@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 17:11:51 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 17:56:24 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,13 @@ int		ft_special_rooms_check(char *str, t_lem *lem)
 {
 	if (!ft_strncmp(str, "##start", 7))
 	{
-		if (++lem->parser.nb_start > 1)
-			return (ft_verbose(lem, str, "map can only have one start"));
-		else
-		{
-			lem->parser.phase = e_phase_start;
-			return (1);
-		}
+		lem->parser.phase = e_phase_start;
+		return (1);
 	}
 	else if (!ft_strncmp(str, "##end", 5))
 	{
-		if (++lem->parser.nb_end > 1)
-			return (ft_verbose(lem, str, "map can only have one end"));
-		else
-		{
-			lem->parser.phase = e_phase_end;
-			return (1);
-		}
+		lem->parser.phase = e_phase_end;
+		return (1);
 	}
 	return (0);
 }

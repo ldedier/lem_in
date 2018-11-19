@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 17:18:51 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 17:57:54 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_init_ant_room(t_room *room, int role, t_lem *lem)
 		lem->map.end = room;
 }
 
-t_room 	*ft_new_room_from_split(char **split)
+t_room	*ft_new_room_from_split(char **split)
 {
 	t_room *room;
 
@@ -42,10 +42,21 @@ t_room 	*ft_new_room_from_split(char **split)
 	return (room);
 }
 
+int		ft_add_role(int role, t_lem *lem)
+{
+	if (role == START && ++lem->parser.nb_start > 1)
+		return (ft_verbose_no_line(lem, "map can only have one start"));
+	else if (role == END && ++lem->parser.nb_end > 1)
+		return (ft_verbose_no_line(lem, "map can only have one end"));
+	return (0);
+}
+
 int		ft_process_add_room(char **split, t_lem *lem, int role)
 {
 	t_room	*room;
 
+	if (ft_add_role(role, lem))
+		return (-1);
 	if (!(room = ft_new_room_from_split(split)))
 	{
 		ft_free_split(split);
@@ -62,7 +73,6 @@ int		ft_process_add_room(char **split, t_lem *lem, int role)
 	lem->parser.phase = e_phase_rooms;
 	ft_free_split(split);
 	return (0);
-
 }
 
 int		ft_add_room(char *str, t_lem *lem, int role)

@@ -6,21 +6,21 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 14:40:06 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 13:02:42 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 15:40:46 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length) //to protect
+int		ft_add_path_from_rooms(t_list **paths, t_list *rooms, int length)
 {
 	t_list	*rooms_cpy;
 	t_path	*path;
-   
+
 	if (!(path = (t_path *)malloc(sizeof(t_path))))
 		return (1);
 	if (ft_copy_list_ptr_rev(rooms, &rooms_cpy))
-			return (1);
+		return (1);
 	path->length = length;
 	path->rooms = rooms_cpy;
 	path->semi_mp = NULL;
@@ -138,13 +138,24 @@ int		ft_is_better_smp(t_path *current, t_path *to_compare)
 	return (ft_lstlength(current->mps) > ft_lstlength(to_compare->mps));
 }
 
+int		ft_process_match_smp(t_path *path1, t_path *path2, int i, int j)
+{
+	if (!path1->semi_mp ||
+			ft_is_better_smp(path2, path1->semi_mp->path))
+	{
+		if (ft_populate_smp(&(path1->semi_mp), j - i, path2))
+			return (1);
+	}
+	return (0);
+}
+
 int		ft_update_matching_smps(t_path *path1, t_path *path2)
 {
-	t_list *current;
-	t_list *current2;
+	t_list	*current;
+	t_list	*current2;
+	int		i;
+	int		j;
 
-	int i;
-	int j;
 	current = path1->rooms;
 	i = 0;
 	while (current != NULL)
@@ -156,15 +167,7 @@ int		ft_update_matching_smps(t_path *path1, t_path *path2)
 			if (current->content == current2->content)
 			{
 				if (j > i)
-				{
-					if (!path1->semi_mp ||
-							ft_is_better_smp(path2, path1->semi_mp->path))
-					{
-						if (ft_populate_smp(&(path1->semi_mp), j - i, path2))
-							return (1);
-					}
-					return (0);
-				}
+					return (ft_process_match_smp(path1, path2, i, j));
 			}
 			current2 = current2->next;
 			j++;
@@ -195,30 +198,39 @@ int		ft_share_rooms(t_path *path1, t_path *path2)
 	return (0);
 }
 
-int		ft_overlaps_path_list(t_list **path_list, t_path* path)
+int		ft_process_overlaps_path_list(t_list *ptr,
+		t_list **prev, t_path *path, t_list **overlapping)
+{
+	t_path	*current;
+
+	while (ptr != NULL)
+	{
+		current = (t_path *)(ptr->content);
+		if (ft_share_rooms(current, path))
+		{
+			if (*overlapping || current->length <= path->length)
+				return (1);
+			else
+				*overlapping = ptr;
+		}
+		if (!(*overlapping))
+			*prev = ptr;
+		ptr = ptr->next;
+	}
+	return (0);
+}
+
+int		ft_overlaps_path_list(t_list **path_list, t_path *path)
 {
 	t_list	*ptr;
-	t_path	*current;
 	t_list	*overlapping;
 	t_list	*prev;
 
 	ptr = *path_list;
 	overlapping = NULL;
 	prev = NULL;
-	while (ptr != NULL)
-	{
-		current = (t_path *)(ptr->content);
-		if (ft_share_rooms(current, path))
-		{
-			if (overlapping || current->length <= path->length)
-				return (1);
-			else
-				overlapping = ptr;
-		}
-		if (!overlapping)
-			prev = ptr;
-		ptr = ptr->next;
-	}
+	if (ft_process_overlaps_path_list(ptr, &prev, path, &overlapping))
+		return (1);
 	if (overlapping)
 	{
 		if (prev == NULL)
@@ -251,11 +263,11 @@ int		ft_process_add_to_mps(t_path *path1, t_path *path2)
 
 int		ft_update_mps(t_path *path1, t_path *path2)
 {
-	t_list *current;
-	t_list *current2;
+	t_list	*current;
+	t_list	*current2;
+	int		i;
+	int		j;
 
-	int i;
-	int j;
 	current = path1->rooms;
 	i = 0;
 	while (current != NULL)
@@ -297,19 +309,33 @@ int		ft_fill_mps(t_lem *lem)
 	return (0);
 }
 
-int		ft_is_compatible_smp_to_single_path(t_path *smp, t_path *single) //CHECK
+int		ft_is_compatible_smp_to_single_path(t_path *smp, t_path *single)
 {
-	if (ft_lstlength(smp->mps) <= ft_lstlength(single->mps)) //todo
+	if (ft_lstlength(smp->mps) <= ft_lstlength(single->mps))
 		return (0);
 	return (1);
 }
 
+int		ft_process_fill_matching_smps(t_list *current, t_list *to_compare)
+{
+	if (current != to_compare &&
+			((t_path *)(to_compare->content))->mps != NULL &&
+			ft_is_compatible_smp_to_single_path(to_compare->content,
+				current->content))
+	{
+		if (ft_update_matching_smps((t_path *)current->content,
+					(t_path *)(to_compare->content)))
+			return (1);
+	}
+	return (0);
+}
+
 int		ft_fill_matching_smps(t_lem *lem)
 {
-	t_list *current;
-	t_list *to_compare;
-	current = lem->paths.paths_list;
+	t_list	*current;
+	t_list	*to_compare;
 
+	current = lem->paths.paths_list;
 	while (current != NULL)
 	{
 		if (((t_path *)current->content)->length == lem->paths.min_length)
@@ -317,15 +343,8 @@ int		ft_fill_matching_smps(t_lem *lem)
 			to_compare = lem->paths.paths_list;
 			while (to_compare != NULL)
 			{
-				if (current != to_compare &&
-						((t_path *)(to_compare->content))->mps != NULL &&
-						ft_is_compatible_smp_to_single_path(to_compare->content,
-							current->content))
-				{
-					if (ft_update_matching_smps((t_path *)current->content,
-							(t_path *)(to_compare->content)))
-						return (1);
-				}
+				if (ft_process_fill_matching_smps(current, to_compare))
+					return (1);
 				to_compare = to_compare->next;
 			}
 		}
@@ -346,7 +365,7 @@ int		ft_fill_metadata(t_lem *lem)
 int		ft_nb_mps_smp(t_path *path)
 {
 	if (path->semi_mp)
-		return ft_lstlength(path->semi_mp->path->mps);
+		return (ft_lstlength(path->semi_mp->path->mps));
 	return (0);
 }
 
@@ -358,10 +377,10 @@ int		ft_is_better_than(t_path *path, t_path *to_compare)
 
 t_path	*ft_chosen_path(t_lem *lem)
 {
-	t_list *paths;
-	t_path *path;
-	t_path *chosen;
-	int first;
+	t_list	*paths;
+	t_path	*path;
+	t_path	*chosen;
+	int		first;
 
 	paths = lem->paths.paths_list;
 	first = 1;
@@ -369,8 +388,8 @@ t_path	*ft_chosen_path(t_lem *lem)
 	while (paths != NULL)
 	{
 		path = (t_path *)(paths->content);
-		if (first == 1 || (path->length == lem->paths.min_length 
-					&& ft_is_better_than(path, chosen)))
+		if (first == 1 || (path->length == lem->paths.min_length
+				&& ft_is_better_than(path, chosen)))
 		{
 			chosen = path;
 			first = 0;
@@ -456,8 +475,8 @@ void	ft_list_sort(t_list **begin_list)
 		list_ptr = *begin_list;
 		while (list_ptr->next != NULL)
 		{
-			if ((((t_path *)(list_ptr->content))->length > 
-						((t_path *)(list_ptr->next->content))->length))
+			if ((((t_path *)(list_ptr->content))->length >
+					((t_path *)(list_ptr->next->content))->length))
 			{
 				tmp = list_ptr->content;
 				list_ptr->content = list_ptr->next->content;
@@ -473,11 +492,11 @@ int		ft_populate_platform(t_deploy_platform *p, t_path *chosen)
 {
 	t_list	*ptr;
 	t_path	*path;
-	int min;
-	int val;
+	int		min;
+	int		val;
 
 	if (ft_copy_list_ptr_rev(chosen->mps, &(p->paths)))
-			return (1);
+		return (1);
 	if (ft_add_to_list_ptr(&(p->paths), chosen, sizeof(t_path)))
 	{
 		ft_lstdel_ptr(&(p->paths));
@@ -546,7 +565,8 @@ void	ft_progress_all_at_body(t_list **temp, t_list **prev, t_lem *lem,
 {
 	while (*temp != NULL)
 	{
-		while (*temp != NULL && !ft_progress_ant((t_ant *)((*temp)->content), lem))
+		while (*temp != NULL &&
+			!ft_progress_ant((t_ant *)((*temp)->content), lem))
 		{
 			*prev = *temp;
 			*temp = (*temp)->next;
@@ -568,8 +588,8 @@ void	ft_progress_all_at_body(t_list **temp, t_list **prev, t_lem *lem,
 
 void	ft_progress_ants(t_deploy *deploy, t_lem *lem)
 {
-	t_list *temp;
-	t_list  *prev;
+	t_list	*temp;
+	t_list	*prev;
 
 	temp = deploy->ants;
 	prev = NULL;
@@ -616,7 +636,7 @@ int		ft_process_print_smp(t_lem *lem, t_path *chosen, t_deploy *deploy)
 		ft_printf("\n");
 		i++;
 	}
-	return ft_process_print_no_smp(lem, chosen->semi_mp->path, deploy);
+	return (ft_process_print_no_smp(lem, chosen->semi_mp->path, deploy));
 }
 
 void	ft_init_deploy(t_deploy *deploy)
@@ -648,7 +668,7 @@ int		ft_print_solution(t_lem *lem, t_path *chosen)
 	return (0);
 }
 
-int     ft_process_lem_in(t_lem *lem)
+int		ft_process_lem_in(t_lem *lem)
 {
 	t_path *chosen;
 
@@ -661,5 +681,5 @@ int     ft_process_lem_in(t_lem *lem)
 	}
 	chosen = ft_chosen_path(lem);
 	ft_print_solution(lem, chosen);
-	return 0;
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/18 18:34:30 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 19:17:19 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,23 @@ void	ft_init_env(t_env *e)
 
 void __attribute__((destructor)) end();
 
-void    end(void)
+void	end(void)
 {
 //	  ft_printf("destructor loop\n");
 //	  while(1);
 }
 
+void	ft_free_texture(SDL_Texture *texture)
+{
+	if (texture != NULL)
+		SDL_DestroyTexture(texture);
+}
+
+void	ft_free_font(TTF_Font *font)
+{
+	if (font != NULL)
+		TTF_CloseFont(font);
+}
 
 void	ft_free_textures(t_env *e)
 {
@@ -39,13 +50,13 @@ void	ft_free_textures(t_env *e)
 	i = 0;
 	while (i < 8)
 	{
-		SDL_DestroyTexture(e->sdl.textures[i]);
+		ft_free_texture(e->sdl.textures[i]);
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		SDL_DestroyTexture(e->sdl.ant_textures[i]);
+		ft_free_texture(e->sdl.ant_textures[i]);
 		i++;
 	}
 }
@@ -55,10 +66,17 @@ void	ft_free_all(t_env *e)
 	ft_lstdel_value(&(e->vants));
 	ft_delete_rooms(&(e->lem.map.rooms));
 	ft_free_textures(e);
-	TTF_CloseFont(e->sdl.font);
-	SDL_FreeSurface(e->sdl.w_surface);
-	SDL_DestroyRenderer(e->sdl.renderer);
-	SDL_DestroyWindow(e->sdl.window);
+	ft_free_font(e->sdl.font);
+	if (e->sdl.w_surface)
+		SDL_FreeSurface(e->sdl.w_surface);
+	if (e->sdl.renderer)
+		SDL_DestroyRenderer(e->sdl.renderer);
+	if (e->sdl.window)
+		SDL_DestroyWindow(e->sdl.window);
+	if (e->sdl.ttf_init)
+		TTF_Quit();
+	if (e->sdl.sdl_init)
+		SDL_Quit();
 }
 
 int		ft_process_main(char *str, t_env *e)
@@ -78,18 +96,24 @@ int		ft_process_main(char *str, t_env *e)
 	return (0);
 }
 
-int main(int argc, char **argv)
+int		main(void)
 {
 	t_env	e;
 	char	*str;
 
-	(void) argc;
-	(void) argv;
 	ft_init_env(&e);
-	if (!ft_init_all(&e))
-		ft_error("Initialisation error\n");
+	if (ft_init_all(&e))
+	{
+		ft_printf("Initialisation error\n");
+		ft_free_all(&e);
+		return (1);
+	}
 	if (ft_parse_visu(&(e.lem)) == -1)
-		ft_error("Parsing error\n");
+	{
+		ft_printf("Parsing error\n");
+		ft_free_all(&e);
+		return (1);
+	}
 	ft_gather_stats(&e);
 	ft_update_corr_pos(&e);
 	e.lem.turn = 0;

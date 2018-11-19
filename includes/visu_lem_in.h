@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 19:07:41 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 19:25:41 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ typedef struct			s_sdl
 	SDL_Texture			*textures[7];
 	SDL_Texture			*ant_textures[4];
 	TTF_Font			*font;
-	int					sdl_init;
-	int					ttf_init;
 }						t_sdl;
 
 typedef struct			s_stats

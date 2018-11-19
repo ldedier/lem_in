@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 19:17:19 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 19:26:29 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ void	ft_free_all(t_env *e)
 		SDL_DestroyRenderer(e->sdl.renderer);
 	if (e->sdl.window)
 		SDL_DestroyWindow(e->sdl.window);
-	if (e->sdl.ttf_init)
+	if (TTF_WasInit())
 		TTF_Quit();
-	if (e->sdl.sdl_init)
+	if (SDL_WasInit(SDL_INIT_EVERYTHING))
 		SDL_Quit();
 }
 

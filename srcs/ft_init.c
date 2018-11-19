@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 18:17:44 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 19:20:22 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/19 19:26:10 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ int			ft_init_sdl(t_env *e)
 {
 	e->sdl.screen.x = 300;
 	e->sdl.screen.y = 200;
-	if (!(e->sdl.sdl_init = (SDL_Init(SDL_INIT_EVERYTHING) == 0)))
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		return (1);
-	if (!(e->sdl.ttf_init = (TTF_Init() >= 0)))
+	if (TTF_Init() < 0)
 		return (1);
 	ft_get_dimensions(e);
 	e->sdl.screen.w = e->dim.width;

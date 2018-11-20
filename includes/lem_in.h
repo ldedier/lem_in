@@ -158,4 +158,5 @@ int						ft_verbose_no_line(t_lem *lem, char *str);
 void					ft_delete_rooms(t_list **rooms);
 void					ft_reset_pathfinding(t_map *map);
 int						ft_is_solvable(t_map *map);
+t_room					*ft_get_room(t_list *rooms, char *name);
 #endif

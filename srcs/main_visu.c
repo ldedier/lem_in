@@ -30,7 +30,7 @@ void __attribute__((destructor)) end();
 void	end(void)
 {
 	  ft_printf("destructor loop\n");
-	  while(1);
+//	  while(1);
 }
 
 void	ft_free_texture(SDL_Texture *texture)

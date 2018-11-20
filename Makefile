@@ -79,7 +79,7 @@ $(BINDIR)/$(NAME): $(OBJECTS) $(LIBFT)
 
 $(BINDIR)/$(VISU_NAME): $(VOBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ -F ./frameworks -framework SDL2\
-		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft -fsanitize=address
+		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft 
 	@echo "$(OK_COLOR)$(VISU_NAME) linked with success !$(EOC)"
 	@install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2 $(SDL2) $(VISU_NAME)
 	@install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image $(SDL2_image) $(VISU_NAME)

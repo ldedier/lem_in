@@ -23,11 +23,14 @@ int		ft_parse_visu(t_lem *lem)
 	while ((ret = get_next_line(0, &str)) > 0 && ft_strcmp(str, ""))
 	{
 		if (parse_arr[lem->parser.phase](str, lem) == -1)
+		{
+			ft_strdel(&(str));
 			return (-1);
+		}
 		ft_strdel(&(str));
 	}
 	ft_strdel(&(str));
-	if (ft_is_valid_post_parse(lem) == -1)
+	if (!ft_is_valid_post_parse(lem))
 		return (-1);
 	else
 		return (0);

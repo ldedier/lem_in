@@ -148,11 +148,8 @@ int			ft_init_sdl(t_env *e)
 	return (0);
 }
 
-int			ft_init_all(t_env *e)
+int			ft_init_all_sdl(t_env *e)
 {
-	ft_init_sdl_to_null(e);
-	ft_init_textures_to_null(e);
-	e->sdl.font = NULL;
 	if (ft_init_sdl(e))
 		return (1);
 	if (ft_init_textures(e))

@@ -127,7 +127,7 @@ typedef struct			s_env
 	int					toward_end;
 }						t_env;
 
-int						ft_init_all(t_env *e);
+int						ft_init_all_sdl(t_env *e);
 int						ft_render(t_env *e);
 void					ft_key_down(t_env *e, SDL_Keycode code);
 void					ft_mouse_down(t_env *e, SDL_Event event);
@@ -143,7 +143,9 @@ void					ft_process(t_env *e, const Uint8 *keys);
 void					ft_process_end(t_env *e);
 int						ft_parse_visu(t_lem *lem);
 int						ft_render_visu(t_env *e, char *str);
-void					ft_render_visu_end(t_env *e);
+int						ft_render_visu_end(t_env *e);
 void					ft_reset_pos(t_env *e);
 int						ft_dist(int x1, int y1, int x2, int y2);
+void					ft_init_sdl_to_null(t_env *e);
+void					ft_init_textures_to_null(t_env *e);
 #endif

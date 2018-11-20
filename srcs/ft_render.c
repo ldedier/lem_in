@@ -396,17 +396,19 @@ int		ft_render(t_env *e)
 
 int		ft_add_current_ants(t_env *e, char *str)
 {
-	if (ft_add_transitions(e, str))
+	int ret;
+
+	if ((ret = ft_add_transitions(e, str)))
 	{
 		ft_lstdel_value(&(e->anim.transitions));
 		ft_lstdel_ptr(&(e->anim.static_ants_rooms));
-		return (1);
+		return (ret);
 	}
 	if (ft_add_static(e))
 	{
 		ft_lstdel_value(&(e->anim.transitions));
 		ft_lstdel_ptr(&(e->anim.static_ants_rooms));
-		return (1);
+		return (-1);
 	}
 	return (0);
 }
@@ -433,17 +435,18 @@ void		ft_process_current_turn(t_env *e, int *loop)
 	if (!e->anim.pause)
 		ft_process_animation(e);
 	ft_process(e, SDL_GetKeyboardState(NULL));
-	ft_render(e);
+	if (ft_render(e))
+		*loop = -1;
 	SDL_Delay(20);
 }
 
 int		ft_render_visu(t_env *e, char *str)
 {
 	int			loop;
-
+	int			ret;
 	e->toward_end = 0;
-	if (ft_add_current_ants(e, str))
-		return (-1);
+	if ((ret = ft_add_current_ants(e, str)))
+		return (ret);
 	e->anim.start = SDL_GetTicks();
 	e->anim.previous = e->anim.start;
 	e->anim.progress = 0;
@@ -477,7 +480,7 @@ void	ft_process_end_events(t_env *e, int *loop)
 	}
 }
 
-void	ft_render_visu_end(t_env *e)
+int	ft_render_visu_end(t_env *e)
 {
 	int loop;
 
@@ -487,7 +490,9 @@ void	ft_render_visu_end(t_env *e)
 	{
 		ft_process_end_events(e, &loop);
 		ft_process_end(e);
-		ft_render(e);
+		if (ft_render(e))
+			return (1);
 		SDL_Delay(20);
 	}
+	return (0);
 }

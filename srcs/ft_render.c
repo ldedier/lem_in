@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:51:01 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 15:54:25 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 15:46:29 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		ft_render_visu(t_env *e, char *str)
 {
 	int			loop;
 	int			ret;
+
 	e->toward_end = 0;
 	if ((ret = ft_add_current_ants(e, str)))
 		return (ret);
@@ -63,7 +64,7 @@ int		ft_render_visu(t_env *e, char *str)
 	return (loop);
 }
 
-int	ft_render_visu_end(t_env *e)
+int		ft_render_visu_end(t_env *e)
 {
 	int loop;
 

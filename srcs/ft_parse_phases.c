@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 19:45:22 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 17:21:49 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 18:39:06 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int		ft_phase_nb_ants(char *str, t_lem *lem)
 		lem->map.total_ants = ft_atoi(str);
 		lem->parser.phase = e_phase_rooms;
 	}
-	return (0);
+	return (1);
 }
 
 int		ft_phase_rooms(char *str, t_lem *lem)
 {
 	int ret;
-
+	
 	if ((ret = ft_common_checks(str)))
 		return (ret);
 	if ((ret = ft_special_rooms_check(str, lem)))
@@ -45,7 +45,6 @@ int		ft_phase_rooms(char *str, t_lem *lem)
 int		ft_phase_start(char *str, t_lem *lem)
 {
 	int ret;
-
 	if ((ret = ft_common_checks(str)))
 		return (ret);
 	if ((ret = ft_special_rooms_check(str, lem)))

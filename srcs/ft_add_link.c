@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 13:15:42 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 13:15:42 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 18:02:51 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int		ft_process_add_link(t_room *r1, t_room *r2, char *str, t_lem *lem)
 		if (ft_not_linked_yet(r1, r2))
 		{
 			if (ft_add_to_list_ptr(&(r1->neighbours), r2, sizeof(t_room)))
-				return (-1);
+				return (-2);
 			if (ft_add_to_list_ptr(&(r2->neighbours), r1, sizeof(t_room)))
-				return (-1);
+				return (-2);
 		}
 		return (1);
 	}
@@ -52,7 +52,8 @@ int		ft_add_link(char *str, t_lem *lem)
 	t_room	*r2;
 	char	**split;
 
-	split = ft_strsplit(str, '-');
+	if (!(split = ft_strsplit(str, '-')))
+		return (-2);
 	if (ft_splitlen(split) == 2)
 	{
 		r1 = ft_get_room((lem->map.rooms), split[0]);

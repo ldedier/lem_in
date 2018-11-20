@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 19:25:41 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 17:37:18 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 # define GRASS_BORDER	200
 # define ROOM_SIZE		150
-
 # define ANT			0
 # define ROOM			1
 # define START_SPRITE	2
@@ -153,7 +152,6 @@ int						ft_dist(int x1, int y1, int x2, int y2);
 void					ft_init_sdl_to_null(t_env *e);
 void					ft_init_textures_to_null(t_env *e);
 int						ft_use_texture_with_surface(t_env *e, char *title);
-int						ft_free_turn(void *str, int ret);
 int						ft_render_nb_ants(t_env *e);
 int						ft_render_dashboard(t_env *e);
 void					ft_process_animation(t_env *e);
@@ -161,4 +159,16 @@ void					ft_fill_rect_x_y(SDL_Rect *rect, int x, int y);
 void					ft_fill_rect_w_h(SDL_Rect *rect, int w, int h);
 void					ft_process_current_turn(t_env *e, int *loop);
 void					ft_process_end_events(t_env *e, int *loop);
+t_transition            *ft_get_transition_to(t_list *transition, t_room *to);
+int						ft_update_ant(t_vant *vant, t_room *to, t_env *e);
+int						ft_create_ant_to(int id, char *room_name, t_env *e);
+int						ft_already_in_transitions(t_list *trs, t_room *room,
+							t_room *to);
+t_transition			*ft_new_transition(t_room *from, t_room * to);
+void					ft_apply_transition(t_env *e, t_room *from, t_room *to);
+int						ft_process_ant_transition(t_vant *vant, t_room *to,
+							t_env *e);
+int						ft_init_textures(t_env *e);
+void					ft_put_to_end(t_env *e);
+void					ft_free_all(t_env *e);
 #endif

@@ -6,13 +6,13 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 12:53:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 12:53:45 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 15:49:34 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visu_lem_in.h"
 
-void	ft_render_links(t_env *e)
+void		ft_render_links(t_env *e)
 {
 	t_list		*ptr;
 	t_list		*neigh_ptr;
@@ -55,7 +55,7 @@ void		ft_render_room(t_env *e, t_room *room, SDL_Rect *pos)
 				NULL, pos);
 }
 
-void	ft_render_rooms(t_env *e)
+void		ft_render_rooms(t_env *e)
 {
 	t_list		*ptr;
 	t_room		*room;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_render.c                                        :+:      :+:    :+:   */
+/*   ft_render_ants.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/15 12:51:01 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 15:54:25 by ldedier          ###   ########.fr       */
+/*   Created: 2018/11/20 15:48:09 by ldedier           #+#    #+#             */
+/*   Updated: 2018/11/20 15:48:25 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			ft_dist_transition(t_transition *tr)
 					tr->to->corr_x, tr->to->corr_y));
 }
 
-void	ft_render_ants(t_env *e)
+void		ft_render_ants(t_env *e)
 {
 	t_list			*ptr;
 	t_transition	*tr;
@@ -70,7 +70,7 @@ void	ft_render_ants(t_env *e)
 	}
 }
 
-void	ft_render_static_ants(t_env *e)
+void		ft_render_static_ants(t_env *e)
 {
 	t_list		*ptr;
 	t_room		*room;

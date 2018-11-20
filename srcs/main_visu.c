@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 19:26:29 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 17:33:12 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,55 +30,7 @@ void __attribute__((destructor)) end();
 void	end(void)
 {
 	  ft_printf("destructor loop\n");
-//	  while(1);
-}
-
-void	ft_free_texture(SDL_Texture *texture)
-{
-	if (texture != NULL)
-		SDL_DestroyTexture(texture);
-}
-
-void	ft_free_font(TTF_Font *font)
-{
-	if (font != NULL)
-		TTF_CloseFont(font);
-}
-
-void	ft_free_textures(t_env *e)
-{
-	int i;
-
-	i = 0;
-	while (i < 8)
-	{
-		ft_free_texture(e->sdl.textures[i]);
-		i++;
-	}
-	i = 0;
-	while (i < 4)
-	{
-		ft_free_texture(e->sdl.ant_textures[i]);
-		i++;
-	}
-}
-
-void	ft_free_all(t_env *e)
-{
-	ft_lstdel_value(&(e->vants));
-	ft_delete_rooms(&(e->lem.map.rooms));
-	ft_free_textures(e);
-	ft_free_font(e->sdl.font);
-	if (e->sdl.w_surface)
-		SDL_FreeSurface(e->sdl.w_surface);
-	if (e->sdl.renderer)
-		SDL_DestroyRenderer(e->sdl.renderer);
-	if (e->sdl.window)
-		SDL_DestroyWindow(e->sdl.window);
-	if (TTF_WasInit())
-		TTF_Quit();
-	if (SDL_WasInit(SDL_INIT_EVERYTHING))
-		SDL_Quit();
+	  while(1);
 }
 
 void	ft_print_error(int error)

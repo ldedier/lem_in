@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ldedier <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/11/06 18:20:16 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/19 18:12:56 by ldedier          ###   ########.fr        #
+#    Created: 2018/11/20 17:02:56 by ldedier           #+#    #+#              #
+#    Updated: 2018/11/20 18:52:53 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,18 +35,21 @@ LIBFT = $(LIBFTDIR)/libft.a
 OK_COLOR = \x1b[32;01m
 EOC = \033[0m
 
-COMMON_NO_PREFIX =	ft_parse_lem.c ft_parse_tools.c ft_debug.c ft_checks.c\
-					ft_add_data.c ft_parse_phases.c ft_lists.c ft_tools.c\
-					ft_rooms.c ft_solvable.c ft_add_link.c
+COMMON_NO_PREFIX =	ft_parse_lem.c ft_parse_tools.c ft_checks.c\
+					ft_parse_phases.c ft_lists.c ft_tools.c ft_rooms.c\
+					ft_solvable.c ft_add_link.c ft_add_room.c ft_free_turn.c
 
-SRCS_NO_PREFIX =	main.c ft_process_lem_in.c
+SRCS_NO_PREFIX =	main.c ft_process_lem_in.c ft_process_fill.c ft_smp.c\
+					ft_mps.c ft_smp2.c ft_overlap.c ft_progress_ant.c\
+					ft_deploy.c ft_print_solution.c ft_process_lem_tools.c
 
-VSRCS_NO_PREFIX =	main_visu.c ft_init.c\
-					ft_render.c ft_events.c ft_center.c\
-					ft_add_infos.c ft_stats.c ft_process_visu.c\
-					ft_parse_visu.c ft_render_ants.c\
+VSRCS_NO_PREFIX =	main_visu.c ft_init.c ft_init_sdl.c\
+					ft_render.c ft_events.c ft_center.c ft_process_add_visu.c\
+					ft_stats.c ft_process_visu.c ft_vant.c ft_transition.c\
+					ft_parse_visu.c ft_render_ants.c ft_mouse_events.c\
 					ft_render_map.c ft_render_ants_number.c ft_render_tools.c\
-					ft_render_dashboard.c ft_process_events.c
+					ft_render_dashboard.c ft_process_events.c\
+					ft_free_all_visu.c
 
 SRCS_NO_PREFIX += $(COMMON_NO_PREFIX)
 VSRCS_NO_PREFIX += $(COMMON_NO_PREFIX)

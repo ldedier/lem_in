@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_parse.c                                         :+:      :+:    :+:   */
+/*   ft_add_room.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 17:57:54 by ldedier          ###   ########.fr       */
+/*   Created: 2018/11/20 14:38:42 by ldedier           #+#    #+#             */
+/*   Updated: 2018/11/20 18:34:00 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,21 @@ int		ft_process_add_room(char **split, t_lem *lem, int role)
 		return (-1);
 	if (!(room = ft_new_room_from_split(split)))
 	{
+		ft_printf("OUAI\n");
 		ft_free_split(split);
-		return (-1);
+		return (-2);
 	}
 	if (ft_add_to_list_ptr(&(lem->map.rooms), room, sizeof(t_room)))
 	{
 		free(room->name);
 		free(room);
 		ft_free_split(split);
-		return (-1);
+		return (-2);
 	}
 	ft_init_ant_room(room, role, lem);
 	lem->parser.phase = e_phase_rooms;
 	ft_free_split(split);
-	return (0);
+	return (1);
 }
 
 int		ft_add_room(char *str, t_lem *lem, int role)
@@ -80,7 +81,7 @@ int		ft_add_room(char *str, t_lem *lem, int role)
 	char	**split;
 
 	if (!(split = ft_strsplit(str, ' ')))
-		return (-1);
+		return (-2);
 	if (ft_is_valid_room(split, lem))
 		return (ft_process_add_room(split, lem, role));
 	else
@@ -89,15 +90,4 @@ int		ft_add_room(char *str, t_lem *lem, int role)
 		ft_verbose(lem, str, "invalid room");
 		return (-1);
 	}
-}
-
-t_room	*ft_get_room(t_list *rooms, char *str)
-{
-	while (rooms != NULL)
-	{
-		if (!ft_strcmp(((t_room *)(rooms->content))->name, str))
-			return ((t_room *)(rooms->content));
-		rooms = rooms->next;
-	}
-	return (NULL);
 }

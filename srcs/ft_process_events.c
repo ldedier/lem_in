@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:51:01 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 15:54:25 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 15:45:52 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		ft_process_current_turn(t_env *e, int *loop)
 	SDL_Delay(20);
 }
 
-void	ft_process_end_events(t_env *e, int *loop)
+void		ft_process_end_events(t_env *e, int *loop)
 {
 	SDL_Event event;
 

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/12 00:35:45 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 17:56:24 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 18:38:36 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ int		ft_links_transition_check(char *str, t_lem *lem)
 {
 	if (ft_describe_link(str))
 	{
-		if (lem->parser.nb_end != 1 || lem->parser.nb_start != 1)
-			return (-1);
+		if (lem->parser.nb_end != 1)
+			return (ft_verbose(lem, str, "map already has no end"));
+		if (lem->parser.nb_start != 1)
+			return (ft_verbose(lem, str, "map already has no start"));
 		lem->parser.phase = e_phase_links;
 		return (ft_phase_links(str, lem));
 	}

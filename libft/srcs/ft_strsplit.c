@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 19:52:55 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 18:49:46 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 20:43:32 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char		**ft_strsplit(char const *s, char c)
 	{
 		if (!(res[i] = ft_word_dup(s, c, i)))
 		{
-			while (--i)
+			while (i--)
 				free(res[i]);
 			free(res);
 			return (NULL);

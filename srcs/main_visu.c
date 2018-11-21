@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/11 22:27:14 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 17:33:12 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 20:53:29 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@ void	ft_init_env(t_env *e)
 	e->ant_number = 1;
 	e->anim.pause = 0;
 	e->time_per_turn = TIME_PER_TURN;
-}
-
-void __attribute__((destructor)) end();
-
-void	end(void)
-{
-	  ft_printf("destructor loop\n");
-	  while(1);
 }
 
 void	ft_print_error(int error)

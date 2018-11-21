@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 18:21:30 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 18:51:05 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 19:51:50 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,6 @@ int					ft_add_to_list_ptr_back(t_list **list, void *content,
 						size_t size);
 void				ft_lstdel_ptr(t_list **list);
 void				ft_lstdel_value(t_list **list);
-int					ft_delete_node(t_list **prev, t_list **ptr, t_list *vs);
-int					ft_delete_node_ptr(t_list **prev, t_list **ptr, t_list *vs);
+int					ft_delete_node(t_list **prev, t_list **ptr, t_list **vs);
+int					ft_delete_node_ptr(t_list **prv, t_list **ptr, t_list **vs);
 #endif

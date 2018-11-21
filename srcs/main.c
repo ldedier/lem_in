@@ -6,19 +6,11 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 18:52:23 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 20:53:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-void __attribute__((destructor)) end();
-
-void	end(void)
-{
-	ft_printf("destructor loop\n");
-	while(1);
-}
 
 void	ft_print_usage(void)
 {

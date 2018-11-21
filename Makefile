@@ -6,14 +6,14 @@
 #    By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 17:02:56 by ldedier           #+#    #+#              #
-#    Updated: 2018/11/20 18:52:53 by ldedier          ###   ########.fr        #
+#    Updated: 2018/11/20 21:30:12 by ldedier          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= lem-in
 VISU_NAME	= lem-in_visu
 
-CC      = gcc -g3
+CC      = gcc
 
 PWD = \"$(shell pwd)\"
 
@@ -80,13 +80,16 @@ all:
 debug:
 	@make all DEBUG=0
 
+$(LIBFT):
+	@make -C $(LIBFTDIR) all
+
 $(BINDIR)/$(NAME): $(OBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ $(CFLAGS) -L $(LIBFTDIR) -lft
 	@echo "$(OK_COLOR)$(NAME) linked with success !$(EOC)"
 
 $(BINDIR)/$(VISU_NAME): $(VOBJECTS) $(LIBFT)
 	@$(CC) -o $@ $^ -F ./frameworks -framework SDL2\
-		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft 
+		-framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -L $(LIBFTDIR) -lft
 	@echo "$(OK_COLOR)$(VISU_NAME) linked with success !$(EOC)"
 	@install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2 $(SDL2) $(VISU_NAME)
 	@install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image $(SDL2_image) $(VISU_NAME)

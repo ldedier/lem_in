@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 15:04:40 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 15:20:41 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 20:36:23 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		ft_add_transition(t_env *e, int id, char *room_name)
 					room_name)))
 				return (-3);
 			if (((ret = (ft_update_ant((t_vant *)(ptr->content), to, e))) == 1))
-				return (ft_delete_node(&prev, &ptr, e->vants));
+				return (ft_delete_node(&prev, &ptr, &(e->vants)));
 			else
 				return (ret);
 		}
@@ -63,29 +63,41 @@ int		ft_add_transition(t_env *e, int id, char *room_name)
 	return (ft_create_ant_to(id, room_name, e));
 }
 
+int		ft_process_add_transitions(char **split, int i,
+			t_env *e)
+{
+	int		ret;
+	char	**ant_split;
+
+	if (!(ant_split = ft_strsplit(split[i], '-')))
+		return (-1);
+	if (ft_splitlen(ant_split) == 2 && ft_strlen(ant_split[0]) > 1)
+	{
+		if ((ret = ft_add_transition(e, ft_atoi(&(ant_split[0][1])),
+						ant_split[1])))
+			return (ft_free_turn_splits(ant_split, split, ret));
+	}
+	else
+		return (ft_free_turn_splits(ant_split, split, -4));
+	ft_free_split(ant_split);
+	return (0);
+}
+
 int		ft_add_transitions(t_env *e, char *str)
 {
 	char	**split;
 	int		i;
-	char	**ant_split;
 	int		ret;
 
 	i = 0;
-	split = ft_strsplit(str, ' ');
+	if (!(split = ft_strsplit(str, ' ')))
+		return (-1);
 	if (ft_splitlen(split) == 0)
 		return (ft_free_turn_split(split, -2));
 	while (split[i])
 	{
-		ant_split = ft_strsplit(split[i], '-');
-		if (ft_splitlen(ant_split) == 2 && ft_strlen(ant_split[0]) > 1)
-		{
-			if ((ret = ft_add_transition(e, ft_atoi(&(ant_split[0][1])),
-					ant_split[1])))
-				return (ft_free_turn_splits(ant_split, split, ret));
-		}
-		else
-			return (ft_free_turn_splits(ant_split, split, -4));
-		ft_free_split(ant_split);
+		if ((ret = ft_process_add_transitions(split, i, e)))
+			return (ret);
 		i++;
 	}
 	ft_free_split(split);

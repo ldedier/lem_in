@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/01 22:04:38 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 17:37:18 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 19:06:26 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,12 +159,12 @@ void					ft_fill_rect_x_y(SDL_Rect *rect, int x, int y);
 void					ft_fill_rect_w_h(SDL_Rect *rect, int w, int h);
 void					ft_process_current_turn(t_env *e, int *loop);
 void					ft_process_end_events(t_env *e, int *loop);
-t_transition            *ft_get_transition_to(t_list *transition, t_room *to);
+t_transition			*ft_get_transition_to(t_list *transition, t_room *to);
 int						ft_update_ant(t_vant *vant, t_room *to, t_env *e);
 int						ft_create_ant_to(int id, char *room_name, t_env *e);
 int						ft_already_in_transitions(t_list *trs, t_room *room,
 							t_room *to);
-t_transition			*ft_new_transition(t_room *from, t_room * to);
+t_transition			*ft_new_transition(t_room *from, t_room *to);
 void					ft_apply_transition(t_env *e, t_room *from, t_room *to);
 int						ft_process_ant_transition(t_vant *vant, t_room *to,
 							t_env *e);

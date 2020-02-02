@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 16:07:12 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 17:29:37 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 18:51:15 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,4 +159,31 @@ void					ft_delete_rooms(t_list **rooms);
 void					ft_reset_pathfinding(t_map *map);
 int						ft_is_solvable(t_map *map);
 t_room					*ft_get_room(t_list *rooms, char *name);
+t_room					*ft_get_neighbour(t_room *room, char *room_name);
+int						ft_free_turn(void *to_free, int ret);
+char					*ft_free_turn_str(char **to_del, char *ret);
+char					*ft_free_turn_strs(char **to_del, char **to_del2,
+							char *ret);
+int						ft_free_turn_split(char **split, int ret);
+int						ft_free_turn_splits(char **split1, char **split2,
+							int ret);
+int						ft_fill_paths(t_lem *lem);
+int						ft_add_path_from_rooms(t_list **paths,
+							t_list *path, int length);
+int						ft_update_matching_smps(t_path *path, t_path *path2);
+int						ft_overlaps_path_list(t_list **paths, t_path *path);
+int						ft_fill_mps(t_lem *lem);
+int						ft_nb_mps_smp(t_path *path);
+int						ft_fill_matching_smps(t_lem *lem);
+void					ft_progress_ants(t_deploy *deploy, t_lem *lem);
+int						ft_deploy_ants(t_deploy *deploy, t_lem *lem);
+int						ft_deploy_ants_smp(t_path *chosen, t_deploy *deploy,
+							t_lem *lem);
+void					ft_init_deploy(t_deploy *deploy);
+t_ant					*ft_new_ant(t_list *rooms);
+int						ft_populate_platform(t_deploy_platform *p,
+							t_path *chosen);
+int						ft_print_solution(t_lem *lem, t_path *chosen);
+t_path					*ft_chosen_path(t_lem *lem);
+
 #endif

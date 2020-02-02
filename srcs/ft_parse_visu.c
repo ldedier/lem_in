@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 13:02:41 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 13:02:41 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 15:45:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int		ft_parse_visu(t_lem *lem)
 {
-	char	*str;
-	int		ret;
+	char			*str;
+	int				ret;
+	t_parse_func	parse_arr[5];
 
-	t_parse_func parse_arr[5];
 	ft_init_parser(&(lem->parser));
 	ft_init_parse_arr(parse_arr);
 	while ((ret = get_next_line(0, &str)) > 0 && ft_strcmp(str, ""))

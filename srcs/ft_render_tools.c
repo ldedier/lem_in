@@ -6,7 +6,7 @@
 /*   By: ldedier <ldedier@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 13:05:05 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/20 13:05:05 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 14:59:55 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,4 @@ void	ft_fill_rect_w_h(SDL_Rect *rect, int w, int h)
 {
 	rect->w = w;
 	rect->h = h;
-}
-
-int		ft_free_turn(void *str, int ret)
-{
-	free(str);
-	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 18:26:02 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 20:53:20 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int		main(int argc, char **argv)
 		if (ft_is_valid_post_parse(&lem) == 1)
 		{
 			ft_printf("%s\n", to_print);
-			if (ft_process_lem_in(&lem) == -1)
+			if (ft_process_lem_in(&lem) == 1)
 				ft_printf("malloc error\n");
 		}
 		else

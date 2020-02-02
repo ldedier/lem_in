@@ -6,7 +6,7 @@
 /*   By: ldedier <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:17 by ldedier           #+#    #+#             */
-/*   Updated: 2018/11/19 17:29:18 by ldedier          ###   ########.fr       */
+/*   Updated: 2018/11/20 18:50:21 by ldedier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,17 @@ int		ft_is_valid_post_parse(t_lem *lem)
 	}
 	if ((ret = ft_is_solvable(&(lem->map))) == 0)
 		ft_verbose_no_line(lem, "map start and end are not linked");
-	else if(ret == -1)
+	else if (ret == -1)
 		ft_printf("malloc error\n");
 	return (ret);
 }
 
-char	*ft_free_turn_str(char *res, char **to_del)
+char	*ft_return_parse_error(int ret, char **str, char **res)
 {
-	ft_strdel(to_del);
-	return (res);
+	if (ret == -1)
+		return (ft_free_turn_str(str, *res));
+	else
+		return (ft_free_turn_strs(str, res, NULL));
 }
 
 char	*ft_parse(t_lem *lem)
@@ -69,12 +71,12 @@ char	*ft_parse(t_lem *lem)
 		return (NULL);
 	while ((ret = get_next_line(0, &str)) > 0)
 	{
-		if (parse_arr[lem->parser.phase](str, lem) == -1)
-			return (ft_free_turn_str(res, &str));
+		if ((ret = parse_arr[lem->parser.phase](str, lem)) != 1)
+			return (ft_return_parse_error(ret, &str, &res));
 		if (!(res = ft_strjoin_free(res, str)))
-			return (ft_free_turn_str(NULL, &str));
+			return (ft_free_turn_strs(&str, &res, NULL));
 		if (!(res = ft_strjoin_free(res, "\n")))
-			return (ft_free_turn_str(NULL, &str));
+			return (ft_free_turn_strs(&str, &res, NULL));
 		lem->parser.nb_lines++;
 		ft_strdel(&str);
 	}

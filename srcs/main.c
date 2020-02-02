@@ -12,14 +12,6 @@
 
 #include "lem_in.h"
 
-void __attribute__((destructor)) end();
-
-void	end(void)
-{
-//	ft_printf("destructor loop\n");
-//	while(1);
-}
-
 void	ft_print_usage(void)
 {
 	ft_printf("./lem-in [optional: -v] < [map_name] | ./lem-in_visu\n");

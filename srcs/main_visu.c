@@ -29,8 +29,6 @@ void __attribute__((destructor)) end();
 
 void	end(void)
 {
-	  ft_printf("destructor loop\n");
-//	  while(1);
 }
 
 void	ft_free_texture(SDL_Texture *texture)
@@ -154,6 +152,7 @@ int		main(void)
 			return (ret == -1 ? 1 : 0);
 	}
 	ft_strdel(&(str));
+	e.vants = NULL;
 	if (ft_render_visu_end(&e))
 	{
 		ft_printf("malloc error\n");

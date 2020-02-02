@@ -44,7 +44,7 @@ where LN describes the number of the ant, going toward its next room
 
 ## Bonus
 
-A program called lem-in_visu should be piped directly to the output of the program and provides a graphic interface to better show the progress of the ants
+A program called lem-in_visu should be piped directly to the output of the program and provides a graphic interface to show the progress of the ants
 
 ## Usage
 
